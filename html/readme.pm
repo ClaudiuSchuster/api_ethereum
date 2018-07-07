@@ -25,8 +25,7 @@ sub print {
                       Requests
                   </h4>
                   <p>
-                      All API request could be either sent as POST or GET requests to the Service-URL, 
-                      with the only exception for the 'json' parameter which 'should' be transfered over POST if a method takes use of it.
+                      All API request must be sent as POST requests with a single JSON encoded parameter/data-Object{} to the Service-URL.
                   </p>
                   <h4>
                       Responses
@@ -59,9 +58,9 @@ sub print {
                         </tr>
                         <tr>
                             <td style='padding-left:15px;'>
-                                \"json\" : null, 
+                                \"postdata\" : { }, 
                             </td><td>
-                                'string' will contain a copy of the 'json' parameter from the request (if it was used by method).
+                                'object{}' will contain the submitted JSON data object from the request.
                             </td>
                         </tr>
                         <tr>
@@ -120,7 +119,7 @@ sub print {
               </br>
               <hr />
               </br>
-              <h2 id='$_[0]'>".(uc $_[0])." <code class='method'>method=$_[0] || method=$_[0]/*</code></h2>
+              <h2 id='$_[0]'>".(uc $_[0])." <code class='method'>method=$_[0] || method=$_[0].*</code></h2>
               <div class='indented'>
                 <hr />
             ";
@@ -154,7 +153,7 @@ sub print {
             if( scalar @_ ) {   # merge defaults with passed parameters
                 @parameter = (
                     @parameter,
-                    ['json', 'object{}', 'true', '', "JSON-object{} of method parameters"],
+                    ['params', 'object{}', 'true', '', "object{} of method parameters"],
                     @_,
                     @optParas
                 );
@@ -237,7 +236,7 @@ sub print {
     };
     
     print $cgi->header, $cgi->start_html(
-        -title=>"API Documentation - pxe.mine.io",
+        -title=>"API Documentation - ethereum.spreadblock.local",
         -style=>{-code=>"
             body {
               font-family: 'Helvetica';
@@ -341,7 +340,9 @@ sub print {
             title           => "Get ETH data",
             note            => "What a cool Note!",
             parameterTable  => [],
-            requestExample  => qq~Do something cool~,
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth"}'
+            ~,
             returnDataTable => [ $returnObject ],
         });
 

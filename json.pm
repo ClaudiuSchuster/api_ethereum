@@ -5,9 +5,7 @@ use strict; use warnings; use utf8; use feature ':5.10';
 use JSON;
 
 ### Load our api-method modules. Note: Modules must have a run() function!
-use methods::dhcp;
 use methods::eth;
-use methods::mine;
 
 
 ### Create and print the JSON Object
