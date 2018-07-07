@@ -25,3 +25,13 @@
      
     [Install]
     WantedBy=multi-user.target
+
+
+### Perl DEPENDENCIES:
+HTTP-Server-Simple-CGI-PreFork
+File::Slurper
+HTTP::Request
+JSON
+LWP::UserAgent
+Math::BigFloat
+Math::BigInt
