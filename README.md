@@ -35,3 +35,9 @@
  - LWP::UserAgent
  - Math::BigFloat
  - Math::BigInt
+
+
+### Rinkeby Authenticated Faucet:
+ - https://www.rinkeby.io/#faucet
+ - https://twitter.com/ClaudiuSchuster/status/1015429498765041665
+ 
