@@ -14,7 +14,7 @@ use server;
 
 
 ### SERVER OPTIONS
-my $dev = (defined $ARGV[1] && $ARGV[1] eq 'dev') ? 1 : 0;
+our $dev = (defined $ARGV[1] && $ARGV[1] eq 'dev') ? 1 : 0;
 my %preforkOptions = (               # Options will be passed to Net::Server::PreFork
     prefork           => 1,          # Default: 0  -  Per default, prefork is turned off (e.g. server runs singlethreaded with Net::Server::Single instead of Net::Server::PreFork). This is very usefull for debugging and backward compatibility.
     min_servers       => $dev?1: 4,  # Default: 5  -  The minimum number of servers to keep running.
