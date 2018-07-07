@@ -28,7 +28,7 @@
 
 
 ### Perl DEPENDENCIES:
- - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 an debian packages 'libssl-dev' & 'libz-dev')
+ - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
  - File::Slurper
  - HTTP::Request
  - JSON
