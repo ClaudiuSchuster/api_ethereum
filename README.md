@@ -7,3 +7,31 @@
 * API-Documentation: http://10.10.0.8:88/readme
 * Simple frontend: http://10.10.0.8:88/eth
 
+
+### api.service systemd definition:
+
+    [Unit]
+    Description=api.pl
+    After=syslog.target network.target remote-fs.target nss-lookup.target
+     
+    [Service]
+    WorkingDirectory=/ethereum/api
+     
+    ExecStart=/bin/sh -c "/ethereum/api/api.pl 88 >> /ethereum/api/log.log 2>&1"
+     
+    Type=simple
+    Restart=on-failure
+     
+     
+    [Install]
+    WantedBy=multi-user.target
+
+
+### Perl DEPENDENCIES:
+ - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
+ - File::Slurper
+ - HTTP::Request
+ - JSON
+ - LWP::UserAgent
+ - Math::BigFloat
+ - Math::BigInt
