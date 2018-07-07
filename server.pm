@@ -10,7 +10,7 @@ use base qw(HTTP::Server::Simple::CGI::PreFork);
 ### Load our json module
 use json;
 ### Load our html-site modules. Note: Modules must have a print() function!
-#use html::dhcp;
+use html::eth;
 use html::readme;
 
 

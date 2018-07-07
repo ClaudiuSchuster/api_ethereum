@@ -1,4 +1,4 @@
-package API::html::dhcp;
+package API::html::eth;
 
 use strict; use warnings; use utf8; use feature ':5.10';
 
