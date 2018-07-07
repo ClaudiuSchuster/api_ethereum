@@ -28,10 +28,10 @@
 
 
 ### Perl DEPENDENCIES:
-HTTP-Server-Simple-CGI-PreFork
-File::Slurper
-HTTP::Request
-JSON
-LWP::UserAgent
-Math::BigFloat
-Math::BigInt
+ - HTTP-Server-Simple-CGI-PreFork
+ - File::Slurper
+ - HTTP::Request
+ - JSON
+ - LWP::UserAgent
+ - Math::BigFloat
+ - Math::BigInt
