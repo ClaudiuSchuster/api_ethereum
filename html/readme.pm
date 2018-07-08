@@ -308,9 +308,9 @@ sub print {
             div.requestExample pre {
                 background: #eee;
                 padding: 8px;
+                margin: 0;
                 border-left: 3px solid #ccc;
                 border-right: 3px solid #ccc;
-                margin-top: 0px;
                 box-sizing: border-box;
                 display: inline-block;
             }
