@@ -11,12 +11,12 @@ sub print {
     API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',[]);
     
     
-    API::html::readme::print::ReadmeClass('eth');
-    API::html::readme::print::MethodList([]);
-    {
-        my $returnObject = ['data:eth', 'object{}', 'yes', "Contains ETH Data, view <a href='#eth'>method:eth</a> for description"];
-
-        API::html::readme::print::Method({
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth',
+            returnObject => ['data:eth', 'object{}', 'yes', "Contains ETH Data, view <a href='#eth'>method:eth</a> for description"]
+        },
+        {
             method          => "eth",
             title           => "Get ETH data",
             note            => "What a cool Note!",
@@ -24,10 +24,19 @@ sub print {
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth"}'
             ~,
-            returnDataTable => [ $returnObject ],
-        });
-
-    }
+            returnDataTable => [ 'returnObject' ],
+        },
+        {
+            method          => "eth.method",
+            title           => "Do eth.method",
+            note            => "What a cool Note!",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth.method"}'
+            ~,
+            returnDataTable => [ 'returnObject' ],
+        }
+    ]);
     
     
     API::html::readme::print::ReadmeClass('endReadme',$cgi);
