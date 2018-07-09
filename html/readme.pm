@@ -16,25 +16,34 @@ sub print {
             readmeClass  => 'eth',
             returnObject => ['data:eth', 'object{}', 'yes', "Contains ETH Data, view <a href='#eth'>method:eth</a> for description"]
         },
+        # {
+            # method          => "eth",
+            # title           => "Get ETH data",
+            # note            => "What a cool Note!",
+            # parameterTable  => [],
+            # requestExample  => qq~
+# curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth"}'
+            # ~,
+            # returnDataTable => [ 'returnObject' ],
+        # },
         {
-            method          => "eth",
-            title           => "Get ETH data",
-            note            => "What a cool Note!",
-            parameterTable  => [],
+            method          => "eth.contract.deploy",
+            title           => "Deploy a contract",
+            note            => "",
+            parameterTable  => [
+                ['params:name', 'string', 'true', '', "'name' of contract to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+            ],
             requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth"}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld"}}'
             ~,
-            returnDataTable => [ 'returnObject' ],
-        },
-        {
-            method          => "eth.method",
-            title           => "Do eth.method",
-            note            => "What a cool Note!",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth.method"}'
-            ~,
-            returnDataTable => [ 'returnObject' ],
+            returnDataTable => [ 'returnObject',
+                ['data:eth:contract:deploy:address', 'string', 'yes', ""],
+                ['data:eth:contract:deploy:tx', 'string', 'yes', ""],
+                ['data:eth:contract:deploy:gas_used', 'integer', 'yes', ""],
+                ['data:eth:contract:deploy:gas_price_wei', 'integer', 'yes', ""],
+                ['data:eth:contract:deploy:tx_cost_wei', 'integer', 'yes', ""],
+                ['data:eth:contract:deploy:tx_cost_eth', 'float', 'yes', ""],
+            ],
         }
     ]);
     
