@@ -8,7 +8,7 @@
 * Simple frontend: http://10.10.0.8:88/eth
 
 
-### api.service systemd definition:
+### api.service Systemd Definition:
 
     [Unit]
     Description=api.pl
