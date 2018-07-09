@@ -1,2 +1,6 @@
 log.log
-contracts/
+
+# Ignore everything in this directory
+contracts/*
+# Except this file
+!contracts/.gitignore

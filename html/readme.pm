@@ -14,18 +14,8 @@ sub print {
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth',
-            returnObject => ['data:eth', 'object{}', 'yes', "Contains ETH Data, view <a href='#eth'>method:eth</a> for description"]
+            returnObject => ['data:eth', 'object{}', 'yes', "Contains the requested ETH Data"], #, view <a href='#eth'>method:eth</a> for description
         },
-        # {
-            # method          => "eth",
-            # title           => "Get ETH data",
-            # note            => "What a cool Note!",
-            # parameterTable  => [],
-            # requestExample  => qq~
-# curl http://$ENV{HTTP_HOST} -X POST -d '{"method":"eth"}'
-            # ~,
-            # returnDataTable => [ 'returnObject' ],
-        # },
         {
             method          => "eth.contract.deploy",
             title           => "Deploy a contract",

@@ -24,7 +24,7 @@ sub run {
     $node->set_debug_mode(1);
     $node->set_show_progress(1);
     
-    ########################  eth                ##########################
+    #########################################################################  eth
     if( $json->{meta}{postdata}{method} eq "eth" ) {
         $json->{meta}{method} = $json->{meta}{postdata}{method};
         
@@ -34,8 +34,8 @@ sub run {
         $json->{meta}{msg} = $mathBigIntOBject->bstr();
         # $json->{meta}{msg} = $node->web3_clientVersion();
     }    
-    ########################  eth.contract.deploy         ##########################
-    if( $json->{meta}{postdata}{method} eq "eth.contract.deploy" ) {
+    #########################################################################  eth.contract.deploy
+    elsif( $json->{meta}{postdata}{method} eq "eth.contract.deploy" ) {
         $json->{meta}{method} = $json->{meta}{postdata}{method};
         if ( ref($params) eq 'HASH' ) {
             unless( $params->{name} ) {
@@ -44,8 +44,8 @@ sub run {
             } else {
                 if( -e 'contracts/'.$params->{name}.'.sol' ) {
                     my $constructor_params = {
-                        initString => '+ IceMine.io - The One And Only +',  # Init string for constructor
-                        initValue  => 102,                                  # Init value for constructor
+                        initString => '+ IceMine.io - The One And Only +',
+                        initValue  => 102,
                     };
                     my $contract_status;
                     eval { $contract_status = $node->compile_and_deploy_contract($params->{name}, $constructor_params, $account->{address}, $account->{password}); 1; } or do { 
@@ -59,12 +59,12 @@ sub run {
                         my $gas_price = $node->eth_gasPrice();
                         my $contract_deploy_price = $gas_used * $gas_price;
                         my $price_in_eth = $node->wei2ether($contract_deploy_price);
-                        $eth->{contract}{deploy}{address} = $new_contract_id;
-                        $eth->{contract}{deploy}{tx} = $transactionHash;
-                        $eth->{contract}{deploy}{tx_cost_wei} = $contract_deploy_price->numify();
-                        $eth->{contract}{deploy}{tx_cost_eth} = $price_in_eth->numify();
+                        $eth->{contract}{deploy}{address}       = $new_contract_id;
+                        $eth->{contract}{deploy}{tx}            = $transactionHash;
+                        $eth->{contract}{deploy}{tx_cost_wei}   = $contract_deploy_price->numify();
+                        $eth->{contract}{deploy}{tx_cost_eth}   = $price_in_eth->numify();
                         $eth->{contract}{deploy}{gas_price_wei} = $gas_price->numify();
-                        $eth->{contract}{deploy}{gas_used} = $gas_used;
+                        $eth->{contract}{deploy}{gas_used}      = $gas_used;
                     }
                 } else {
                     $json->{meta}{rc}  = 400;
