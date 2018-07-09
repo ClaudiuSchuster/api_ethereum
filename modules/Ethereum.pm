@@ -1334,17 +1334,17 @@ sub compile_and_deploy_contract()
 {
   my ($this, $contract_name, $constructor_params, $src_account, $password) = @_;
 
-  my $contract_src_path = $contract_name.'.sol';
+  my $contract_src_path = 'contracts/'.$contract_name.'.sol';
   my $bin_solc = '/usr/bin/solc';
-  my $cmd = "$bin_solc --bin --abi $contract_src_path -o build --overwrite";
+  my $cmd = "$bin_solc --bin --abi $contract_src_path -o contracts --overwrite";
   if(system($cmd))
   {
     die sprintf("Failed to compile $contract_name with value %d\n", $? >> 8);
   }
 
-  my $abi = $this->_read_file('build/'.$contract_name.'.abi');
+  my $abi = $this->_read_file('contracts/'.$contract_name.'.abi');
   $this->set_contract_abi($abi);
-  my $bin = $this->_read_file('build/'.$contract_name.'.bin');
+  my $bin = $this->_read_file('contracts/'.$contract_name.'.bin');
   $bin = '0x'.$bin;
 
   $this->personal_unlockAccount($src_account, $password, 600);
