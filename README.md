@@ -29,12 +29,20 @@
 
 ### Perl DEPENDENCIES:
  - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
+ - HTTP::Server::Simple
+ - IO::Socket::INET6
+ - Net::Server
+ - Net::Server::PreFork
+ - Net::Server::Proto::SSLEAY
+ - Net::Server::Single
+ - Net::SSLeay
  - File::Slurper
  - HTTP::Request
- - JSON
  - LWP::UserAgent
  - Math::BigFloat
  - Math::BigInt
+ - Socket6
+ - JSON
 
 
 ### Rinkeby Authenticated Faucet:
