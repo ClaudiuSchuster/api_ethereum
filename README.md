@@ -29,6 +29,11 @@
 
 ### Perl Dependencies:
  - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
+ - File::Slurper
+ - HTTP::Request
+ - LWP::UserAgent
+ - Math::BigFloat
+ - Math::BigInt
  - JSON
  - *______ below should be installed by previous automatically ______*
  - HTTP::Server::Simple
@@ -38,12 +43,8 @@
  - Net::Server::Proto::SSLEAY
  - Net::Server::Single
  - Net::SSLeay
- - File::Slurper
- - HTTP::Request
- - LWP::UserAgent
- - Math::BigFloat
- - Math::BigInt
  - Socket6
+ - *. . . and possibly others . . .*
 
 
 ### Rinkeby Authenticated Faucet:
