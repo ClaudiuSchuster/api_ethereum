@@ -11,7 +11,10 @@ sub deploy {
         return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" };
     } else {
         unless( $params->{name} ) {
-            return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract to deploy is needed!" };
+            return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract to deploy is needed. Abort!" };
+        }
+        if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' ) {
+            return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" };
         }
     }
 
@@ -23,28 +26,19 @@ sub deploy {
     eval {
         $contract_status = $node->compile_and_deploy_contract(
             $params->{name},
-            {   # Constructor Params
-                initString => '+ IceMine.io - The One And Only +',
-                initValue  => 102,
-            },
+            $params->{constructor} || {}, # Constructor Init Parameters
             API::methods::eth::personal::account::address,
             API::methods::eth::personal::account::password
         ); 1; 
     } or do {
         return { 'rc' => 500, 'msg' => "error.eth.contract.deploy: ".$@ };
     };
-    my $address     = $contract_status->{contractAddress};
-    my $txhash      = $contract_status->{transactionHash};
-    my $gas_used    = hex($contract_status->{gasUsed});
-    my $gas_price   = $node->eth_gasPrice();
-    my $tx_cost_wei = $gas_used * $gas_price;
-    my $tx_cost_eth = $node->wei2ether($tx_cost_wei);
-    $data->{address}       = $address;
-    $data->{tx}            = $txhash;
-    $data->{tx_cost_wei}   = $tx_cost_wei->numify();
-    $data->{tx_cost_eth}   = $tx_cost_eth->numify();
-    $data->{gas_price_wei} = $gas_price->numify();
-    $data->{gas_used}      = $gas_used;
+    $data->{address}       = $contract_status->{contractAddress};
+    $data->{tx}            = $contract_status->{transactionHash};
+    $data->{gas_used}      = hex($contract_status->{gasUsed});
+    $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
+    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
+    $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
 }
 
 sub test {

@@ -21,10 +21,12 @@ sub print {
             title           => "Deploy a contract",
             note            => "",
             parameterTable  => [
-                ['params:name', 'string', 'true', '', "'name' of contract to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:name',         'string',    'true',  '',    "'name' of contract to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld","constructor":{"initString":"+ InitString +","initValue":102}}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:eth:contract:deploy:address',        'string',   'yes', ""],
