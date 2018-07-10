@@ -22,17 +22,17 @@ sub run {
     };
     
     ### Check if subclass and requested function exists before initialize node and execute it.
-    my ($reqPackage,$reqSubclass,$reqFunc) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\.(\w+))?(?:\.(\w+))?/ );
-    my ($subclass) = grep { $json->{meta}{postdata}{method} =~ /^\w+\.($_)(\.\w+)?$/ }  map /methods\/$reqPackage\/(\w+)\.pm/, keys %INC;
+    my ($reqPackage,$reqSubclass,$reqFunc) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\.(\w+))?(?:\.(\w*))?/ );
+    my ($subclass) = grep { $json->{meta}{postdata}{method} =~ /^\w+\.($_)(?:\..*)?$/ }  map /methods\/$reqPackage\/(\w+)\.pm/, keys %INC;
     if( defined $subclass ) {
-        my $subclass_func = $1 if( $json->{meta}{postdata}{method} =~ /^eth\.contract\.(\w+)/ );
+        my ($subclass_func) = ($json->{meta}{postdata}{method} =~ /^$reqPackage\.$subclass\.(\w+)/);
         my @subs;
         {
             no strict 'refs';
             my $class = 'API::methods::'.$reqPackage.'::'.$subclass.'::';
             @subs = keys %$class;
         }
-        if( grep { $_ eq $subclass_func } @subs ) {
+        if( defined $subclass_func && grep { $_ eq $subclass_func } @subs ) {
             $json->{meta}{method} = $json->{meta}{postdata}{method};
             my $node = $init_node->();
             {
