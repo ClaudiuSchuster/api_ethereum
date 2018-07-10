@@ -12,7 +12,6 @@ use methods::eth::contract;
 sub run {
     my $cgi = shift;
     my $json = shift;
-    my $data = {};
     
     my $init_node = sub { # Initialize Ethereum Node
         my $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
@@ -38,22 +37,16 @@ sub run {
             {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
-                my $method_run_result = $method_run_ref->($cgi,$json,\%{$data->{$subclass}{$subclass_func}},$node);
+                my $method_run_result = $method_run_ref->($cgi,$json,\%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},$node);
                 $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
             }
         } else {
-            $json->{meta}{rc}  = 400;
-            $json->{meta}{msg} = "Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass' (class.subclass.function). Abort!";
+            return {'rc'=>400,'msg'=>"Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass' (class.subclass.function). Abort!"};
         }
     } else {
-            $json->{meta}{rc}  = 400;
-            $json->{meta}{msg} = "Requested subclass '".($reqSubclass || '')."' does not exist in class '".($reqPackage || '')."' (class.subclass.function). Abort!";
+            return {'rc'=>400,'msg'=>"Requested subclass '".($reqSubclass || '')."' does not exist in class '$reqPackage' (class.subclass.function). Abort!"};
     }
     
-    ###
-    return {
-       data => $data,
-    };
 }
 
 

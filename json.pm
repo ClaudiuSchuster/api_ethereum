@@ -35,7 +35,7 @@ sub print {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${method}::run"};
                 my $method_run_result = $method_run_ref->($cgi,$json);
-                $json->{'data'}{$method} = $method_run_result->{data};
+                $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
             }
             $json->{'data'}{$method} = {} if( $json->{meta}{postdata}{nodata} );
         } else {
