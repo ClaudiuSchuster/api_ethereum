@@ -8,7 +8,7 @@
 * Simple frontend: http://10.10.0.8:88/eth
 
 
-### api.service systemd definition:
+### api.service Systemd Definition:
 
     [Unit]
     Description=api.pl
@@ -27,14 +27,24 @@
     WantedBy=multi-user.target
 
 
-### Perl DEPENDENCIES:
+### Perl Dependencies:
  - HTTP-Server-Simple-CGI-PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
  - File::Slurper
  - HTTP::Request
- - JSON
  - LWP::UserAgent
  - Math::BigFloat
  - Math::BigInt
+ - JSON
+ - *______ below should be installed by previous automatically ______*
+ - HTTP::Server::Simple
+ - IO::Socket::INET6
+ - Net::Server
+ - Net::Server::PreFork
+ - Net::Server::Proto::SSLEAY
+ - Net::Server::Single
+ - Net::SSLeay
+ - Socket6
+ - *. . . and possibly others . . .*
 
 
 ### Rinkeby Authenticated Faucet:
