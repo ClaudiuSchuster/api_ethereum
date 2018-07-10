@@ -4,7 +4,7 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 ## Load our Ethereum module ( Net::Ethereum 0.30 https://metacpan.org/pod/Net::Ethereum )
 use modules::Ethereum;
-## Load some more from our modules...
+## Load some more from our method modules...
 use methods::eth::personal::account;
 use methods::eth::contract;
 
@@ -13,7 +13,6 @@ sub run {
     my $cgi = shift;
     my $json = shift;
     my $data = {};
-    
     
     my $init_node = sub { # Initialize Ethereum Node
         my $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
