@@ -4,7 +4,7 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 
 sub deploy {
-    my $cgi=shift; my $json=shift; my $eth=shift; my $node=shift;
+    my $cgi=shift; my $json=shift; my $data=shift; my $node=shift;
     
     my $params = $json->{meta}{postdata}{params} || undef;
     unless( ref($params) eq 'HASH' ) {
@@ -39,16 +39,16 @@ sub deploy {
     my $gas_price   = $node->eth_gasPrice();
     my $tx_cost_wei = $gas_used * $gas_price;
     my $tx_cost_eth = $node->wei2ether($tx_cost_wei);
-    $eth->{contract}{deploy}{address}       = $address;
-    $eth->{contract}{deploy}{tx}            = $txhash;
-    $eth->{contract}{deploy}{tx_cost_wei}   = $tx_cost_wei->numify();
-    $eth->{contract}{deploy}{tx_cost_eth}   = $tx_cost_eth->numify();
-    $eth->{contract}{deploy}{gas_price_wei} = $gas_price->numify();
-    $eth->{contract}{deploy}{gas_used}      = $gas_used;
+    $data->{address}       = $address;
+    $data->{tx}            = $txhash;
+    $data->{tx_cost_wei}   = $tx_cost_wei->numify();
+    $data->{tx_cost_eth}   = $tx_cost_eth->numify();
+    $data->{gas_price_wei} = $gas_price->numify();
+    $data->{gas_used}      = $gas_used;
 }
 
 sub test {
-    my $cgi=shift; my $json=shift; my $eth=shift; my $node=shift;
+    my $cgi=shift; my $json=shift; my $data=shift; my $node=shift;
     my $mathBigIntOBject = $node->eth_getBalance( API::methods::eth::personal::account::address, 'latest' );
     # $json->{meta}{msg} = Dumper(  );
     # $json->{meta}{msg} = $node->wei2ether( $mathBigIntOBject )->bstr(); # ->numify()
