@@ -27,12 +27,12 @@ sub print {
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld"}}'
             ~,
             returnDataTable => [ 'returnObject',
-                ['data:eth:contract:deploy:address', 'string', 'yes', ""],
-                ['data:eth:contract:deploy:tx', 'string', 'yes', ""],
-                ['data:eth:contract:deploy:gas_used', 'integer', 'yes', ""],
-                ['data:eth:contract:deploy:gas_price_wei', 'integer', 'yes', ""],
-                ['data:eth:contract:deploy:tx_cost_wei', 'integer', 'yes', ""],
-                ['data:eth:contract:deploy:tx_cost_eth', 'float', 'yes', ""],
+                ['data:eth:contract:deploy:address',        'string',   'yes', ""],
+                ['data:eth:contract:deploy:tx',             'string',   'yes', ""],
+                ['data:eth:contract:deploy:gas_used',       'integer',  'yes', ""],
+                ['data:eth:contract:deploy:gas_price_wei',  'integer',  'yes', ""],
+                ['data:eth:contract:deploy:tx_cost_wei',    'integer',  'yes', ""],
+                ['data:eth:contract:deploy:tx_cost_eth',    'float',    'yes', ""],
             ],
         }
     ]);
