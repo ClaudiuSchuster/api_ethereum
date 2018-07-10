@@ -3,6 +3,16 @@ package API::methods::eth::contract;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
+sub test {
+    my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
+    
+    my $mathBigIntOBject = $node->eth_getBalance( API::methods::eth::personal::account::address, 'latest' );
+    # $json->{meta}{msg} = Dumper(  );
+    # $json->{meta}{msg} = $node->wei2ether( $mathBigIntOBject )->bstr(); # ->numify()
+    # $json->{meta}{msg} = $mathBigIntOBject->bstr();
+    # $json->{meta}{msg} = $node->web3_clientVersion();
+}
+
 sub deploy {
     my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
     
@@ -38,16 +48,6 @@ sub deploy {
     $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
     $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
     $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
-}
-
-sub test {
-    my $cgi=shift; my $data=shift; my $params=shift; my $node=shift;
-    
-    my $mathBigIntOBject = $node->eth_getBalance( API::methods::eth::personal::account::address, 'latest' );
-    # $json->{meta}{msg} = Dumper(  );
-    # $json->{meta}{msg} = $node->wei2ether( $mathBigIntOBject )->bstr(); # ->numify()
-    # $json->{meta}{msg} = $mathBigIntOBject->bstr();
-    # $json->{meta}{msg} = $node->web3_clientVersion();
 }
 
 

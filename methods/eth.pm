@@ -12,14 +12,7 @@ use methods::eth::contract;
 sub run {
     my $cgi = shift;
     my $json = shift;
-    
-    my $init_node = sub { # Initialize Ethereum Node
-        my $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
-        $node->set_debug_mode(1);
-        $node->set_show_progress(1);
-        return $node;
-    };
-    
+
     ### Check if subclass and requested function exists before initialize node and execute it.
     my ($reqPackage,$reqSubclass,$reqFunc) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\.(\w+))?(?:\.(\w+))?/ );
     my ($subclass) = grep { $json->{meta}{postdata}{method} =~ /^\w+\.($_)(?:\..*)?$/ }  map /methods\/$reqPackage\/(\w+)\.pm/, keys %INC;
@@ -33,7 +26,15 @@ sub run {
         }
         if( defined $subclass_func && grep { $_ eq $subclass_func } @subs ) {
             $json->{meta}{method} = $json->{meta}{postdata}{method};
-            my $node = $init_node->();
+            my $node;
+            eval { # Initialize Ethereum Node
+                $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
+                $node->set_debug_mode( 1 );
+                $node->set_show_progress( 1 );
+                1; 
+            } or do {
+                return { 'rc' => 500, 'msg' => "error.initialize.eth.node: ".$@ };
+            };
             {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
