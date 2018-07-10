@@ -39,9 +39,7 @@ sub run {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
                 my $method_run_result = $method_run_ref->($cgi,$json,\%{$data->{$subclass}{$subclass_func}},$node);
-                if( ref($method_run_result) eq 'HASH' ) {
-                    $json->{meta} = { %{$json->{meta}}, %$method_run_result };
-                }
+                $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
             }
         } else {
             $json->{meta}{rc}  = 400;
