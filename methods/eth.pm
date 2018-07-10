@@ -39,9 +39,9 @@ sub run {
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
                 return $method_run_ref->(
                     $cgi,
-                    $json,
                     \%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},
-                    $node
+                    $node,
+                    $json->{meta}{postdata}{params} || undef
                 );
             }
         } else {

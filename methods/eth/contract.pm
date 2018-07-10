@@ -4,9 +4,8 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 
 sub deploy {
-    my $cgi=shift; my $json=shift; my $data=shift; my $node=shift;
+    my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
     
-    my $params = $json->{meta}{postdata}{params} || undef;
     unless( ref($params) eq 'HASH' ) {
         return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" };
     } else {
@@ -42,11 +41,12 @@ sub deploy {
 }
 
 sub test {
-    my $cgi=shift; my $json=shift; my $data=shift; my $node=shift;
+    my $cgi=shift; my $data=shift; my $params=shift; my $node=shift;
+    
     my $mathBigIntOBject = $node->eth_getBalance( API::methods::eth::personal::account::address, 'latest' );
     # $json->{meta}{msg} = Dumper(  );
     # $json->{meta}{msg} = $node->wei2ether( $mathBigIntOBject )->bstr(); # ->numify()
-    $json->{meta}{msg} = $mathBigIntOBject->bstr();
+    # $json->{meta}{msg} = $mathBigIntOBject->bstr();
     # $json->{meta}{msg} = $node->web3_clientVersion();
 }
 
