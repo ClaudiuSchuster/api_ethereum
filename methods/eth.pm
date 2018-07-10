@@ -12,12 +12,19 @@ use methods::eth::contract;
 sub run {
     my $cgi = shift;
     my $json = shift;
-    my $eth = {};
+    my $data = {};
     
+    
+    my $init_node = sub { # Initialize Ethereum Node
+        my $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
+        $node->set_debug_mode(1);
+        $node->set_show_progress(1);
+        return $node;
+    };
     
     ### Check if subclass and requested function exists before initialize node and execute it.
-    my ($reqPackage,$reqSubclass,$reqFunc) = ( $json->{meta}{postdata}{method} =~ /(\w+)\.(\w+)\.(\w+)/ );
-    my ($subclass) = grep { $json->{meta}{postdata}{method} =~ /^\w+\.($_)(\.\w+)?$/ }  map /methods\/eth\/(\w+)\.pm/, keys %INC;
+    my ($reqPackage,$reqSubclass,$reqFunc) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\.(\w+))?(?:\.(\w+))?/ );
+    my ($subclass) = grep { $json->{meta}{postdata}{method} =~ /^\w+\.($_)(\.\w+)?$/ }  map /methods\/$reqPackage\/(\w+)\.pm/, keys %INC;
     if( defined $subclass ) {
         my $subclass_func = $1 if( $json->{meta}{postdata}{method} =~ /^eth\.contract\.(\w+)/ );
         my @subs;
@@ -28,34 +35,28 @@ sub run {
         }
         if( grep { $_ eq $subclass_func } @subs ) {
             $json->{meta}{method} = $json->{meta}{postdata}{method};
-            
-            ### Initialize Ethereum Node
-            my $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
-            $node->set_debug_mode(1);
-            $node->set_show_progress(1);
-            
+            my $node = $init_node->();
             {
                 no strict 'refs';
-                my $method_run_ref = \&{"API::methods::eth::${subclass}::${subclass_func}"};
-                my $method_run_result = $method_run_ref->($cgi,$json,$eth,$node);
+                my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
+                my $method_run_result = $method_run_ref->($cgi,$json,$data,$node);
                 if( ref($method_run_result) eq 'HASH' ) {
                     $json->{meta}{rc}  = $method_run_result->{rc};
                     $json->{meta}{msg} = $method_run_result->{msg};
                 }
             }
-            
         } else {
             $json->{meta}{rc}  = 400;
-            $json->{meta}{msg} = "Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass'. Abort!";
+            $json->{meta}{msg} = "Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass' (class.subclass.function). Abort!";
         }
     } else {
             $json->{meta}{rc}  = 400;
-            $json->{meta}{msg} = "Requested class '".($reqSubclass || '')."' does not exist in package '".($reqPackage || '')."'. Abort!";
+            $json->{meta}{msg} = "Requested subclass '".($reqSubclass || '')."' does not exist in class '".($reqPackage || '')."' (class.subclass.function). Abort!";
     }
     
     ###
     return {
-       data => $eth,
+       data => $data,
     };
 }
 

@@ -38,6 +38,10 @@ sub print {
                 $json->{'data'}{$method} = $method_run_result->{data};
             }
             $json->{'data'}{$method} = {} if( $json->{meta}{postdata}{nodata} );
+        } else {
+            my ($reqPackage) = ( $json->{meta}{postdata}{method} =~ /^(\w+)\.?.*/ );
+            $json->{meta}{rc}  = 400;
+            $json->{meta}{msg} = "Requested method class '".($reqPackage || '')."' (class.subclass.function) does not exist. Abort!";
         }
     }
     
