@@ -37,7 +37,12 @@ sub run {
             {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
-                return $method_run_ref->($cgi,$json,\%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},$node);
+                return $method_run_ref->(
+                    $cgi,
+                    $json,
+                    \%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},
+                    $node
+                );
             }
         } else {
             return {'rc'=>400,'msg'=>"Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass' (class.subclass.function). Abort!"};
