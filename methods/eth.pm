@@ -37,8 +37,7 @@ sub run {
             {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${reqPackage}::${subclass}::${subclass_func}"};
-                my $method_run_result = $method_run_ref->($cgi,$json,\%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},$node);
-                $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
+                return $method_run_ref->($cgi,$json,\%{$json->{data}{$reqPackage}{$subclass}{$subclass_func}},$node);
             }
         } else {
             return {'rc'=>400,'msg'=>"Requested function '".($reqFunc || '')."' does not exist in package '$reqPackage.$subclass' (class.subclass.function). Abort!"};
