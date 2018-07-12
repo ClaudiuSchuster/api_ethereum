@@ -16,20 +16,14 @@ sub test {
 sub deploy {
     my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
     
-    unless( ref($params) eq 'HASH' ) {
-        return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" };
-    } else {
-        unless( $params->{name} ) {
-            return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract to deploy is needed. Abort!" };
-        }
-        if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' ) {
-            return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" };
-        }
-    }
-
-    unless( -e 'contracts/'.$params->{name}.'.sol' ) {
-        return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{name}.sol' not found. Abort!" };
-    }
+    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
+        unless( ref($params) eq 'HASH' );
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract to deploy is needed. Abort!" }
+        unless( $params->{name} );
+    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{name}.sol' not found. Abort!" }
+        unless( -e 'contracts/'.$params->{name}.'.sol' );
+    return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" }
+        if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' );
 
     my $contract_status;
     eval {
@@ -48,6 +42,8 @@ sub deploy {
     $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
     $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
     $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
+    
+    return { 'rc' => 200 };
 }
 
 
