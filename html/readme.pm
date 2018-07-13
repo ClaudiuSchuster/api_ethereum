@@ -25,8 +25,13 @@ sub print {
                 ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
+// Generic example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld"}}'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld","constructor":{"initString":"+ InitString +","initValue":102}}}'
+
+// Deploying IceMine.io Smart Contract:
+curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"name":"IceMine","constructor":{"_cap":2000,"_supply":10000,"_percent":60,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1"}}}'
+
+                                                                                                     (_cap=HardCapETH, _supply=totalSupply, _percent:%fromTotalSupplyForICO, _wallet:targetWalletICOfunds)
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:eth:contract:deploy:address',        'string',   'yes', ""],
