@@ -10,6 +10,7 @@ use JSON;
 use Math::BigInt;
 use Math::BigFloat;
 use File::Slurper 'read_text';
+use Data::Dumper;
 
 our $VERSION = '0.30'; # Net::Ethereum 0.30
 
@@ -1310,7 +1311,10 @@ sub contract_method_call()
     print 'eth_call return data: '.$rc. "\n";
   }
   my $raw_data = substr($rc, 2);
-  return $this->_unmarshal($function_name, $raw_data);
+  # return $this->_unmarshal($function_name, $raw_data);
+  my $return = $this->_unmarshal($function_name, $raw_data);
+  my @keys = keys %$return;
+  return defined $keys[0] ? $return->{$keys[0]} : $return;
 }
 
 
