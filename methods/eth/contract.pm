@@ -34,7 +34,7 @@ sub info {
     $data->{remaining_eth}   = $node->wei2ether( $weiRemaining )->numify();
     $data->{remaining_token} = $node->contract_method_call('remainingTokens')->bstr();
     $data->{cap_reached}     = $node->contract_method_call('capReached')->numify();
-    $data->{ico_percent}     = $node->contract_method_call('crowdsalePercent')->numify();
+    $data->{ico_percent}     = $node->contract_method_call('investorsPercent')->numify();
     
     return { 'rc' => 200 };
 }
@@ -55,8 +55,8 @@ sub address {
     $node->set_contract_abi( $node->_read_file('contracts/'.$params->{name}.'.abi') );
     $node->set_contract_id($contracts->{$params->{name}});
     
-    $data->{balance_token}    = $node->contract_method_call('balanceOf',{ '' => $params->{address} })->bstr();
-    $data->{investment_wei} = $node->contract_method_call('investmentOf',{ '' => $params->{address} })->bstr();
+    $data->{balance_token}  = $node->contract_method_call('balanceOf',   { '_beneficiary' => $params->{address} })->bstr();
+    $data->{investment_wei} = $node->contract_method_call('investmentOf',{ '_beneficiary' => $params->{address} })->bstr();
 
     return { 'rc' => 200 };
 }
