@@ -1,62 +1,104 @@
 package API::methods::eth::contract;
 
 use strict; use warnings; use utf8; use feature ':5.10';
-use Data::Dumper;
 
-sub info {
-    my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
+
+my $set_contract = sub {
+    my $node         = shift;
+    my $params       = shift;
+    my $contracts    = API::methods::eth::personal::account::contracts;
+    
+    $node->set_contract_abi( $node->_read_file('contracts/'.$params->{contract}.'.abi') );
+    $node->set_contract_id( $contracts->{$params->{contract}} );
+    
+    return $contracts->{$params->{contract}}; # addressOf
+};
+
+my $check_basics = sub {
+    my $params    = shift;
     my $contracts = API::methods::eth::personal::account::contracts;
     
     return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
-        unless( ref($params) eq 'HASH' );
-    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract is needed. Abort!" }
-        unless( $params->{name} );
-    return { 'rc' => 400, 'msg' => "Contract '$params->{name}' not found in account.pm. Abort!" }
-        unless( defined $contracts->{$params->{name}} );
-    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{name}.abi' not found. Abort!" }
-        unless( -e 'contracts/'.$params->{name}.'.abi' );
+        unless( defined $params || ref($params) eq 'HASH' );
+        
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: Name of 'contract' is needed. Abort!" }
+        unless( $params->{contract} );
+        
+    return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in account.pm. Abort!" }
+        unless( defined $contracts->{$params->{contract}} );
+        
+    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{contract}.abi' not found. Abort!" }
+        unless( -e 'contracts/'.$params->{contract}.'.abi' );
+        
+    return { 'rc' => 200 };
+};
 
-    $node->set_contract_abi( $node->_read_file('contracts/'.$params->{name}.'.abi') );
-    $node->set_contract_id($contracts->{$params->{name}});
+    # $data->{eth2tokenTest}                   = $node->contract_method_call('crowdsaleCalcToken',{ '_weiAmount' => 1*10**18 })->bstr();
+
+sub info {
+    my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
     
-    $data->{address}         = $contracts->{$params->{name}};
-    $data->{name}            = substr($node->contract_method_call('name'), 1);
-    $data->{symbol}          = substr($node->contract_method_call('symbol'), 1);
-    $data->{wallet}          = $node->contract_method_call('crowdsaleWallet');
-    $data->{cap}             = $node->contract_method_call('crowdsaleCap')->bstr();
-    $data->{decimals}        = $node->contract_method_call('decimals')->numify();
-    $data->{totalSupply}     = $node->contract_method_call('totalSupply')->bstr();
-    my $weiRaised            = $node->contract_method_call('crowdsaleRaised');
-    $data->{raised_wei}      = $weiRaised->bstr();
-    $data->{raised_eth}      = $node->wei2ether( $weiRaised )->numify();
-    my $weiRemaining         = $node->contract_method_call('remainingWei');
-    $data->{remaining_wei}   = $weiRemaining->bstr();
-    $data->{remaining_eth}   = $node->wei2ether( $weiRemaining )->numify();
-    $data->{remaining_token} = $node->contract_method_call('remainingTokens')->bstr();
-    $data->{cap_reached}     = $node->contract_method_call('capReached')->numify();
-    $data->{ico_percent}     = $node->contract_method_call('investorsPercent')->numify();
+    my $checks = $check_basics->($params);
+    return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
+
+    my $contract = $set_contract->($node, $params);
+    
+    $data->{address}                         = $contract;
+    $data->{name}                            = substr($node->contract_method_call('name'), 1);
+    $data->{symbol}                          = substr($node->contract_method_call('symbol'), 1);
+    $data->{decimals}                        = $node->contract_method_call('decimals')->numify();
+    my $totalSupply                          = $node->contract_method_call('totalSupply');
+    $data->{totalSupply}                     = $totalSupply->bstr();
+    $data->{totalSupply_IceMine}             = $node->wei2ether( $totalSupply )->numify();
+    $data->{memberCount}                     = $node->contract_method_call('memberCount')->numify();
+    for (0..($data->{memberCount}-1) ) {
+        push @{$data->{memberIndex}}, $node->contract_method_call('memberIndex', { '' => $_ });
+    }
+    $data->{crowdsaleOpen}                   = $node->contract_method_call('crowdsaleOpen')->numify();
+    $data->{crowdsaleFinished}               = $node->contract_method_call('crowdsaleFinished')->numify();
+    $data->{crowdsalePercent}                = $node->contract_method_call('crowdsalePercentOfTotalSupply')->numify();
+    my $crowdsaleSupply                      = $node->contract_method_call('crowdsaleSupply');
+    $data->{crowdsaleSupply}                 = $crowdsaleSupply->bstr();
+    $data->{crowdsaleSupply_IceMine}         = $node->wei2ether( $crowdsaleSupply )->numify();
+    my $weiRaised                            = $node->contract_method_call('crowdsaleRaised');
+    $data->{crowdsaleRaised_Wei}             = $weiRaised->bstr();
+    $data->{crowdsaleRaised_Eth}             = $node->wei2ether( $weiRaised )->numify();
+    my $crowdsaleCap                         = $node->contract_method_call('crowdsaleCap');
+    $data->{crowdsaleCap}                    = $crowdsaleCap->bstr();
+    $data->{crowdsaleCap_Eth}                = $node->wei2ether( $crowdsaleCap )->numify();
+    $data->{crowdsaleWallet}                 = $node->contract_method_call('crowdsaleWallet');
+    my $weiRemaining                         = $node->contract_method_call('crowdsaleRemainingWei');
+    $data->{crowdsaleRemainingWei}           = $weiRemaining->bstr();
+    $data->{crowdsaleRemainingWei_Eth}       = $node->wei2ether( $weiRemaining )->numify();
+    my $crowdsaleRemainingToken              = $node->contract_method_call('crowdsaleRemainingToken');
+    $data->{crowdsaleRemainingToken}         = $crowdsaleRemainingToken->bstr();
+    $data->{crowdsaleRemainingToken_IceMine} = $node->wei2ether( $crowdsaleRemainingToken )->numify();
     
     return { 'rc' => 200 };
 }
 
-sub address {
+sub member {
     my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
-    my $contracts = API::methods::eth::personal::account::contracts;
     
-    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
-        unless( ref($params) eq 'HASH' );
-    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract and 'address' of account in contract needed. Abort!" }
-        unless( $params->{name} && $params->{address} );
-    return { 'rc' => 400, 'msg' => "Contract '$params->{name}' not found in account.pm. Abort!" }
-        unless( defined $contracts->{$params->{name}} );
-    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{name}.abi' not found. Abort!" }
-        unless( -e 'contracts/'.$params->{name}.'.abi' );
-
-    $node->set_contract_abi( $node->_read_file('contracts/'.$params->{name}.'.abi') );
-    $node->set_contract_id($contracts->{$params->{name}});
+    my $checks = $check_basics->($params);
+    return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' of _beneficiary needed. Abort!" }
+        unless( $params->{address} );
     
-    $data->{balance_token}  = $node->contract_method_call('balanceOf',   { '_beneficiary' => $params->{address} })->bstr();
-    $data->{investment_wei} = $node->contract_method_call('investmentOf',{ '_beneficiary' => $params->{address} })->bstr();
+    my $contract = $set_contract->($node, $params);
+    
+    my $balance              = $node->contract_method_call('balanceOf',    { '_beneficiary' => $params->{address} });
+    $data->{balance}         = $balance->bstr();
+    $data->{balance_IceMine} = $node->wei2ether( $balance )->numify();
+    my $percent              = $node->contract_method_call('percentOf',    { '_beneficiary' => $params->{address} });
+    $data->{percent}         = $percent->bstr();
+    # $data->{percent_percent} = $node->wei2ether( $percent )->numify();
+    my $investment           = $node->contract_method_call('investmentOf', { '_beneficiary' => $params->{address} });
+    $data->{investment}      = $investment->bstr();
+    $data->{investment_Eth}  = $node->wei2ether( $investment )->numify();
+    my $unpaid               = $node->contract_method_call('unpaidOf',     { '_beneficiary' => $params->{address} });
+    $data->{unpaid}          = $unpaid->bstr();
+    $data->{unpaid_Eth}      = $node->wei2ether( $unpaid )->numify();
 
     return { 'rc' => 200 };
 }
@@ -64,19 +106,15 @@ sub address {
 sub deploy {
     my $cgi=shift; my $data=shift; my $node=shift; my $params=shift;
     
-    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
-        unless( ref($params) eq 'HASH' );
-    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'name' of contract to deploy is needed. Abort!" }
-        unless( $params->{name} );
-    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{name}.sol' not found. Abort!" }
-        unless( -e 'contracts/'.$params->{name}.'.sol' );
+    my $checks = $check_basics->($params);
+    return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" }
         if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' );
-
+    
     my $contract_status;
     eval {
         $contract_status = $node->compile_and_deploy_contract(
-            $params->{name},
+            $params->{contract},
             $params->{constructor} || {}, # Constructor Init Parameters
             API::methods::eth::personal::account::address,
             API::methods::eth::personal::account::password

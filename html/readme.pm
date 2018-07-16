@@ -21,17 +21,15 @@ sub print {
             title           => "Deploy a contract",
             note            => "",
             parameterTable  => [
-                ['params:name',         'string',    'true',  '',    "'name' of contract to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:contract',     'string',    'true',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
                 ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
 // Generic example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"name":"HelloWorld"}}'
 
-// Deploying IceMine.io Smart Contract:
-curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"name":"IceMine","constructor":{"_cap":2000,"_supply":10000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1"}}}'
-
-                                                                                                     (_cap=HardCapETH, _supply=totalSupply, _wallet:targetWalletICOfunds)
+// Deploy IceMine.io Smart Contract (_cap=HardCapETH, _wallet:TargetWalletForIcoFunds, _owner:TargetOwner||0x0_for_msg.sender):
+curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:eth:contract:deploy:address',        'string',   'yes', ""],
