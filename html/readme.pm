@@ -45,7 +45,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             title           => "Deploy 'IceMine' contract (specific)",
             note            => "",
             parameterTable  => [
-                ['params:contract',     'string',   'false',  '',                     "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
                 ['params:constructor',  'object{}', 'false', '{ *from IceMine.pm* }', qq~'Constructor' parameters will be read from IceMine.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
             ],
             requestExample  => qq~
