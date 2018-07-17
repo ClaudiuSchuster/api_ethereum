@@ -14,7 +14,7 @@ sub print {
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.contract',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested aata"],
+            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
         },
         {
             method          => "eth.contract.*.deploy",
@@ -211,7 +211,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.member","params":{"contr
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.tx',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested aata"],
+            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
         }
     ]);
     
