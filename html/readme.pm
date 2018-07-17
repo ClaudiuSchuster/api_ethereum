@@ -50,7 +50,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"HelloWorld"}}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
 
-// Deploy IceMine.io Smart Contract:
+// Deploy IceMine Smart Contract:
 curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [ 'returnObject',
@@ -58,13 +58,13 @@ curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"contract
             ],
         },
         {
-            method          => "eth.contract.*.info",
+            method          => "eth.contract.*.read",
             title           => "Read Contract (specific)",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
 // Read Info from contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.info"}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:address',                        'string',   'yes', "Contract address"],
@@ -97,17 +97,17 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.info"}'
             ],
         },
         {
-            method          => "eth.contract.info",
+            method          => "eth.contract.read",
             title           => "Read Contract (generic)",
             note            => "",
             parameterTable  => [
                 ['params:contract',     'string',    'true',  '',    "Name of 'contract'"],
             ],
             requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.info","params":{"contract":"IceMine"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.read","params":{"contract":"IceMine"}}'
             ~,
             returnDataTable => [ 'returnObject',
-                ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.info'>method:eth.contract.*.info</a> for returndata"],
+                ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.read'>method:eth.contract.*.read</a> for returndata"],
             ],
         },
         {

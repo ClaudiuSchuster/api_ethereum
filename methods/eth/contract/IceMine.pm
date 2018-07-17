@@ -3,7 +3,7 @@ package API::methods::eth::contract::IceMine;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
-sub info {
+sub read {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $data->{address}                         = $contract->{address};
