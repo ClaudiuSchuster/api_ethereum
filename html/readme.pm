@@ -32,7 +32,12 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [
-                ['data:*',        '*',   '*', "contract specific, see specific methods [ <a href='#eth.contract.IceMine.deploy'>method:eth.contract.IceMine.deploy</a> ] for returndata"],
+                ['data:address',        'string',   'yes', "Contract address"],
+                ['data:tx',             'string',   'yes', "Deployment transaction hash"],
+                ['data:tx_cost_wei',    'string',   'yes', "tx cost in Wei"],
+                ['data:tx_cost_eth',    'float',    'yes', "tx cost in ETH"],
+                ['data:gas_used',       'integer',  'yes', "gas amount used"],
+                ['data:gas_price_wei',  'integer',  'yes', "price per gas amount"],
             ],
         },
         {
@@ -48,12 +53,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ~,
             returnDataTable => [
-                ['data:address',        'string',   'yes', "Contract address"],
-                ['data:tx',             'string',   'yes', "Deployment transaction hash"],
-                ['data:tx_cost_wei',    'string',   'yes', "tx cost in Wei"],
-                ['data:tx_cost_eth',    'float',    'yes', "tx cost in ETH"],
-                ['data:gas_used',       'integer',  'yes', "gas amount used"],
-                ['data:gas_price_wei',  'integer',  'yes', "price per gas amount"],
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
             ],
         },
         {
