@@ -51,7 +51,7 @@ my $deploy = sub {
     $data->{tx}            = $contract_status->{transactionHash};
     $data->{gas_used}      = hex($contract_status->{gasUsed});
     $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
-    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei}->bstr();;
+    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
     $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
     
     return { 'rc' => 200 };

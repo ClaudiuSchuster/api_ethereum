@@ -34,7 +34,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             returnDataTable => [
                 ['data:address',        'string',   'yes', "Contract address"],
                 ['data:tx',             'string',   'yes', "Deployment transaction hash"],
-                ['data:tx_cost_wei',    'string',   'yes', "tx cost in Wei"],
+                ['data:tx_cost_wei',    'integer',  'yes', "tx cost in Wei"],
                 ['data:tx_cost_eth',    'float',    'yes', "tx cost in ETH"],
                 ['data:gas_used',       'integer',  'yes', "gas amount used"],
                 ['data:gas_price_wei',  'integer',  'yes', "price per gas amount"],
