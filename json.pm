@@ -33,11 +33,11 @@ sub print {
         } else {
             my ($reqPackage) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\..*)?/ );
             $json->{meta}{rc}  = 400;
-            $json->{meta}{msg} = "Requested method class '".($reqPackage || '')."' (class.subclass.function) does not exist. Abort!";
+            $json->{meta}{msg} = "Requested method class '".($reqPackage || '')."' (class.subclass.[function|subsubclass.function]) does not exist. Abort!";
         }
     } else {
         $json->{meta}{rc}  = 400;
-        $json->{meta}{msg} = "No 'method' parameter transfered! 'POSTDATA' must be a JSON-Object{} like {'method':'class.subclass.function','params':{}}";
+        $json->{meta}{msg} = "No 'method' parameter transfered! 'POSTDATA' must be a JSON-Object{} like {'method':'class.subclass.[function|subsubclass.function]','params':{}}";
     }
     
     ### Print JSON object
