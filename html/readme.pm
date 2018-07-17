@@ -14,7 +14,6 @@ sub print {
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.contract',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
         },
         {
             method          => "eth.contract.deploy",
@@ -22,7 +21,7 @@ sub print {
             note            => "",
             parameterTable  => [
                 ['params:contract',     'string',    'true',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
-                ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
+                ['params:constructor',  'object{}',  'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
 // Generic example:
@@ -32,7 +31,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
 // Deploy IceMine Smart Contract:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
-            returnDataTable => [ 'returnObject',
+            returnDataTable => [
                 ['data:*',        '*',   '*', "view specific methods [ <a href='#eth.contract.*.deploy'>method:eth.contract.*.deploy</a> ] for returndata"],
             ],
         },
@@ -41,14 +40,14 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             title           => "Deploy 'IceMine' contract (specific)",
             note            => "",
             parameterTable  => [
-                ['params:contract',     'string',    'false',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
-                ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
+                ['params:contract',     'string',   'false',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:constructor',  'object{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
 // Deploy constract 'IceMine' with constructor from IceMine.pm
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ~,
-            returnDataTable => [ 'returnObject',
+            returnDataTable => [
                 ['data:address',        'string',   'yes', "Contract address"],
                 ['data:tx',             'string',   'yes', "Deployment transaction hash"],
                 ['data:tx_cost_wei',    'string',   'yes', "tx cost in Wei"],
@@ -66,7 +65,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
 // Read Info from contract 'IceMine'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
             ~,
-            returnDataTable => [ 'returnObject',
+            returnDataTable => [
                 ['data:address',                        'string',   'yes', "Contract address"],
                 ['data:owner',                          'string',   'yes', "Contract owner address"],
                 ['data:name',                           'string',   'yes', "EIP-20 name"],
@@ -107,7 +106,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
 // use contract 'IceMine'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params":{"address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
             ~,
-            returnDataTable => [ 'returnObject',
+            returnDataTable => [
                 ['data:crowdsaleIsMember',          'bool',     'yes', "true if address is member of Contract"],
                 ['data:unpaid',                     'string',   'yes', "Unpaid Wei amount"],
                 ['data:unpaid_Eth',                 'float',    'yes', "Unpaid ETH amount"],
@@ -135,7 +134,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
 # // use contract 'IceMine'
 # curl http://$ENV{HTTP_HOST} -d 
             # ~,
-            # returnDataTable => [ 'returnObject',
+            # returnDataTable => [
                 # ['data:TEMPLATE', 'string', 'yes', ""],
             # ],
         # },
@@ -150,7 +149,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
             # requestExample  => qq~
 # curl http://$ENV{HTTP_HOST} -d 
             # ~,
-            # returnDataTable => [ 'returnObject',
+            # returnDataTable => [
                 # ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.TEMPLATE'>method:eth.contract.*.TEMPLATE</a> for returndata"],
             # ],
         # }
@@ -160,14 +159,14 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.address',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
+            returnObject => ['data', 'object{}', 'yes', "object{} contains the requested data"],
         }
     ]);
     
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.tx',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
+            returnObject => ['data', 'object{}', 'yes', "object{} contains the requested data"],
         }
     ]);
     

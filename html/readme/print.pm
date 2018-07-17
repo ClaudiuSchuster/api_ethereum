@@ -117,7 +117,7 @@ sub ReadmeClass {
                             <td>
                                 \"data\" : { } 
                             </td><td>
-                                'object{}' of requested data which contains one or more objects of specified API methods, e.g. {dhcp}.
+                                'object{}' which contains the requested data.
                             </td>
                         </tr>
                     </tbody></table>
