@@ -117,7 +117,7 @@ sub ReadmeClass {
                             <td>
                                 \"data\" : { } 
                             </td><td>
-                                'object{}' which contains the requested data.
+                                'object{}' will contain the requested return data.
                             </td>
                         </tr>
                     </tbody></table>
