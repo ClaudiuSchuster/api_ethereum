@@ -188,7 +188,7 @@ sub Method {
         if( scalar @_ ) {   # merge defaults with passed parameters
             @parameter = (
                 @parameter,
-                ['params', 'object{}', '', '', "Object of method parameters"],
+                ['params', 'object{}', (grep { $_->[2] eq 'true' } @_) ? 'true' : 'false' , '', "Object of method parameters"],
                 @_,
                 @optParas
             );
