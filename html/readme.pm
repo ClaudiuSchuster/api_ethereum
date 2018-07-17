@@ -91,9 +91,9 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:crowdsaleCap',                   'string',   'yes', "Wei after crowdsale is finished"],
                 ['data:crowdsaleCap_Eth',               'float',    'yes', "ETH after crowdsale is finished"],
                 ['data:crowdsaleCalcToken_1wei',        'integer',  'yes', "Ici (10**-18 ICE) amount in crowdsale for 1 Wei"],
-                ['data:crowdsaleInitialized',           'integer',   'yes', "1 after owner initialized the contract, else 0"],
-                ['data:crowdsaleOpen',                  'integer',   'yes', "1 if crowdsale is open for investors, else 0"],
-                ['data:crowdsaleFinished',              'integer',   'yes', "1 after crowdsaleCap was reached, else 0"],
+                ['data:crowdsaleInitialized',           'bool',     'yes', "true after owner initialized the contract"],
+                ['data:crowdsaleOpen',                  'bool',     'yes', "true if crowdsale is open for investors"],
+                ['data:crowdsaleFinished',              'bool',     'yes', "true after crowdsaleCap was reached"],
             ],
         },
         {
@@ -122,7 +122,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.read","params":{"contrac
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params":{"address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
             ~,
             returnDataTable => [ 'returnObject',
-                ['data:crowdsaleIsMember',          'integer',  'yes', "1 if address is member of Contract, else 0"],
+                ['data:crowdsaleIsMember',          'bool',     'yes', "true if address is member of Contract"],
                 ['data:unpaid',                     'string',   'yes', "Unpaid Wei amount"],
                 ['data:unpaid_Eth',                 'float',    'yes', "Unpaid ETH amount"],
                 ['data:balance',                    'string',   'yes', "Ici balance"],
@@ -204,7 +204,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.member","params":{"contr
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.address',
-            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested aata"],
+            returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
         }
     ]);
     

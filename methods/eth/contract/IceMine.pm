@@ -18,9 +18,9 @@ sub read {
     for (0..($data->{memberCount}-1) ) {
         push @{$data->{memberIndex}}, $node->contract_method_call('memberIndex', { '' => $_ });
     }
-    $data->{crowdsaleOpen}                   = $node->contract_method_call('crowdsaleOpen')->numify();
-    $data->{crowdsaleFinished}               = $node->contract_method_call('crowdsaleFinished')->numify();
-    $data->{crowdsaleInitialized}            = $node->contract_method_call('crowdsaleInitialized')->numify();
+    $data->{crowdsaleOpen}                   = \($node->contract_method_call('crowdsaleOpen')->numify());
+    $data->{crowdsaleFinished}               = \($node->contract_method_call('crowdsaleFinished')->numify());
+    $data->{crowdsaleInitialized}            = \($node->contract_method_call('crowdsaleInitialized')->numify());
     $data->{crowdsalePercentOfTotalSupply}   = $node->contract_method_call('crowdsalePercentOfTotalSupply')->numify();
     my $crowdsaleSupply                      = $node->contract_method_call('crowdsaleSupply');
     $data->{crowdsaleSupply}                 = $crowdsaleSupply->bstr().'';
@@ -67,7 +67,7 @@ sub member {
     my $unpaid                      = $node->contract_method_call('unpaidOf',               { '_beneficiary' => $params->{address} });
     $data->{unpaid}                 = $unpaid->bstr().'';
     $data->{unpaid_Eth}             = $node->wei2ether( $unpaid )->numify();
-    $data->{crowdsaleIsMember}      = $node->contract_method_call('crowdsaleIsMemberOf',    { '_beneficiary' => $params->{address} })->numify();
+    $data->{crowdsaleIsMember}      = \($node->contract_method_call('crowdsaleIsMemberOf',  { '_beneficiary' => $params->{address} })->numify());
 
     return { 'rc' => 200 };
 }
