@@ -188,7 +188,7 @@ sub Method {
         if( scalar @_ ) {   # merge defaults with passed parameters
             @parameter = (
                 @parameter,
-                ['params', 'object{}', 'true', '', "Object of method parameters"],
+                ['params', 'object{}', '', '', "Object of method parameters"],
                 @_,
                 @optParas
             );
