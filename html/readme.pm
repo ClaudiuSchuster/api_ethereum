@@ -144,7 +144,7 @@ curl http://10.10.0.8:89 -d '{"method":"eth.contract.IceMine.member","params":{"
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
             ],
             requestExample  => qq~
-curl http://10.10.0.8:89 -d '{"method":"eth.contract.IceMine.member","params":{"contract":"IceMine","address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
+curl http://10.10.0.8:89 -d '{"method":"eth.contract.member","params":{"contract":"IceMine","address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.member'>method:eth.contract.*.member</a> for returndata"],
