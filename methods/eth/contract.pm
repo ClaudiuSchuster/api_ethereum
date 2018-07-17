@@ -54,18 +54,21 @@ my $deploy = sub {
 };
 
 sub run {
-    my ($cgi, $data, $node, $reqFunc_run_ref, $contractName, $params) = @_;
+    my ($cgi, $data, $node, $reqFunc, $reqFunc_run_ref, $contractName, $params) = @_;
     
     $params->{contract} = $contractName if( !defined $params || ref($params) eq 'HASH' || !defined $params->{contract} );
     
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    my $contracts    = API::methods::eth::personal::account::contracts;
-    return { 'rc' => 400, 'msg' => "Contract '$contractName' in methods/eth/personal/account.pm. Abort!" }
-        unless( $contracts->{$contractName} );
-    $node->set_contract_abi( $node->_read_file('contracts/'.$contractName.'.abi') );
-    $node->set_contract_id( $contracts->{$contractName} );
+    my $contracts;
+    if( $reqFunc ne "deploy" ) {
+        my $contracts = API::methods::eth::personal::account::contracts;
+        return { 'rc' => 400, 'msg' => "Contract '$contractName' in methods/eth/personal/account.pm. Abort!" }
+            unless( $contracts->{$contractName} );
+        $node->set_contract_abi( $node->_read_file('contracts/'.$contractName.'.abi') );
+        $node->set_contract_id( $contracts->{$contractName} );
+    }
     
     return $reqFunc_run_ref->(
         $cgi,
@@ -73,7 +76,7 @@ sub run {
         $node,
         $params,
         {
-            address => $contracts->{$contractName},
+            address => $contracts->{$contractName} || '',
             name => $contractName,
             deploy_run_ref => $deploy,
         }

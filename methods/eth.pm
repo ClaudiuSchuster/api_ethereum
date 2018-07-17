@@ -58,6 +58,7 @@ sub run {
                             $cgi,
                             $json->{data},
                             $node,
+                            $reqFunc,
                             $reqFunc_run_ref,
                             $subsubclass,
                             $json->{meta}{postdata}{params} || undef
