@@ -149,7 +149,56 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.member","params":{"contr
             returnDataTable => [ 'returnObject',
                 ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.member'>method:eth.contract.*.member</a> for returndata"],
             ],
-        }
+        },
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        # {
+            # method          => "eth.contract.*.TEMPLATE",
+            # title           => "TEMPLATE (specific)",
+            # note            => "",
+            # parameterTable  => [
+                # ['params:TEMPLATE',      'string',    'true',  '',   "'TEMPLATE' of member"],
+            # ],
+            # requestExample  => qq~
+# // use contract 'IceMine'
+# curl http://$ENV{HTTP_HOST} -d 
+            # ~,
+            # returnDataTable => [ 'returnObject',
+                # ['data:TEMPLATE', 'string', 'yes', ""],
+            # ],
+        # },
+        # {
+            # method          => "eth.contract.TEMPLATE",
+            # title           => "TEMPLATE (generic)",
+            # note            => "",
+            # parameterTable  => [
+                # ['params:contract',   'string',    'true',  '',   "Name of 'contract'"],
+                # ['params:TEMPLATE',      'string',    'true',  '',   "'TEMPLATE' of member"],
+            # ],
+            # requestExample  => qq~
+# curl http://$ENV{HTTP_HOST} -d 
+            # ~,
+            # returnDataTable => [ 'returnObject',
+                # ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.TEMPLATE'>method:eth.contract.*.TEMPLATE</a> for returndata"],
+            # ],
+        # }
+        
     ]);
     
     API::html::readme::print::ReadmeClass([
