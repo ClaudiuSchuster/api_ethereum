@@ -127,19 +127,6 @@ sub ReadmeClass {
                   </h4>
                   <p>
                       If returned <code>meta->{rc}</code> == <code>200</code> (and <code>meta->{method}</code> equals to <code>'your.requested.API.Method'</code>) the requested API call should be successful.
-                      <p>
-                          <em class='wrapper'>
-                            <span class='left'>
-                                Note:
-                            </span>
-                            <span class='right'>
-                                If you request a generic class-method for a specific entity with the entity as parameter, the specitic function name will be returned not the requested.</br> 
-                                e.g.: You can call method: eth.contract.info with parameter 'contract' and will get the result as when you call method: eth.contract.CONTRACTNAME.info.</br>
-                                </br>
-                                If you mix both possibilities you should probably check returned <code>meta->{method}</code> with a regex like <code>/^eth\\.contract(\\.\\w+)?\\.function\$/</code> to not worry about.
-                            </span>
-                          </em>
-                      </p>
                   <hr />
             ";
         } elsif ( $_[0] eq 'endReadme' ) {

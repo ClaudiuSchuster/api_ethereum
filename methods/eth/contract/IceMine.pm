@@ -57,10 +57,10 @@ sub member {
     $data->{balance_Ice}            = $node->wei2ether( $balance )->numify();
     my $percentTotal                = $node->contract_method_call('percentTotalOf',         { '_beneficiary' => $params->{address} });
     $data->{percentTotal}           = $percentTotal->bstr().'';
-    $data->{percentTotal_float}     = $percentTotal->btdiv(10**21)->numify();
+    $data->{percentTotal_Float}     = $percentTotal->btdiv(10**21)->numify();
     my $crowdsalePercent            = $node->contract_method_call('crowdsalePercentOf',     { '_beneficiary' => $params->{address} });
     $data->{crowdsalePercent}       = $crowdsalePercent->bstr().'';
-    $data->{crowdsalePercent_float} = $crowdsalePercent->btdiv(10**21)->numify();
+    $data->{crowdsalePercent_Float} = $crowdsalePercent->btdiv(10**21)->numify();
     my $crowdsaleInvestment         = $node->contract_method_call('crowdsaleInvestmentOf',  { '_beneficiary' => $params->{address} });
     $data->{crowdsaleInvestment}    = $crowdsaleInvestment->bstr().'';
     $data->{crowdsaleInvestment_Eth}= $node->wei2ether( $crowdsaleInvestment )->numify();

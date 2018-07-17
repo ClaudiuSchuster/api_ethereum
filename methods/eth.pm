@@ -32,13 +32,6 @@ sub run {
     my ($reqPackage,$reqSubclass,$reqSubSub,$reqFunc) = ( $reqMethod =~ /^(\w+)(?:\.(\w+))?(?:\.(\w+))?(?:\.(\w+))?/ );
     my ($subclass) = grep { $reqMethod =~ /^\w+\.($_)(?:\..*)?$/ }  map /methods\/$reqPackage\/(\w+)\.pm/, keys %INC;
     if( defined $subclass ) {
-        if( 'contract' eq $reqSubclass && !defined $reqFunc && defined $json->{meta}{postdata}{params}{contract} ) {
-            $reqFunc = $reqSubSub;
-            $reqSubSub = $json->{meta}{postdata}{params}{contract};
-            $reqMethod =~ s/(.+\.)(\w)/$1$reqSubSub\.$2/;
-        } elsif ( 'contract' eq $reqSubclass && !defined $reqFunc ) {
-            return {'rc'=>400,'msg'=>"No 'contract' parameter and also not used contract as 'subsubclass' in method call (eth.contract.CONTRACTNAME.function). Abort!"};
-        }
         if(defined $reqFunc) {
             my ($subsubclass) = grep { $reqMethod =~ /^\w+\.\w+\.($_)(?:\..*)?$/ }  map /methods\/$reqPackage\/$subclass\/(\w+)\.pm/, keys %INC;
             if( defined $subsubclass ) {

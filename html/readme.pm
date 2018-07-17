@@ -17,8 +17,28 @@ sub print {
             returnObject => ['data', 'object{}', 'yes', "object-{} contains the requested data"],
         },
         {
-            method          => "eth.contract.*.deploy",
-            title           => "Deploy a contract (specific)",
+            method          => "eth.contract.deploy",
+            title           => "Deploy a contract (generic)",
+            note            => "",
+            parameterTable  => [
+                ['params:contract',     'string',    'true',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
+            ],
+            requestExample  => qq~
+// Generic example:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"HelloWorld"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
+
+// Deploy IceMine Smart Contract:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
+            ~,
+            returnDataTable => [ 'returnObject',
+                ['data:*',        '*',   '*', "view specific methods [ <a href='#eth.contract.*.deploy'>method:eth.contract.*.deploy</a> ] for returndata"],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.deploy",
+            title           => "Deploy 'IceMine' contract (specific)",
             note            => "",
             parameterTable  => [
                 ['params:contract',     'string',    'false',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
@@ -38,28 +58,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ],
         },
         {
-            method          => "eth.contract.deploy",
-            title           => "Deploy a contract (generic)",
-            note            => "",
-            parameterTable  => [
-                ['params:contract',     'string',    'true',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
-                ['params:constructor',  'object-{}', 'false', '{ }', qq~'constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
-            ],
-            requestExample  => qq~
-// Generic example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"HelloWorld"}}'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
-
-// Deploy IceMine Smart Contract:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
-            ~,
-            returnDataTable => [ 'returnObject',
-                ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.deploy'>method:eth.contract.*.deploy</a> for returndata"],
-            ],
-        },
-        {
-            method          => "eth.contract.*.read",
-            title           => "Read Contract (specific)",
+            method          => "eth.contract.IceMine.read",
+            title           => "Read 'IceMine' contract",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
@@ -97,22 +97,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
             ],
         },
         {
-            method          => "eth.contract.read",
-            title           => "Read Contract (generic)",
-            note            => "",
-            parameterTable  => [
-                ['params:contract',     'string',    'true',  '',    "Name of 'contract'"],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.read","params":{"contract":"IceMine"}}'
-            ~,
-            returnDataTable => [ 'returnObject',
-                ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.read'>method:eth.contract.*.read</a> for returndata"],
-            ],
-        },
-        {
-            method          => "eth.contract.*.member",
-            title           => "Read Member-Info from Contract (specific)",
+            method          => "eth.contract.IceMine.member",
+            title           => "Read member-info from 'IceMine' contract",
             note            => "",
             parameterTable  => [
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
@@ -128,9 +114,9 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
                 ['data:balance',                    'string',   'yes', "Ici balance"],
                 ['data:balance_Ice',                'float',    'yes', "ICE balance"],
                 ['data:percentTotal',               'string',   'yes', "percentTotal as in contract (use 'percentMultiplier')"],
-                ['data:percentTotal_float',         'float',    'yes', "percentTotal as float representative"],
+                ['data:percentTotal_Float',         'float',    'yes', "percentTotal as float representative"],
                 ['data:crowdsalePercent',           'string',   'yes', "crowdsalePercent as in contract (use 'percentMultiplier')"],
-                ['data:crowdsalePercent_float',     'float',    'yes', "crowdsalePercent as float representative"],
+                ['data:crowdsalePercent_Float',     'float',    'yes', "crowdsalePercent as float representative"],
                 ['data:crowdsaleInvestment',        'string',   'yes', "Invested Wei into crowdsale"],
                 ['data:crowdsaleInvestment_Eth',    'float',    'yes', "Invested ETH into crowdsale"],
             ],

@@ -6,6 +6,7 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 my $check_basics = sub {
     my $params    = shift;
+    my $simpleCheck = shift;
     my $contracts = API::methods::eth::personal::account::contracts;
     
     return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
@@ -13,13 +14,14 @@ my $check_basics = sub {
         
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: Name of 'contract' is needed. Abort!" }
         unless( $params->{contract} );
-        
-    return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in account.pm. Abort!" }
-        unless( defined $contracts->{$params->{contract}} );
-        
-    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{contract}.abi' not found. Abort!" }
-        unless( -e 'contracts/'.$params->{contract}.'.abi' );
-        
+
+    unless( defined $simpleCheck ) {
+        return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in account.pm. Abort!" }
+            unless( defined $contracts->{$params->{contract}} );
+            
+        return { 'rc' => 400, 'msg' => "Contract ABI 'contracts/$params->{contract}.abi' not found. Abort!" }
+            unless( -e 'contracts/'.$params->{contract}.'.abi' );
+    }
     return { 'rc' => 200 };
 };
 
@@ -27,10 +29,12 @@ my $check_basics = sub {
 my $deploy = sub {
     my ($cgi, $data, $node, $params) = @_;
     
-    my $checks = $check_basics->($params);
+    my $checks = $check_basics->($params, 1);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" }
         if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' );
+    return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{contract}.sol' not found. Abort!" }
+        unless( -e 'contracts/'.$params->{contract}.'.sol' );
     
     my $contract_status;
     eval {
@@ -53,6 +57,10 @@ my $deploy = sub {
     return { 'rc' => 200 };
 };
 
+sub deploy {    
+    return $deploy->(@_);
+}
+
 sub run {
     my ($cgi, $data, $node, $reqFunc, $reqFunc_run_ref, $contractName, $params) = @_;
     
@@ -61,14 +69,11 @@ sub run {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    my $contracts;
-    if( $reqFunc ne "deploy" ) {
-        my $contracts = API::methods::eth::personal::account::contracts;
-        return { 'rc' => 400, 'msg' => "Contract '$contractName' in methods/eth/personal/account.pm. Abort!" }
-            unless( $contracts->{$contractName} );
-        $node->set_contract_abi( $node->_read_file('contracts/'.$contractName.'.abi') );
-        $node->set_contract_id( $contracts->{$contractName} );
-    }
+    my $contracts = API::methods::eth::personal::account::contracts;
+    return { 'rc' => 400, 'msg' => "Contract '$contractName' in methods/eth/personal/account.pm. Abort!" }
+        unless( $contracts->{$contractName} );
+    $node->set_contract_abi( $node->_read_file('contracts/'.$contractName.'.abi') );
+    $node->set_contract_id( $contracts->{$contractName} );
     
     return $reqFunc_run_ref->(
         $cgi,
