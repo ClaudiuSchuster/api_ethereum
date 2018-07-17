@@ -51,7 +51,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
 
 // Deploy IceMine Smart Contract:
-curl http://10.10.0.8:89 -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.deploy'>method:eth.contract.*.deploy</a> for returndata"],
@@ -119,7 +119,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.read","params":{"contrac
             ],
             requestExample  => qq~
 // use contract 'IceMine'
-curl http://10.10.0.8:89 -d '{"method":"eth.contract.IceMine.member","params":{"address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params":{"address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:crowdsaleIsMember',          'integer',  'yes', "1 if address is member of Contract, else 0"],
@@ -144,7 +144,7 @@ curl http://10.10.0.8:89 -d '{"method":"eth.contract.IceMine.member","params":{"
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
             ],
             requestExample  => qq~
-curl http://10.10.0.8:89 -d '{"method":"eth.contract.member","params":{"contract":"IceMine","address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.member","params":{"contract":"IceMine","address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
             ~,
             returnDataTable => [ 'returnObject',
                 ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.member'>method:eth.contract.*.member</a> for returndata"],
