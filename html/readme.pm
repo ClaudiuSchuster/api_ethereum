@@ -78,7 +78,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:withdrawer',                     'string',   'yes', "Address of allowed executor for automatic processed member whitdrawals"],
                 ['data:depositor',                      'string',   'yes', "Address of allowed depositor of mining profits"],
                 ['data:crowdsaleWallet',                'string',   'yes', "Address where crowdsale funds are collected"],
-                ['data:percentMultiplier',              'string',   'yes', "Percent of totalSupply which will be available for Crowdsale"],
+                ['data:percentMultiplier',              'string',   'yes', "Percent-value percentMultiplier to avoid floats. (10**21)"],
                 ['data:crowdsaleRemainingWei',          'string',   'yes', "Remeining Wei to buy in crowdsale"],
                 ['data:crowdsaleRemainingWei_Eth',      'float',    'yes', "Remeining ETH to buy in crowdsale"],
                 ['data:crowdsaleSupply',                'string',   'yes', "Remaining amount of totalSupply (Ici) which will be available for Crowdsale"],
