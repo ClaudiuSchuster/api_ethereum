@@ -126,7 +126,7 @@ sub ReadmeClass {
                       Check for successful execution
                   </h4>
                   <p>
-                      If returned <code>meta->{rc}</code> == <code>200</code> (and <code>meta->{method}</code> equals to <code>'your.requested.API.Method'</code>) the requested API call should be successful.
+                      If returned <code>meta->{rc}</code> == <code>200</code> and <code>meta->{method}</code> equals to <code>'your.requested.API.Method'</code>, the requested API call should be successful.
                   <hr />
             ";
         } elsif ( $_[0] eq 'endReadme' ) {
