@@ -32,7 +32,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [
-                ['data:*',        '*',   '*', "view specific methods [ <a href='#eth.contract.*.deploy'>method:eth.contract.*.deploy</a> ] for returndata"],
+                ['data:*',        '*',   '*', "contract specific, see specific methods [ <a href='#eth.contract.IceMine.deploy'>method:eth.contract.IceMine.deploy</a> ] for returndata"],
             ],
         },
         {
@@ -121,38 +121,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
             ],
         },
         
-        
-        
-        # {
-            # method          => "eth.contract.*.TEMPLATE",
-            # title           => "TEMPLATE (specific)",
-            # note            => "",
-            # parameterTable  => [
-                # ['params:TEMPLATE',      'string',    'true',  '',   "'TEMPLATE' of member"],
-            # ],
-            # requestExample  => qq~
-# // use contract 'IceMine'
-# curl http://$ENV{HTTP_HOST} -d 
-            # ~,
-            # returnDataTable => [
-                # ['data:TEMPLATE', 'string', 'yes', ""],
-            # ],
-        # },
-        # {
-            # method          => "eth.contract.TEMPLATE",
-            # title           => "TEMPLATE (generic)",
-            # note            => "",
-            # parameterTable  => [
-                # ['params:contract',   'string',    'true',  '',   "Name of 'contract'"],
-                # ['params:TEMPLATE',      'string',    'true',  '',   "'TEMPLATE' of member"],
-            # ],
-            # requestExample  => qq~
-# curl http://$ENV{HTTP_HOST} -d 
-            # ~,
-            # returnDataTable => [
-                # ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.TEMPLATE'>method:eth.contract.*.TEMPLATE</a> for returndata"],
-            # ],
-        # }
         
     ]);
     
