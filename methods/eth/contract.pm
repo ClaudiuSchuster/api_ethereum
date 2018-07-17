@@ -47,7 +47,7 @@ my $deploy = sub {
     $data->{tx}            = $contract_status->{transactionHash};
     $data->{gas_used}      = hex($contract_status->{gasUsed});
     $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
-    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
+    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei}->bstr();;
     $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
     
     return { 'rc' => 200 };
@@ -56,7 +56,7 @@ my $deploy = sub {
 sub run {
     my ($cgi, $data, $node, $reqFunc_run_ref, $contractName, $params) = @_;
     
-    $params->{contract} = $contractName if( not defined $params || ref($params) eq 'HASH' );
+    $params->{contract} = $contractName if( !defined $params || ref($params) eq 'HASH' || !defined $params->{contract} );
     
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );

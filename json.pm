@@ -29,7 +29,6 @@ sub print {
                 my $method_run_result = $method_run_ref->($cgi,$json);
                 $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
             }
-            $json->{'data'}{$method} = {} if( $json->{meta}{postdata}{nodata} );
         } else {
             my ($reqPackage) = ( $json->{meta}{postdata}{method} =~ /^(\w+)(?:\..*)?/ );
             $json->{meta}{rc}  = 400;

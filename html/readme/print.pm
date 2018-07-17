@@ -27,11 +27,11 @@ sub ReadmeClass {
                 for ( @{$_[3]} ) {
                     state $i = 0;
                     if (++$i == 1) {
-                        $classAnchors .= $_."'>".uc $_."</a>";
+                        $classAnchors .= $_."'>".$_."</a>";
                     } else {
                         $classAnchors .= "
                             <span style='margin:0 10px 0 10px;'>-</span>
-                            <a href='#class_".$_."'>".uc $_."</a>
+                            <a href='#class_".$_."'>".$_."</a>
                         ";
                     }
                 }
@@ -126,16 +126,20 @@ sub ReadmeClass {
                       Check for successful execution
                   </h4>
                   <p>
-                      If returned meta->{method} equals to your requested API-Method and meta->{rc} == 200 the requested API call should be successful.
-                  </p>
-                  <h4 id='modifyresponse'>
-                      Modifying responses with query parameters
-                  </h4>
-                  <p>
-                      With the optional query parameter <code>nodata=1</code> an empty response-object of the requested API-Method will be returned inside the {data} object, e.g. {dhcp}. 
-                      </br>
-                      Can be used to reduce the response data from API calls where only the meta-section is relevant, or to test the examples more readable in the command-line.
-                  </p>
+                      If returned <code>meta->{rc}</code> == <code>200</code> (and <code>meta->{method}</code> equals to <code>'your.requested.API.Method'</code>) the requested API call should be successful.
+                      <p>
+                          <em class='wrapper'>
+                            <span class='left'>
+                                Note:
+                            </span>
+                            <span class='right'>
+                                If you request a generic class-method for a specific entity with the entity as parameter, the specitic function name will be returned not the requested.</br> 
+                                e.g.: You can call method: eth.contract.info with parameter 'contract' and will get the result as when you call method: eth.contract.CONTRACTNAME.info.</br>
+                                </br>
+                                If you mix both possibilities you should probably check returned <code>meta->{method}</code> with a regex like <code>/^eth\\.contract(\\.\\w+)?\\.function\$/</code> to not worry about.
+                            </span>
+                          </em>
+                      </p>
                   <hr />
             ";
         } elsif ( $_[0] eq 'endReadme' ) {
@@ -151,7 +155,7 @@ sub ReadmeClass {
               </br>
               <hr />
               </br>
-              <h2 id='class_$_[0]'>".(uc $_[0])." <code class='method'>method: $_[0] || $_[0].*</code></h2>
+              <h2 id='class_$_[0]'>method: ".($_[0]).".*</h2>
             ";
         }
     }
@@ -192,7 +196,7 @@ sub Method {
             ['method', 'string', 'true', '', "API method to be executed"],
         );
         my @optParas = (    # default optional parameter
-            ['nodata', 'integer', 'false', 0, "Returns an empty response-object if set. View <a href='#modifyresponse'>Introduction</a> for description."],
+            # ['nodata', 'integer', 'false', 0, "Returns an empty response-object if set. View <a href='#modifyresponse'>Introduction</a> for description."],
         );
         if( scalar @_ ) {   # merge defaults with passed parameters
             @parameter = (

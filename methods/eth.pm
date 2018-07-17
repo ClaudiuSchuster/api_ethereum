@@ -20,7 +20,7 @@ sub run {
     ### Initialize Ethereum Node
     my $node;
     eval {
-        $node = API::modules::Ethereum->new('http://127.0.0.1:854'.($API::dev?6:5).'/');
+        $node = API::modules::Ethereum->new('http://127.0.0.1:8546/');
         $node->set_debug_mode( 1 );
         $node->set_show_progress( 1 );
         1; 
