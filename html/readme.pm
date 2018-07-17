@@ -135,36 +135,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
                 ['data:crowdsaleInvestment_Eth',    'float',    'yes', "Invested ETH into crowdsale"],
             ],
         },
-        {
-            method          => "eth.contract.member",
-            title           => "Read Member-Info from Contract (generic)",
-            note            => "",
-            parameterTable  => [
-                ['params:contract',     'string',    'true',  '',   "Name of 'contract'"],
-                ['params:address',      'string',    'true',  '',   "'address' of member"],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.member","params":{"contract":"IceMine","address":"0x21c3ec39329b5EE1394E890842f679E93FE648bf"}}'
-            ~,
-            returnDataTable => [ 'returnObject',
-                ['data:*',        '*',   '*', "view specific method <a href='#eth.contract.*.member'>method:eth.contract.*.member</a> for returndata"],
-            ],
-        },
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         
