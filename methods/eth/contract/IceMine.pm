@@ -75,7 +75,6 @@ sub member {
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
-    $params->{contract} = 'IceMine' unless( $params->{contract} );
     $params->{constructor} = {
         _cap => 2,
         _wallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',

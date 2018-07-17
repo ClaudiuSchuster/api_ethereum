@@ -16,7 +16,7 @@ my $check_basics = sub {
         unless( $params->{contract} );
 
     unless( defined $simpleCheck ) {
-        return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in account.pm. Abort!" }
+        return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in methods/eth/personal/account.pm. Abort!" }
             unless( defined $contracts->{$params->{contract}} );
             
         return { 'rc' => 400, 'msg' => "Contract ABI 'contracts/$params->{contract}.abi' not found. Abort!" }
@@ -64,14 +64,12 @@ sub deploy {
 sub run {
     my ($cgi, $data, $node, $reqFunc, $reqFunc_run_ref, $contractName, $params) = @_;
     
-    $params->{contract} = $contractName if( !defined $params || ref($params) eq 'HASH' || !defined $params->{contract} );
+    $params->{contract} = $contractName;
     
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
     my $contracts = API::methods::eth::personal::account::contracts;
-    return { 'rc' => 400, 'msg' => "Contract '$contractName' in methods/eth/personal/account.pm. Abort!" }
-        unless( $contracts->{$contractName} );
     $node->set_contract_abi( $node->_read_file('contracts/'.$contractName.'.abi') );
     $node->set_contract_id( $contracts->{$contractName} );
     
