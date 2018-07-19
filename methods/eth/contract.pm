@@ -60,9 +60,10 @@ sub deploy {
     return { 'rc' => 400, 'msg' => "Contract 'contracts/$params->{contract}.sol' not found. Abort!" }
         unless( -e 'contracts/'.$params->{contract}.'.sol' );
     
-    my $contract_status;
+    my $startTime = time();
+    my $result;
     eval {
-        $contract_status = $node->compile_and_deploy_contract(
+        $result = $node->compile_and_deploy_contract(
             $params->{contract},
             $params->{constructor} || {}, # Constructor Init Parameters
             API::methods::eth::personal::account::address,
@@ -71,17 +72,15 @@ sub deploy {
     } or do {
         return { 'rc' => 500, 'msg' => "error.eth.contract.deploy: ".$@ };
     };
-    $data->{address}       = $contract_status->{contractAddress};
-    $data->{tx}            = $contract_status->{transactionHash};
-    $data->{gas_used}      = hex($contract_status->{gasUsed});
-    $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
-    $data->{tx_cost_wei}   = $data->{gas_used} * $data->{gas_price_wei};
-    $data->{tx_cost_eth}   = $node->wei2ether( $data->{tx_cost_wei} )->numify();
+    
+    $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
+    $data->{address} = $result->{contractAddress};
+    $data->{tx_execution_time} = time() - $startTime;
     
     return { 'rc' => 200 };
 }
 
-sub sendTransaction {
+sub transaction {
     my ($cgi, $data, $node, $params) = @_;
     my $iterations = 96; # 96 iteration (min. 5 sec each) = Try min. 8 Minutes to verify the tx (wait for mined block)
     
@@ -109,21 +108,11 @@ sub sendTransaction {
         return { 'rc' => 500, 'msg' =>  "Could not verify transaction after $iterations iterations." } unless( defined $result );
         1; 
     } or do {
-        return { 'rc' => 500, 'msg' => "error.sendTransaction: ".$@ };
+        return { 'rc' => 500, 'msg' => "error.eth.contract.transaction: ".$@ };
     };
     
-    $data->{status}                 = hex($result->{status});
-    $data->{tx}                     = $result->{transactionHash};
-    $data->{block_hash}             = $result->{blockHash};
-    $data->{block_number}           = hex($result->{blockNumber});
-    $data->{from}                   = $result->{from};
-    $data->{to}                     = $result->{to};
-    $data->{gas_used}               = hex($result->{gasUsed});
-    $data->{cumulative_gas_used}    = hex($result->{cumulativeGasUsed});
-    $data->{gas_price_wei}          = $node->eth_gasPrice()->numify();
-    $data->{tx_cost_wei}            = $data->{gas_price_wei} * $data->{cumulative_gas_used};
-    $data->{tx_cost_eth}            = $node->wei2ether($data->{tx_cost_wei})->numify();
-    $data->{tx_execution_time}      = time() - $startTime;
+    $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
+    $data->{tx_execution_time} = time() - $startTime;
     
     return { 'rc' => 200 };
 }

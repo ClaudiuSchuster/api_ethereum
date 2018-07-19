@@ -9,7 +9,8 @@ sub deploy {
     $params->{constructor} = {
         _cap => 10,
         _wallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',
-        _owner => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3',
+        _owner => '0x',
+        # _owner => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3',
     } unless( $params->{constructor} );
     
     return API::methods::eth::contract::deploy($cgi, $data, $node, $params);
@@ -19,11 +20,116 @@ sub memberIndex {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $data->{memberIndex} = [];
-    my $memberCount                         = $node->contract_method_call('memberCount')->numify();
+    my $memberCount = $node->contract_method_call('memberCount')->numify();
     for ( 0..($memberCount-1) ) {
-        push @{$data->{memberIndex}},         $node->contract_method_call('memberIndex', { '' => $_ });
+        push @{$data->{memberIndex}}, $node->contract_method_call('memberIndex', { '' => $_ });
     }
 
+    return { 'rc' => 200 };
+}
+
+sub withdraw {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' of _beneficiary needed. Abort!" }
+        unless( $params->{address} );
+        
+    return { 'rc' => 400, 'msg' => "Member '$params->{address}' has no unpaid_wei. Abort!" }
+        unless( $node->contract_method_call('unpaidOf', { '_beneficiary' => $params->{address} })->bgt(0) );
+    
+    $params->{function} = 'withdrawOf';
+    $params->{function_params} = {
+        _beneficiary => $params->{address}
+    };
+    
+    return API::methods::eth::contract::transaction($cgi, $data, $node, $params);
+}
+
+sub setOwner {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    my $newOwner = "0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3";
+    
+    $params->{function} = 'setOwner';
+    $params->{function_params} = {
+        _newOwner => $params->{newOwner} || $newOwner
+    };
+    
+    return API::methods::eth::contract::transaction($cgi, $data, $node, $params);
+}
+
+sub approveTeam {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    return { 'rc' => 400, 'msg' => "'members' array[] of object{}'s parameter incorrect. Abort!" }
+        if( defined $params->{members} && ( ref($params->{members}) ne 'ARRAY' || !defined $params->{members}[0]{address} || !defined $params->{members}[0]{share} ) );
+        
+    my $members =  $params->{members} || [
+        { address => '0xE1F41867532c5c5F63179c9Ec7819d8D3BF772d8', share => 12 },
+        { address => '0x587f82E14ccc1176525233ec7166d2f5d19B9A17', share => 9 },
+        { address => '0x79691D048AD362Fc59dEB87c6f459393Bd63B791', share => 8 },
+        { address => '0xbed0bccb8398577C6920625c693602D2abaF50C6', share => 11 },
+    ];
+    
+    $params->{function} = 'approveTeam';
+    for ( @$members ) {
+        my $data_tmp = {};
+        $params->{function_params} = { _beneficiary => $_->{address}, _share => $_->{share} };
+        my $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
+        return $return unless( defined $return->{rc} && $return->{rc} == 200 );
+        $data->{$_->{address}} = $data_tmp;
+        $data->{$_->{address}}{'share'} = $_->{share};
+    }
+    
+    return { 'rc' => 200 };
+}
+
+sub approvePrivate {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    return { 'rc' => 400, 'msg' => "'members' array[] of object{}'s parameter incorrect. Abort!" }
+        if( defined $params->{members} && ( ref($params->{members}) ne 'ARRAY' || !defined $params->{members}[0]{address} || !defined $params->{members}[0]{ethMinPurchase} ) );
+        
+    my $members =  $params->{members} || [
+        { address => '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', ethMinPurchase => 1 },
+        { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0 },
+    ];
+    
+    $params->{function} = 'approvePrivate';
+    for ( @$members ) {
+        my $data_tmp = {};
+        $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} };
+        my $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
+        return $return unless( defined $return->{rc} && $return->{rc} == 200 );
+        $data->{$_->{address}} = $data_tmp;
+        $data->{$_->{address}}{'ethMinPurchase'} = $_->{ethMinPurchase};
+    }
+    
+    return { 'rc' => 200 };
+}
+
+sub approveWhitelist {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    return { 'rc' => 400, 'msg' => "'members' array[] of object{}'s parameter incorrect. Abort!" }
+        if( defined $params->{members} && ( ref($params->{members}) ne 'ARRAY' || !defined $params->{members}[0]{address} || !defined $params->{members}[0]{ethMinPurchase} ) );
+        
+    my $members =  $params->{members} || [
+        { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1 },
+        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 0 },
+        { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0 },
+    ];
+    
+    $params->{function} = 'approve';
+    for ( @$members ) {
+        my $data_tmp = {};
+        $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} };
+        my $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
+        return $return unless( defined $return->{rc} && $return->{rc} == 200 );
+        $data->{$_->{address}} = $data_tmp;
+        $data->{$_->{address}}{'ethMinPurchase'} = $_->{ethMinPurchase};
+    }
+    
     return { 'rc' => 200 };
 }
 
@@ -51,24 +157,6 @@ sub member {
     $data->{crowdsaleIsMember}              = \($node->contract_method_call('crowdsaleIsMemberOf',  { '_beneficiary' => $params->{address} })->numify());
 
     return { 'rc' => 200 };
-}
-
-sub withdraw {
-    my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' of _beneficiary needed. Abort!" }
-        unless( $params->{address} );
-        
-    return { 'rc' => 400, 'msg' => "Member '$params->{address}' has no unpaid_wei. Abort!" }
-        unless( $node->contract_method_call('unpaidOf', { '_beneficiary' => $params->{address} })->bgt(0) );
-    
-    $params->{contract} = $contract->{name};
-    $params->{function} = 'withdrawOf';
-    $params->{function_params} = {
-        _beneficiary => $params->{address}
-    };
-    
-    return API::methods::eth::contract::sendTransaction($cgi, $data, $node, $params);
 }
 
 sub read {
@@ -124,6 +212,7 @@ sub crowdsaleCalcTokenAmount {
 
     return { 'rc' => 200 };
 }
+
 
 
 

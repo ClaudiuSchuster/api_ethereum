@@ -7,6 +7,8 @@ use modules::Ethereum;
 ## Load some more from our method modules...
 use methods::eth::personal::account;
 use methods::eth::tx;
+use methods::eth::node;
+use methods::eth::address;
 use methods::eth::contract;
 use methods::eth::contract::IceMine;
 use methods::eth::contract::IceMine_Mining;

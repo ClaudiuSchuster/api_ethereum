@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.address','eth.node']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -33,15 +33,12 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             ~,
             returnDataTable => [
                 ['data:address',        'string',   'yes', "Contract address"],
-                ['data:tx',             'string',   'yes', "Deployment transaction hash"],
-                ['data:tx_cost_wei',    'integer',  'yes', "tx cost in Wei"],
-                ['data:tx_cost_eth',    'float',    'yes', "tx cost in ETH"],
-                ['data:gas_used',       'integer',  'yes', "gas amount used"],
-                ['data:gas_price_wei',  'integer',  'yes', "price per gas amount"],
+                ['data:to',             'null',     'yes', "null"],
+                ['data:*',              '*',        'yes', "Additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
             ],
         },
         {
-            method          => "eth.contract.sendTransaction",
+            method          => "eth.contract.transaction",
             title           => "Send a transaction to a contract",
             note            => "",
             parameterTable  => [
@@ -51,21 +48,11 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             ],
             requestExample  => qq~
 // Generic example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.sendTransaction","params":{"contract":"IceMine","function":"withdrawOf","function_params":{"_beneficiary":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"contract":"IceMine","function":"withdrawOf","function_params":{"_beneficiary":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}}'
             ~,
             returnDataTable => [
-                ['data:status',                     'integer',  'yes', "tx status, 1 for success"],
-                ['data:tx',                         'string',   'yes', "tx hash"],
-                ['data:block_hash',                 'string',   'yes', "block hash"],
-                ['data:block_number',               'integer',  'yes', "block number"],
-                ['data:from',                       'string',   'yes', "from address"],
-                ['data:to',                         'string',   'yes', "to address"],
-                ['data:gas_used',                   'integer',  'yes', "gas used by tx"],
-                ['data:cumulative_gas_used',        'integer',  'yes', "cumulative gas used by tx"],
-                ['data:gas_price_wei',              'integer',  'yes', "gas price in Wei"],
-                ['data:tx_cost_wei',                'integer',  'yes', "transaction price in Wei"],
-                ['data:tx_cost_eth',                'float',    'yes', "transaction price in ETH"],
                 ['data:tx_execution_time',          'integer',  'yes', "seconds till tx got mined (96 iterations á 5sec)"],
+                ['data:*',                          '*',        'yes', "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
             ],
         },
         {
@@ -73,14 +60,116 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.sendTransaction","params
             title           => "Deploy 'IceMine' contract",
             note            => "",
             parameterTable  => [
-                ['params:constructor',  'object{}', 'false', '{ *from IceMine.pm* }', qq~'Constructor' parameters will be read from IceMine.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
+                ['params:constructor',  'object{}', 'false',    '{ *from IceMine.pm* }', qq~'Constructor' parameters will be read from IceMine.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
             ],
             requestExample  => qq~
 // Deploy constract 'IceMine' with constructor from IceMine.pm
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ~,
             returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
+                ['data:*',              '*',        'yes',      "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.approveTeam",
+            title           => "Approve Team members in 'IceMine' contract",
+            note            => "",
+            parameterTable  => [
+                ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
+                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","share":8}~],
+                ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
+                ['params:members:*:share',          'string',   'false',    '', "Team-'share' of member."],
+            ],
+            requestExample  => qq~
+// Approve Team member(s) and set their share from given parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveTeam","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","share":8}]}}'
+
+// Team members and shares will be read from IceMine.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveTeam"}'
+            ~,
+            returnDataTable => [
+                ['data:*',              'object{}',  'no',      "member-'address' named object{} for each team-member."],
+                ['data:*:share',        'integer',   'yes',     "'share' of this team-member."],
+                ['data:*:*',            '*',        'yes',      "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.approvePrivate",
+            title           => "Approve private crowdsale members in 'IceMine' contract",
+            note            => "",
+            parameterTable  => [
+                ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
+                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0}~],
+                ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
+                ['params:members:*:ethMinPurchase', 'string',   'false',    '', "'ethMinPurchase' of member."],
+            ],
+            requestExample  => qq~
+// ApprovePrivate member(s) and set their ethMinPurchase from given parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approvePrivate","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0}]}}'
+
+// Private crowdsale members and their ethMinPurchase will be read from IceMine.pm:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approvePrivate"}'
+            ~,
+            returnDataTable => [
+                ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each private crowdsale member."],
+                ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this private crowdsale ember."],
+                ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.approveWhitelist",
+            title           => "Approve whitelisted crowdsale members in 'IceMine' contract",
+            note            => "",
+            parameterTable  => [
+                ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
+                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0}~],
+                ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
+                ['params:members:*:ethMinPurchase', 'string',   'false',    '', "'ethMinPurchase' of member."],
+            ],
+            requestExample  => qq~
+// ApproveWhitelist member(s) and set their ethMinPurchase from given parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0}]}}'
+
+// Whitelisted crowdsale members and their ethMinPurchase will be read from IceMine.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist"}'
+            ~,
+            returnDataTable => [
+                ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each whitelisted crowdsale member."],
+                ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale ember."],
+                ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.setOwner",
+            title           => "Initiate a withdrawal for a 'IceMine' contract member",
+            note            => "",
+            parameterTable  => [
+                ['params:newOwner',      'string',    'false',  '',   "'address' of newOwner"],
+            ],
+            requestExample  => qq~
+// Set new owner to 'newOwner' parameter.
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.setOwner","params":{"newOwner":"0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3"}}'
+
+// Set new owner to newOwner from IceMine.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.setOwner"}'
+            ~,
+            returnDataTable => [
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.withdraw",
+            title           => "Initiate a withdrawal for a 'IceMine' contract member",
+            note            => "",
+            parameterTable  => [
+                ['params:address',      'string',    'true',  '',   "'address' of member"],
+            ],
+            requestExample  => qq~
+// Withdraw unpaid amount of member 0xe1f4.....72d8, returns a rc == 400 error if member has no unpaid_wei.
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'
+            ~,
+            returnDataTable => [
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data."],
             ],
         },
         {
@@ -162,21 +251,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.withdraw",
-            title           => "Initiate a withdrawal for a 'IceMine' contract member",
-            note            => "",
-            parameterTable  => [
-                ['params:address',      'string',    'true',  '',   "'address' of member"],
-            ],
-            requestExample  => qq~
-// Withdraw unpaid amount of member 0xe1f4.....72d8, returns a rc == 400 error if member has no unpaid_wei.
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'
-            ~,
-            returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.sendTransaction'>eth.contract.sendTransaction</a> for return data."],
-            ],
-        },
-        {
             method          => "eth.contract.IceMine.crowdsaleCalcTokenAmount",
             title           => "Calc Ici for Wei in 'IceMine' contract crowdsale",
             note            => "",
@@ -196,19 +270,89 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
         
     ]);
     
-    # API::html::readme::print::ReadmeClass([
-        # {
-            # readmeClass  => 'eth.address',
-            # returnObject => ['data', 'object{}', 'yes', "object{} contains the requested data"],
-        # }
-    # ]);
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.node',
+        },
+        {
+            method          => "eth.node.block",
+            title           => "Get the number of most recent block",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.block"}'
+            ~,
+            returnDataTable => [
+                ['data:block_number',       'integer',   'yes', "Most recent block number from client."],
+             ],
+        },
+        {
+            method          => "eth.node.balance",
+            title           => "Get the balance of coinbase address",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.balance"}'
+            ~,
+            returnDataTable => [
+                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
+                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
+             ],
+        },
+        {
+            method          => "eth.node.info",
+            title           => "Get current node informations",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
+            ~,
+            returnDataTable => [
+                ['data:client_version',     'string',   'yes', "Current client version."],
+                ['data:eth_coinbase',       'string',   'yes', "Current coinbase address."],
+                ['data:net_version',        'string',   'yes', "Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4."],
+                ['data:eth_protocolVersion','string',   'yes', "Current ethereum protocol version."],
+                ['data:net_peerCount',      'integer',  'yes', "Number of peers currently connected to the client."],
+                ['data:block_number',       'integer',  'yes', "Most recent block number from client."],
+                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
+                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
+                ['data:eth_accounts',       'array[]',  'yes', "List strings of addresses owned by client."],
+                ['data:net_listening',      'bool',     'yes', "'true' if client is actively listening for network connections."],
+                ['data:eth_syncing',        'bool',     'yes', "'true' if client is still syncing the chain, or 'false' (we are synced)."],
+            ],
+        },
+    ]);
     
-    # API::html::readme::print::ReadmeClass([
-        # {
-            # readmeClass  => 'eth.tx',
-            # returnObject => ['data', 'object{}', 'yes', "object{} contains the requested data"],
-        # }
-    # ]);
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.tx',
+        },
+        {
+            method          => "eth.tx.receipt",
+            title           => "Get a transaction receipt from a tx-hash",
+            note            => "",
+            parameterTable  => [
+                ['params:tx',      'string',    'true',  '',   "'tx'-hash to get receipt for."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e64a509ac0ead1c372e63553d4651137320ea5a27ec2ae094347e5083b41005"}}'
+            ~,
+            returnDataTable => [
+                ['data:status',                     'integer',  'yes', "transaction status, 1 for success"],
+                ['data:tx',                         'string',   'yes', "transaction hash"],
+                ['data:txIndex',                    'string',   'yes', "transaction Index"],
+                ['data:block_hash',                 'string',   'yes', "block hash"],
+                ['data:block_number',               'integer',  'yes', "block number"],
+                ['data:from',                       'string',   'yes', "from address"],
+                ['data:to',                         'string',   'yes', "to address"],
+                ['data:gas_used',                   'integer',  'yes', "gas used by tx"],
+                ['data:cumulative_gas_used',        'integer',  'yes', "cumulative gas used by tx"],
+                ['data:gas_price_wei',              'integer',  'yes', "gas price in Wei"],
+                ['data:tx_cost_wei',                'integer',  'yes', "transaction price in Wei"],
+                ['data:tx_cost_eth',                'float',    'yes', "transaction price in ETH"],
+            ],
+        },
+    ]);
     
     API::html::readme::print::ReadmeClass('endReadme',$cgi);
 }
