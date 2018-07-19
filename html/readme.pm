@@ -45,7 +45,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             title           => "Send a transaction to a contract",
             note            => "",
             parameterTable  => [
-                ['params:contract',     'string',    'true',  '',    "Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)"],
+                ['params:contract',     'string',    'true',  '',    "Name of 'contract' to interact with, 'contract'.abi must be found in contracts/ folder"],
                 ['params:function',     'string',    'true',  '',    "Contract function to execute"],
                 ['params:function_params',  'object{}',  'false', '{ }', qq~Contract function parameters. e.g.: {"_beneficiary":"0x0","_value":102}~],
             ],
@@ -163,13 +163,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
         },
         {
             method          => "eth.contract.IceMine.withdraw",
-            title           => "Initiate a withdrawal for a member",
+            title           => "Initiate a withdrawal for a 'IceMine' contract member",
             note            => "",
             parameterTable  => [
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
             ],
             requestExample  => qq~
-// Withdraw unpaid amount of member 0xe1f4.....72d8, throws a rc == 500 error if member has no unpaid (tx gas check will fail)
+// Withdraw unpaid amount of member 0xe1f4.....72d8, returns a rc == 400 error if member has no unpaid_wei.
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'
             ~,
             returnDataTable => [

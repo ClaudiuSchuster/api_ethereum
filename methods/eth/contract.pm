@@ -53,7 +53,7 @@ my $personal_unlockAccount = sub {
 sub deploy {    
     my ($cgi, $data, $node, $params) = @_;
     
-    my $checks = $check_basics->($params, 1);
+    my $checks = $check_basics->($params, 'simpleCheck');
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     return { 'rc' => 400, 'msg' => "Argument 'constructor' must be an object-{}. Abort!" }
         if( defined $params->{constructor} && ref($params->{constructor}) ne 'HASH' );

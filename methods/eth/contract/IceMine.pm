@@ -58,6 +58,9 @@ sub withdraw {
     
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' of _beneficiary needed. Abort!" }
         unless( $params->{address} );
+        
+    return { 'rc' => 400, 'msg' => "Member '$params->{address}' has no unpaid_wei. Abort!" }
+        unless( $node->contract_method_call('unpaidOf', { '_beneficiary' => $params->{address} })->bgt(0) );
     
     $params->{contract} = $contract->{name};
     $params->{function} = 'withdrawOf';
