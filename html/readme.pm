@@ -183,6 +183,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
             ~,
             returnDataTable => [
                 ['data:address',                        'string',   'yes', "Contract address"],
+                ['data:block_number',                   'integer',  'yes', "Block number of contract creation block."],
                 ['data:owner',                          'string',   'yes', "Contract owner address"],
                 ['data:name',                           'string',   'yes', "EIP-20 name"],
                 ['data:symbol',                         'string',   'yes', "EIP-20 symbol"],
@@ -194,6 +195,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:crowdsalePercentOfTotalSupply',  'integer',  'yes', "Percent of totalSupply which will be available for Crowdsale"],
                 ['data:withdrawer',                     'string',   'yes', "Address of allowed executor for automatic processed member whitdrawals"],
                 ['data:depositor',                      'string',   'yes', "Address of allowed depositor of mining profits"],
+                ['data:balance_wei',                    'string',   'yes', "Balance of contract in Wei"],
+                ['data:balance_eth',                    'float',    'yes', "Balance of contract in ETH"],
                 ['data:crowdsaleWallet',                'string',   'yes', "Address where crowdsale funds are collected"],
                 ['data:percentMultiplier',              'string',   'yes', "Percent-value percentMultiplier to avoid floats. (10**21)"],
                 ['data:crowdsaleRemainingWei_wei',      'string',   'yes', "Remeining Wei to buy in crowdsale"],
@@ -210,6 +213,20 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:crowdsaleInitialized',           'bool',     'yes', "true after owner initialized the contract"],
                 ['data:crowdsaleOpen',                  'bool',     'yes', "true if crowdsale is open for investors"],
                 ['data:crowdsaleFinished',              'bool',     'yes', "true after crowdsaleCap was reached"],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.balance",
+            title           => "Get 'IceMine' contract balance",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+// Read Info from contract 'IceMine'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.balance"}'
+            ~,
+            returnDataTable => [
+                ['data:balance_wei',        'string',   'yes', "Balance of contract in Wei"],
+                ['data:balance_eth',        'float',    'yes', "Balance of contract in ETH"],
             ],
         },
         {
@@ -270,58 +287,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
         
     ]);
     
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.node',
-        },
-        {
-            method          => "eth.node.block",
-            title           => "Get the number of most recent block",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.block"}'
-            ~,
-            returnDataTable => [
-                ['data:block_number',       'integer',   'yes', "Most recent block number from client."],
-             ],
-        },
-        {
-            method          => "eth.node.balance",
-            title           => "Get the balance of coinbase address",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.balance"}'
-            ~,
-            returnDataTable => [
-                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
-                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
-             ],
-        },
-        {
-            method          => "eth.node.info",
-            title           => "Get current node informations",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
-            ~,
-            returnDataTable => [
-                ['data:client_version',     'string',   'yes', "Current client version."],
-                ['data:eth_coinbase',       'string',   'yes', "Current coinbase address."],
-                ['data:net_version',        'string',   'yes', "Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4."],
-                ['data:eth_protocolVersion','string',   'yes', "Current ethereum protocol version."],
-                ['data:net_peerCount',      'integer',  'yes', "Number of peers currently connected to the client."],
-                ['data:block_number',       'integer',  'yes', "Most recent block number from client."],
-                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
-                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
-                ['data:eth_accounts',       'array[]',  'yes', "List strings of addresses owned by client."],
-                ['data:net_listening',      'bool',     'yes', "'true' if client is actively listening for network connections."],
-                ['data:eth_syncing',        'bool',     'yes', "'true' if client is still syncing the chain, or 'false' (we are synced)."],
-            ],
-        },
-    ]);
     
     API::html::readme::print::ReadmeClass([
         {
@@ -353,6 +318,106 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e6
             ],
         },
     ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.address',
+        },
+        {
+            method          => "eth.address.balance",
+            title           => "Get the ETH balance of 'address'",
+            note            => "",
+            parameterTable  => [
+                ['params:address',      'string',    'true',  '',   "'address' to get balance for."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
+            ~,
+            returnDataTable => [
+                ['data:balance_wei',                'string',   'yes', "balance in Wei"],
+                ['data:balance_eth',                'float',    'yes', "balance in ETH"],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.node',
+        },
+        {
+            method          => "eth.node.block",
+            title           => "Get the number of most recent block",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.block"}'
+            ~,
+            returnDataTable => [
+                ['data:block_number',       'integer',   'yes', "Most recent block number from client."],
+             ],
+        },
+        {
+            method          => "eth.node.accounts",
+            title           => "Get list of addresses owned by client",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.accounts"}'
+            ~,
+            returnDataTable => [
+                ['data:eth_accounts',       'array[]',   'yes', "List strings of addresses owned by client."],
+             ],
+        },
+        {
+            method          => "eth.node.coinbase",
+            title           => "Get the client coinbase address",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.coinbase"}'
+            ~,
+            returnDataTable => [
+                ['data:eth_coinbase',       'string',   'yes', "Address of client coinbase."],
+             ],
+        },
+        {
+            method          => "eth.node.balance",
+            title           => "Get the balance of coinbase address",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.balance"}'
+            ~,
+            returnDataTable => [
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.balance'>eth.address.balance</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.node.info",
+            title           => "Get current node informations",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
+            ~,
+            returnDataTable => [
+                ['data:client_version',     'string',   'yes', "Current client version."],
+                ['data:eth_coinbase',       'string',   'yes', "Current coinbase address."],
+                ['data:net_version',        'string',   'yes', "Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4."],
+                ['data:eth_protocolVersion','string',   'yes', "Current ethereum protocol version."],
+                ['data:net_peerCount',      'integer',  'yes', "Number of peers currently connected to the client."],
+                ['data:block_number',       'integer',  'yes', "Most recent block number from client."],
+                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
+                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
+                ['data:eth_accounts',       'array[]',  'yes', "List strings of addresses owned by client."],
+                ['data:net_listening',      'bool',     'yes', "'true' if client is actively listening for network connections."],
+                ['data:eth_syncing',        'bool',     'yes', "'true' if client is still syncing the chain, or 'false' (we are synced)."],
+            ],
+        },
+    ]);
+    
     
     API::html::readme::print::ReadmeClass('endReadme',$cgi);
 }

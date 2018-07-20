@@ -23,6 +23,8 @@ our $add_tx_receipt = sub {
 sub receipt {
     my ($cgi, $data, $node, $params) = @_;
     
+    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
+        unless( defined $params && ref($params) eq 'HASH' );
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'tx' hash needed. Abort!" }
         unless( $params->{tx} );
     

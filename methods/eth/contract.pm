@@ -16,7 +16,7 @@ my $check_basics = sub {
 
     unless( defined $simpleCheck ) {
         return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in methods/eth/personal/account.pm. Abort!" }
-            unless( defined $contracts->{$params->{contract}} );
+            unless( defined $contracts->{$params->{contract}}[0] );
             
         return { 'rc' => 400, 'msg' => "Contract ABI 'contracts/$params->{contract}.abi' not found. Abort!" }
             unless( -e 'contracts/'.$params->{contract}.'.abi' );
@@ -30,7 +30,7 @@ my $set_contract_abi = sub {
     
     my $contracts = API::methods::eth::personal::account::contracts;
     $node->set_contract_abi( $node->_read_file('contracts/'.$params->{contract}.'.abi') );
-    $node->set_contract_id( $contracts->{$params->{contract}} );
+    $node->set_contract_id( $contracts->{$params->{contract}}[0] );
 };
 
 my $personal_unlockAccount = sub {
@@ -135,7 +135,8 @@ sub run {
         $node,
         $params,
         {
-            address => $contracts->{$contractName} || '',
+            address => $contracts->{$contractName}[0] || '',
+            block_number => $contracts->{$contractName}[1] || '',
             name => $contractName,
         }
     );

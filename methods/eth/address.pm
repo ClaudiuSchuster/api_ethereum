@@ -3,28 +3,20 @@ package API::methods::eth::address;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
-sub test {
+sub balance {
     my ($cgi, $data, $node, $params) = @_;
     
-    my $rq = { jsonrpc => "2.0", method => "net_version", params => [], id => 67};
-    $data->{num} = $node->_node_request($rq)-> { result };
+    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
+        unless( defined $params && ref($params) eq 'HASH' );
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' needed. Abort!" }
+        unless( $params->{address} );
+    
+    my $balance_wei         = $node->eth_getBalance($params->{address}, "latest");
+    $data->{balance_wei}    = $balance_wei->bstr().'';
+    $data->{balance_eth}    = $node->wei2ether( $balance_wei )->numify();
     
     return { 'rc' => 200 };
 }
 
 
-
 1;
-
-
-
-
-
-# sub eth_blockNumber()
-# {
-  # my ($this) = @_;
-  # my $rq = { jsonrpc => "2.0", method => "eth_blockNumber", params => [], id => 83};
-  # my $num = $this->_node_request($rq)-> { result };
-  # my $dec = sprintf("%d", hex($num)) + 0;
-  # return $dec;
-# }

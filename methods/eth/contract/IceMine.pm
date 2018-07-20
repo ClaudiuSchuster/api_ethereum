@@ -1,7 +1,7 @@
 package API::methods::eth::contract::IceMine;
 
 use strict; use warnings; use utf8; use feature ':5.10';
-use Data::Dumper;
+use Math::BigInt;
 
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
@@ -14,6 +14,34 @@ sub deploy {
     } unless( $params->{constructor} );
     
     return API::methods::eth::contract::deploy($cgi, $data, $node, $params);
+}
+
+sub logs {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    my $rq = { jsonrpc => "2.0", 
+        method => "eth_getLogs",
+        params => [ { 
+            fromBlock => '0x'.Math::BigInt->new( $contract->{block_number} )->to_hex(),
+            address => $contract->{address}
+        } ],
+        id => 74
+    };
+    
+    my $logs = $node->_node_request($rq)->{result};
+    
+    
+    $data->{logs} = $node->_node_request($rq)->{result};
+    
+
+    return { 'rc' => 200 };
+}
+
+sub balance {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    $params->{address} = $contract->{address};
+    return API::methods::eth::address::balance($cgi, $data, $node, $params);
 }
 
 sub memberIndex {
@@ -163,6 +191,7 @@ sub read {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $data->{address}                         = $contract->{address};
+    $data->{block_number}                    = $contract->{block_number};
     $data->{name}                            = substr($node->contract_method_call('name'), 1);
     $data->{symbol}                          = substr($node->contract_method_call('symbol'), 1);
     $data->{decimals}                        = $node->contract_method_call('decimals')->numify();
@@ -196,7 +225,8 @@ sub read {
     $data->{crowdsaleRemainingToken_ice}     = $node->wei2ether( $crowdsaleRemainingToken )->numify();
     $data->{crowdsaleCalcToken_1wei}         = $node->contract_method_call('crowdsaleCalcTokenAmount',{ '_weiAmount' => 1 })->numify();
     memberIndex($cgi, $data, $node, $params, $contract);
-
+    balance($cgi, $data, $node, $params, $contract);
+    
     return { 'rc' => 200 };
 }
 
