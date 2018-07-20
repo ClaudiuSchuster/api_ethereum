@@ -748,6 +748,48 @@ sub eth_getLogs() {
     return $this->_node_request($rq)->{result};
 }
 
+=head2 eth_getBlockByNumber
+
+    Returns information about a block by block number.
+
+    QUANTITY|TAG - integer of a block number, or the string "earliest", "latest" or "pending", as in the default block parameter.
+    Boolean - If true it returns the full transaction objects, if false only the hashes of the transactions.
+
+=cut
+
+sub eth_getBlockByNumber() {
+    my ($this, $block_number, $fullTransactions) = @_;
+    
+    my $rq = { jsonrpc => "2.0", 
+        method => "eth_getBlockByNumber",
+        params => [ '0x'.Math::BigInt->new( $block_number )->to_hex(), $fullTransactions ? \1 : \0 ],
+        id => 1
+    };
+    
+    return $this->_node_request($rq)->{result};
+}
+
+=head2 eth_getBlockByHash
+
+    Returns information about a block by block number.
+
+    DATA, 32 Bytes - Hash of a block.
+    Boolean - If true it returns the full transaction objects, if false only the hashes of the transactions.
+
+=cut
+
+sub eth_getBlockByHash() {
+    my ($this, $hash, $fullTransactions) = @_;
+    
+    my $rq = { jsonrpc => "2.0", 
+        method => "eth_getBlockByHash",
+        params => [ $hash, $fullTransactions ? \1 : \0 ],
+        id => 1
+    };
+    
+    return $this->_node_request($rq)->{result};
+}
+
 
 =pod
 

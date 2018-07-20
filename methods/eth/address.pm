@@ -4,7 +4,7 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 
 my $check_basics = sub {
-    my $params    = shift;
+    my $params = shift;
     
     return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
         unless( defined $params && ref($params) eq 'HASH' );

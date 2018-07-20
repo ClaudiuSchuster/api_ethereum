@@ -83,7 +83,7 @@ sub ReadmeClass {
                             <td style='padding-left:15px; white-space: nowrap; padding-right:60px;'>
                                 \"method\" : null, 
                             </td><td>
-                                'string' will contain the 'method' which was executed (if any, not a simple copy of 'method' request parameter).
+                                'string' will contain the 'method' which was executed.
                             </td>
                         </tr>
                         <tr>
@@ -188,7 +188,9 @@ sub Method {
         if( scalar @_ ) {   # merge defaults with passed parameters
             @parameter = (
                 @parameter,
-                ['params', 'object{}', (grep { $_->[2] eq 'true' } @_) ? 'true' : 'false' , '', "Object of method parameters"],
+                ($_[0]->[0] ne "params: 1.")
+                    ? ['params', 'object{}', (grep { $_->[2] eq 'true' } @_) ? 'true' : 'false' , '', "Object of method parameters"]
+                    : ['params', 'array[]',  (grep { $_->[2] eq 'true' } @_) ? 'true' : 'false' , '', "Array of method parameters"],
                 @_,
                 @optParas
             );

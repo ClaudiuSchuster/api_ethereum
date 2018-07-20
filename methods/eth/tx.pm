@@ -20,6 +20,14 @@ our $add_tx_receipt = sub {
     $data->{tx_cost_eth}            = $node->wei2ether($data->{tx_cost_wei})->numify();
 };
 
+sub gasprice {
+    my ($cgi, $data, $node, $params) = @_;
+    
+    $data->{gas_price_wei} = $node->eth_gasPrice()->numify();
+    
+    return { 'rc' => 200 };
+}
+
 sub receipt {
     my ($cgi, $data, $node, $params) = @_;
     

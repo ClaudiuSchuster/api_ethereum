@@ -8,6 +8,7 @@ use modules::Ethereum;
 use methods::eth::personal::account;
 use methods::eth::tx;
 use methods::eth::node;
+use methods::eth::block;
 use methods::eth::address;
 use methods::eth::contract;
 use methods::eth::contract::IceMine;
