@@ -722,6 +722,33 @@ sub eth_getBalance()
 }
 
 
+=head2 eth_getLogs
+
+    Returns an array of all logs matching a given filter object.
+
+    fromBlock: QUANTITY|TAG - Integer block number, or "latest" for the last mined block or "pending", "earliest" for not yet mined transactions.
+    address: DATA|Array, 20 Bytes - Contract address or a list of addresses from which logs should originate.
+    topics: Array of DATA, - (optional) Array of 32 Bytes DATA topics. Topics are order-dependent. Each topic can also be an array of DATA with "or" options.
+
+=cut
+
+sub eth_getLogs() {
+    my ($this, $address, $fromBlock, $topics) = @_;
+    
+    my $rq = { jsonrpc => "2.0", 
+        method => "eth_getLogs",
+        params => [ { 
+            fromBlock => '0x'.Math::BigInt->new( $fromBlock )->to_hex(),
+            address => $address,
+            topics => $topics || []
+        } ],
+        id => 74
+    };
+    
+    return $this->_node_request($rq)->{result};
+}
+
+
 =pod
 
 =head2 eth_getStorageAt

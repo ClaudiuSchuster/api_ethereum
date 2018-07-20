@@ -19,19 +19,8 @@ sub deploy {
 sub logs {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
-    my $rq = { jsonrpc => "2.0", 
-        method => "eth_getLogs",
-        params => [ { 
-            fromBlock => '0x'.Math::BigInt->new( $contract->{block_number} )->to_hex(),
-            address => $contract->{address}
-        } ],
-        id => 74
-    };
     
-    my $logs = $node->_node_request($rq)->{result};
-    
-    
-    $data->{logs} = $node->_node_request($rq)->{result};
+    $data->{logs} = $node->eth_getLogs($contract->{address}, $contract->{block_number}, []);
     
 
     return { 'rc' => 200 };
