@@ -832,7 +832,7 @@ sub eth_getTransactionCount()
 
   $hash - hash of a block;
 
-  my $eth_getTransactionByHash = $node->eth_getBlockTransactionCountByHash('0xe79342277d7e95cedf0409e0887c2cddb3ebc5f0d952b9f7c1c1c5cef845cb97', "latest");
+  my $eth_getTransactionByHash = $node->eth_getTransactionByHash('0xe79342277d7e95cedf0409e0887c2cddb3ebc5f0d952b9f7c1c1c5cef845cb97', "latest");
 
 =cut
 

@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.address','eth.block','eth.node']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.address','eth.block','eth.node','eth.contract.IceMine']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -54,6 +54,238 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
                 ['data:tx_execution_time',          'integer',  'yes', "seconds till tx got mined (96 iterations á 5sec)"],
                 ['data:*',                          '*',        'yes', "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
             ],
+        },        
+        
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.tx',
+        },
+        {
+            method          => "eth.tx.receipt",
+            title           => "Get a transaction receipt from a tx-hash",
+            note            => "",
+            parameterTable  => [
+                ['params:tx',      'string',    'true',  '',   "'tx'-hash to get receipt for."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e64a509ac0ead1c372e63553d4651137320ea5a27ec2ae094347e5083b41005"}}'
+            ~,
+            returnDataTable => [
+                ['data:status',                     'integer',  'yes', "transaction status, 1 for success"],
+                ['data:tx_hash',                    'string',   'yes', "transaction hash"],
+                ['data:tx_index',                   'integer',  'yes', "transaction index position in the block"],
+                ['data:block_hash',                 'string',   'yes', "block hash"],
+                ['data:block_number',               'integer',  'yes', "block number"],
+                ['data:from',                       'string',   'yes', "from address"],
+                ['data:to',                         'string',   'yes', "to address"],
+                ['data:gas_used',                   'integer',  'yes', "gas used by tx"],
+                ['data:gas_provided',               'integer',  'yes', "gas provided by sender"],
+                ['data:cumulative_gas_used',        'integer',  'yes', "cumulative gas used by tx"],
+                ['data:gas_price_wei',              'integer',  'yes', "gas price in Wei"],
+                ['data:tx_cost_wei',                'integer',  'yes', "transaction price in Wei"],
+                ['data:data',                       'string',   'yes', "the HEX-DATA send along with the transaction."],
+                ['data:value_wei',                  'integer',  'yes', "value transferred in Wei."],
+                ['data:value_eth',                  'integer',  'yes', "value transferred in ETH."],
+            ],
+        },
+        {
+            method          => "eth.tx.gasprice",
+            title           => "Get current price per gas in Wei",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
+            ~,
+            returnDataTable => [
+                ['data:gas_price_wei',              'integer',  'yes', "Current gas price in Wei"],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.address',
+        },
+        {
+            method          => "eth.address.balance",
+            title           => "Get the ETH balance of 'address'",
+            note            => "",
+            parameterTable  => [
+                ['params:address',      'string',    'true',  '',   "'address' to get balance for."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
+            ~,
+            returnDataTable => [
+                ['data:balance_wei',                'string',   'yes', "balance in Wei"],
+                ['data:balance_eth',                'float',    'yes', "balance in ETH"],
+            ],
+        },
+        {
+            method          => "eth.address.logs (DEVELOP/NOTREADY)",
+            title           => "Get logs from an 'address'",
+            note            => "",
+            parameterTable  => [
+                ['params:address',      'string',   'true', '',   "'address' to get logs from."],
+                ['params:fromBlock',    'integer',  'false','0',   "Starting block for fetching logs."],
+                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address":"0x02206f9f8b50d59cac1265e9234be7dda06d20f5"}}'
+            ~,
+            returnDataTable => [
+                ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
+                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.block',
+        },
+        {
+            method          => "eth.block.byNumber",
+            title           => "Get information about a block by 'number'",
+            note            => "",
+            parameterTable  => [
+                ['params: 1.',          'integer',  'true', '',   "Block number"],
+                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
+            ~,
+            returnDataTable => [
+                ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.block.byHash",
+            title           => "Get information about a block by 'hash'",
+            note            => "",
+            parameterTable  => [
+                ['params: 1.',          'integer',  'true', '',   "Block hash"],
+                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
+            ~,
+            returnDataTable => [
+                ['data:block_hash',         'string',   'yes',                      "Block hash"],
+                ['data:block_number',       'integer',  'yes',                      "Block number"],
+                ['data:gas_used',           'integer',  'yes',                      "Gas used in block"],
+                ['data:gas_limit',          'integer',  'yes',                      "Gas limit of block"],
+                ['data:miner',              'string',   'yes',                      "Addres of block miner"],
+                ['data:parent_hash',        'string',   'yes',                      "Parent block_hash"],
+                ['data:size',               'integer',  'yes',                      "Size of block"],
+                ['data:timestamp',          'integer',  'yes',                      "Timestamp of block"],
+                ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
+                ['data:difficulty_total',   'integer',  'yes',                      "totalDifficulty of block"],
+                ['data:transactions',       'array[]',  'yes',                      "array[] with all transactions of block."],
+                ['data:transactions:*',     'string',   'yes, unless "params: 2."', "If 'params: 2.' is false, a 'string' for each tx_hash in this block."],
+                ['data:transactions:*',     'string',   'yes, if "params: 2."',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
+                ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2."', "transaction hash"],
+                ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2."', "transaction index position in the block"],
+                ['data:transactions:*:from',                'string',   'yes, if "params: 2."', "from address"],
+                ['data:transactions:*:to',                  'string',   'yes, if "params: 2."', "to address"],
+                ['data:transactions:*:gas_used',            'integer',  'yes, if "params: 2."', "gas used by tx"],
+                ['data:transactions:*:gas_provided',        'integer',  'yes, if "params: 2."', "gas provided by sender"],
+                ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2."', "cumulative gas used by tx"],
+                ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2."', "gas price in Wei"],
+                ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2."', "transaction price in Wei"],
+                ['data:transactions:*:data',                'string',   'yes, if "params: 2."', "the HEX-DATA send along with the transaction."],
+                ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2."', "value transferred in Wei."],
+                ['data:transactions:*:value_eth',           'integer',  'yes, if "params: 2."', "value transferred in ETH."],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.node',
+        },
+        {
+            method          => "eth.node.block",
+            title           => "Get the number of most recent block",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.block"}'
+            ~,
+            returnDataTable => [
+                ['data:block_number',       'integer',   'yes', "Most recent block number from client."],
+             ],
+        },
+        {
+            method          => "eth.node.accounts",
+            title           => "Get list of addresses owned by client",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.accounts"}'
+            ~,
+            returnDataTable => [
+                ['data:eth_accounts',       'array[]',   'yes', "List strings of addresses owned by client."],
+             ],
+        },
+        {
+            method          => "eth.node.coinbase",
+            title           => "Get the client coinbase address",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.coinbase"}'
+            ~,
+            returnDataTable => [
+                ['data:eth_coinbase',       'string',   'yes', "Address of client coinbase."],
+             ],
+        },
+        {
+            method          => "eth.node.balance",
+            title           => "Get the balance of coinbase address",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.balance"}'
+            ~,
+            returnDataTable => [
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.balance'>eth.address.balance</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.node.info",
+            title           => "Get current node informations",
+            note            => "",
+            parameterTable  => [],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
+            ~,
+            returnDataTable => [
+                ['data:client_version',     'string',   'yes', "Current client version."],
+                ['data:eth_coinbase',       'string',   'yes', "Current coinbase address."],
+                ['data:net_version',        'string',   'yes', "Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4."],
+                ['data:eth_protocolVersion','string',   'yes', "Current ethereum protocol version."],
+                ['data:net_peerCount',      'integer',  'yes', "Number of peers currently connected to the client."],
+                ['data:block_number',       'integer',  'yes', "Most recent block number from client."],
+                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
+                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
+                ['data:eth_accounts',       'array[]',  'yes', "List strings of addresses owned by client."],
+                ['data:net_listening',      'bool',     'yes', "'true' if client is actively listening for network connections."],
+                ['data:eth_syncing',        'bool',     'yes', "'true' if client is still syncing the chain, or 'false' (we are synced)."],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.contract.IceMine',
         },
         {
             method          => "eth.contract.IceMine.deploy",
@@ -296,206 +528,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
             returnDataTable => [
                 ['data:tokenAmount_ici',                'string',   'yes', "Ici amount"],
                 ['data:tokenAmount_ice',                'float',    'yes', "ICE amount"],
-            ],
-        },
-        
-        
-    ]);
-    
-    
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.tx',
-        },
-        {
-            method          => "eth.tx.receipt",
-            title           => "Get a transaction receipt from a tx-hash",
-            note            => "",
-            parameterTable  => [
-                ['params:tx',      'string',    'true',  '',   "'tx'-hash to get receipt for."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e64a509ac0ead1c372e63553d4651137320ea5a27ec2ae094347e5083b41005"}}'
-            ~,
-            returnDataTable => [
-                ['data:status',                     'integer',  'yes', "transaction status, 1 for success"],
-                ['data:tx',                         'string',   'yes', "transaction hash"],
-                ['data:txIndex',                    'integer',  'yes', "transaction index position in the block"],
-                ['data:block_hash',                 'string',   'yes', "block hash"],
-                ['data:block_number',               'integer',  'yes', "block number"],
-                ['data:from',                       'string',   'yes', "from address"],
-                ['data:to',                         'string',   'yes', "to address"],
-                ['data:gas_used',                   'integer',  'yes', "gas used by tx"],
-                ['data:cumulative_gas_used',        'integer',  'yes', "cumulative gas used by tx"],
-                ['data:gas_price_wei',              'integer',  'yes', "gas price in Wei"],
-                ['data:tx_cost_wei',                'integer',  'yes', "transaction price in Wei"],
-                ['data:tx_cost_eth',                'float',    'yes', "transaction price in ETH"],
-            ],
-        },
-        {
-            method          => "eth.tx.gasprice",
-            title           => "Get current price per gas in Wei",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
-            ~,
-            returnDataTable => [
-                ['data:gas_price_wei',              'integer',  'yes', "Current gas price in Wei"],
-            ],
-        },
-    ]);
-    
-    
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.address',
-        },
-        {
-            method          => "eth.address.balance",
-            title           => "Get the ETH balance of 'address'",
-            note            => "",
-            parameterTable  => [
-                ['params:address',      'string',    'true',  '',   "'address' to get balance for."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
-            ~,
-            returnDataTable => [
-                ['data:balance_wei',                'string',   'yes', "balance in Wei"],
-                ['data:balance_eth',                'float',    'yes', "balance in ETH"],
-            ],
-        },
-        {
-            method          => "eth.address.logs (DEVELOP/NOTREADY)",
-            title           => "Get logs from an 'address'",
-            note            => "",
-            parameterTable  => [
-                ['params:address',      'string',   'true', '',   "'address' to get logs from."],
-                ['params:fromBlock',    'integer',  'false','0',   "Starting block for fetching logs."],
-                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address":"0x02206f9f8b50d59cac1265e9234be7dda06d20f5"}}'
-            ~,
-            returnDataTable => [
-                ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
-                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
-            ],
-        },
-    ]);
-    
-    
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.block',
-        },
-        {
-            method          => "eth.block.byNumber (DEVELOP/NOTREADY)",
-            title           => "Get information about a block by 'number'",
-            note            => "",
-            parameterTable  => [
-                ['params: 1.',          'integer',  'true', '',   "Block number"],
-                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
-            ~,
-            returnDataTable => [
-                ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
-            ],
-        },
-        {
-            method          => "eth.block.byHash (DEVELOP/NOTREADY)",
-            title           => "Get information about a block by 'hash'",
-            note            => "",
-            parameterTable  => [
-                ['params: 1.',          'integer',  'true', '',   "Block hash"],
-                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
-            ~,
-            returnDataTable => [
-                ['data:hash',   'string',   'yes',   "Block Hash"],
-                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
-            ],
-        },
-    ]);
-    
-    
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.node',
-        },
-        {
-            method          => "eth.node.block",
-            title           => "Get the number of most recent block",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.block"}'
-            ~,
-            returnDataTable => [
-                ['data:block_number',       'integer',   'yes', "Most recent block number from client."],
-             ],
-        },
-        {
-            method          => "eth.node.accounts",
-            title           => "Get list of addresses owned by client",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.accounts"}'
-            ~,
-            returnDataTable => [
-                ['data:eth_accounts',       'array[]',   'yes', "List strings of addresses owned by client."],
-             ],
-        },
-        {
-            method          => "eth.node.coinbase",
-            title           => "Get the client coinbase address",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.coinbase"}'
-            ~,
-            returnDataTable => [
-                ['data:eth_coinbase',       'string',   'yes', "Address of client coinbase."],
-             ],
-        },
-        {
-            method          => "eth.node.balance",
-            title           => "Get the balance of coinbase address",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.balance"}'
-            ~,
-            returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.balance'>eth.address.balance</a> for return data."],
-            ],
-        },
-        {
-            method          => "eth.node.info",
-            title           => "Get current node informations",
-            note            => "",
-            parameterTable  => [],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
-            ~,
-            returnDataTable => [
-                ['data:client_version',     'string',   'yes', "Current client version."],
-                ['data:eth_coinbase',       'string',   'yes', "Current coinbase address."],
-                ['data:net_version',        'string',   'yes', "Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4."],
-                ['data:eth_protocolVersion','string',   'yes', "Current ethereum protocol version."],
-                ['data:net_peerCount',      'integer',  'yes', "Number of peers currently connected to the client."],
-                ['data:block_number',       'integer',  'yes', "Most recent block number from client."],
-                ['data:balance_wei',        'string',   'yes', "Balance of Coinbase-address in Wei"],
-                ['data:balance_eth',        'float',    'yes', "Balance of Coinbase-address in ETH"],
-                ['data:eth_accounts',       'array[]',  'yes', "List strings of addresses owned by client."],
-                ['data:net_listening',      'bool',     'yes', "'true' if client is actively listening for network connections."],
-                ['data:eth_syncing',        'bool',     'yes', "'true' if client is still syncing the chain, or 'false' (we are synced)."],
             ],
         },
     ]);
