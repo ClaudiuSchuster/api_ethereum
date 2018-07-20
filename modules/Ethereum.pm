@@ -738,8 +738,8 @@ sub eth_getLogs() {
     my $rq = { jsonrpc => "2.0", 
         method => "eth_getLogs",
         params => [ { 
-            fromBlock => '0x'.Math::BigInt->new( $fromBlock )->to_hex(),
             address => $address,
+            fromBlock => $fromBlock ? '0x'.Math::BigInt->new( $fromBlock )->to_hex() : '0x0',
             topics => $topics || []
         } ],
         id => 74

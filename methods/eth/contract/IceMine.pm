@@ -1,7 +1,7 @@
 package API::methods::eth::contract::IceMine;
 
 use strict; use warnings; use utf8; use feature ':5.10';
-use Math::BigInt;
+
 
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
@@ -19,11 +19,11 @@ sub deploy {
 sub logs {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
+    $params->{address} = $contract->{address};
+    $params->{fromBlock} = $contract->{block_number};
+    # $params->{topics} = [];
     
-    $data->{logs} = $node->eth_getLogs($contract->{address}, $contract->{block_number}, []);
-    
-
-    return { 'rc' => 200 };
+    return API::methods::eth::address::logs($cgi, $data, $node, $params);
 }
 
 sub balance {

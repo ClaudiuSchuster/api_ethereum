@@ -268,6 +268,20 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             ],
         },
         {
+            method          => "eth.contract.IceMine.logs (DEVELOP/NOTREADY)",
+            title           => "Get logs from 'IceMine' contract",
+            note            => "",
+            parameterTable  => [
+                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
+            ~,
+            returnDataTable => [
+                ['data:logs',                'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
+            ],
+        },
+        {
             method          => "eth.contract.IceMine.crowdsaleCalcTokenAmount",
             title           => "Calc Ici for Wei in 'IceMine' contract crowdsale",
             note            => "",
@@ -337,6 +351,22 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
             returnDataTable => [
                 ['data:balance_wei',                'string',   'yes', "balance in Wei"],
                 ['data:balance_eth',                'float',    'yes', "balance in ETH"],
+            ],
+        },
+        {
+            method          => "eth.address.logs (DEVELOP/NOTREADY)",
+            title           => "Get logs from an 'address'",
+            note            => "",
+            parameterTable  => [
+                ['params:address',      'string',   'true', '',   "'address' to get logs from."],
+                ['params:fromBlock',    'integer',  'false','0',   "Starting block for fetching logs."],
+                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address":"0x02206f9f8b50d59cac1265e9234be7dda06d20f5"}}'
+            ~,
+            returnDataTable => [
+                ['data:logs',                'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
             ],
         },
     ]);

@@ -87,8 +87,8 @@ sub transaction {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'contract', 'function' and 'function_params' needed. Abort!" }
-        unless( $params->{function} && $params->{contract} );
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'function' needed. Abort!" }
+        unless( $params->{function} );
     
     my $startTime = time();
     $set_contract_abi->($node, $params);
