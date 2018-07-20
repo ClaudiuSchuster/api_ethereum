@@ -278,7 +278,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
             ~,
             returnDataTable => [
-                ['data:logs',                'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
+                ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
+                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
             ],
         },
         {

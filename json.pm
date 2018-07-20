@@ -26,7 +26,11 @@ sub print {
             {
                 no strict 'refs';
                 my $method_run_ref = \&{"API::methods::${method}::run"};
-                my $method_run_result = $method_run_ref->($cgi,$json);
+                my $method_run_result;
+                eval { $method_run_result = $method_run_ref->($cgi,$json); 1; } or do { 
+                    $json->{meta}{rc}  = 500;
+                    $json->{meta}{msg} = 'api.internal.error: '.$@;
+                };
                 $json->{meta} = { %{$json->{meta}}, %$method_run_result } if( ref($method_run_result) eq 'HASH' );
             }
         } else {
