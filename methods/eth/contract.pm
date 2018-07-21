@@ -73,6 +73,7 @@ sub deploy {
         return { 'rc' => 500, 'msg' => "error.eth.contract.deploy: ".$@ };
     };
     
+    API::methods::eth::block::byHash( $cgi, $data, $node, [$result->{blockHash}, 2] );
     $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
     $data->{address} = $result->{contractAddress};
     $data->{tx_execution_time} = time() - $startTime;
@@ -111,6 +112,7 @@ sub transaction {
         return { 'rc' => 500, 'msg' => "error.eth.contract.transaction: ".$@ };
     };
     
+    API::methods::eth::block::byHash( $cgi, $data, $node, [$result->{blockHash}, 2] );
     $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
     $data->{tx_execution_time} = time() - $startTime;
     

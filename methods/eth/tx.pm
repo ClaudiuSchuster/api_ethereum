@@ -5,23 +5,22 @@ use Math::BigInt;
 
 
 our $add_tx_receipt = sub {
-    my ($data, $node, $resultR, $resultT) = @_;
+    my ($data, $node, $Rresult, $Tresult) = @_;
     
-    $data->{status}                 = hex($resultR->{status});
-    $data->{tx_hash}                = $resultR->{transactionHash};
-    $data->{tx_index}               = hex($resultR->{transactionIndex});
-    $data->{block_hash}             = $resultR->{blockHash};
-    $data->{block_number}           = hex($resultR->{blockNumber});
-    $data->{from}                   = $resultR->{from};
-    $data->{to}                     = $resultR->{to};
-    $data->{gas_used}               = hex($resultR->{gasUsed});
-    $data->{cumulative_gas_used}    = hex($resultR->{cumulativeGasUsed});
+    $data->{status}                 = hex($Rresult->{status});
+    $data->{tx_hash}                = $Rresult->{transactionHash};
+    $data->{tx_index}               = hex($Rresult->{transactionIndex});
+    $data->{block_hash}             = $Rresult->{blockHash};
+    $data->{block_number}           = hex($Rresult->{blockNumber});
+    $data->{from}                   = $Rresult->{from};
+    $data->{to}                     = $Rresult->{to};
+    $data->{gas_used}               = hex($Rresult->{gasUsed});
+    $data->{cumulative_gas_used}    = hex($Rresult->{cumulativeGasUsed});
     $data->{gas_price_wei}          = $node->eth_gasPrice()->numify();
     $data->{tx_cost_wei}            = $data->{gas_price_wei} * $data->{cumulative_gas_used};
     
-    $data->{gas_provided}           = hex($resultT->{gas});
-    $data->{data}                   = $resultT->{input}; # hex input
-    my $value                       = Math::BigInt->new( $resultT->{value} );
+    $data->{data}                   = $Tresult->{input}; # hex input
+    my $value                       = Math::BigInt->new( $Tresult->{value} );
     $data->{value_wei}              = $value->bstr().'';
     $data->{value_eth}              = $node->wei2ether($value)->numify();
 };
@@ -42,9 +41,10 @@ sub receipt {
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'tx' hash needed. Abort!" }
         unless( $params->{tx} );
     
-    my $resultR = $node->eth_getTransactionReceipt( $params->{tx} );
-    my $resultT = $node->eth_getTransactionByHash(  $params->{tx} );
-    $add_tx_receipt->($data, $node, $resultR->{result}, $resultT);
+    my $Rresult = $node->eth_getTransactionReceipt( $params->{tx} )->{result};
+    my $Tresult = $node->eth_getTransactionByHash(  $params->{tx} );
+    API::methods::eth::block::byHash( $cgi, $data, $node, [$Rresult->{blockHash}, 2] );
+    $add_tx_receipt->($data, $node, $Rresult, $Tresult);
     
     return { 'rc' => 200 };
 }

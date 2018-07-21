@@ -16,7 +16,7 @@ my $check_basics = sub {
 };
 
 my $get_block = sub {
-    my ($data, $node, $raw_block, $boolFullTxOrHash) = @_;
+    my ($data, $node, $raw_block, $FullTxOrHashOrNothing) = @_;
     
     # $data->{raw_block}       = $raw_block;
     $data->{block_hash}            = $raw_block->{hash};
@@ -31,7 +31,7 @@ my $get_block = sub {
     $data->{difficulty_total} = hex($raw_block->{totalDifficulty});
     
     
-    if($boolFullTxOrHash) {
+    if($FullTxOrHashOrNothing) {
         $data->{transactions} = [];
         for ( @{$raw_block->{transactions}} ) {
             my $tx = {};
@@ -47,7 +47,7 @@ my $get_block = sub {
             $tx->{block_hash}   = $_->{blockHash};
             $tx->{block_number} = hex($_->{blockNumber});
             
-            push @{$data->{transactions}}, $tx;
+            push(@{$data->{transactions}}, $tx) unless($FullTxOrHashOrNothing == 2);
         }
     } else {
         $data->{transactions} = $raw_block->{transactions};

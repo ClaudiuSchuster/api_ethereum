@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.address','eth.block','eth.node','eth.contract.IceMine']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -89,6 +89,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e6
                 ['data:data',                       'string',   'yes', "the HEX-DATA send along with the transaction."],
                 ['data:value_wei',                  'integer',  'yes', "value transferred in Wei."],
                 ['data:value_eth',                  'integer',  'yes', "value transferred in ETH."],
+                ['data:*',                          '*',        'yes', "Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> with 'param: 2.' == 2."],
             ],
         },
         {
@@ -101,6 +102,67 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
             ~,
             returnDataTable => [
                 ['data:gas_price_wei',              'integer',  'yes', "Current gas price in Wei"],
+            ],
+        },
+    ]);
+    
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.block',
+        },
+        {
+            method          => "eth.block.byNumber",
+            title           => "Get information about a block by 'number'",
+            note            => "",
+            parameterTable  => [
+                ['params: 1.',          'integer',  'true', '',   "Block number"],
+                ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
+            ~,
+            returnDataTable => [
+                ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
+            ],
+        },
+        {
+            method          => "eth.block.byHash",
+            title           => "Get information about a block by 'hash'",
+            note            => "",
+            parameterTable  => [
+                ['params: 1.',          'string',   'true', '',   "Block hash"],
+                ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
+            ~,
+            returnDataTable => [
+                ['data:block_hash',         'string',   'yes',                      "Block hash"],
+                ['data:block_number',       'integer',  'yes',                      "Block number"],
+                ['data:gas_used',           'integer',  'yes',                      "Gas used in block"],
+                ['data:gas_limit',          'integer',  'yes',                      "Gas limit of block"],
+                ['data:miner',              'string',   'yes',                      "Addres of block miner"],
+                ['data:parent_hash',        'string',   'yes',                      "Parent block_hash"],
+                ['data:size',               'integer',  'yes',                      "Size of block"],
+                ['data:timestamp',          'integer',  'yes',                      "Timestamp of block"],
+                ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
+                ['data:difficulty_total',   'integer',  'yes',                      "totalDifficulty of block"],
+                ['data:transactions',       'array[]',  'yes',                      "array[] with all transactions of block."],
+                ['data:transactions:*',     'string',   'yes, if "params: 2." != 0|2', "If 'params: 2.' is false, a 'string' for each tx_hash in this block."],
+                ['data:transactions:*',     'string',   'yes, if "params: 2." == 1',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
+                ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2." == 1', "transaction hash"],
+                ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2." == 1', "transaction index position in the block"],
+                ['data:transactions:*:from',                'string',   'yes, if "params: 2." == 1', "from address"],
+                ['data:transactions:*:to',                  'string',   'yes, if "params: 2." == 1', "to address"],
+                ['data:transactions:*:gas_used',            'integer',  'yes, if "params: 2." == 1', "gas used by tx"],
+                ['data:transactions:*:gas_provided',        'integer',  'yes, if "params: 2." == 1', "gas provided by sender"],
+                ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2." == 1', "cumulative gas used by tx"],
+                ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2." == 1', "gas price in Wei"],
+                ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2." == 1', "transaction price in Wei"],
+                ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "the HEX-DATA send along with the transaction."],
+                ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2." == 1', "value transferred in Wei."],
+                ['data:transactions:*:value_eth',           'integer',  'yes, if "params: 2." == 1', "value transferred in ETH."],
             ],
         },
     ]);
@@ -140,67 +202,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address"
             returnDataTable => [
                 ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
                 ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
-            ],
-        },
-    ]);
-    
-    
-    API::html::readme::print::ReadmeClass([
-        {
-            readmeClass  => 'eth.block',
-        },
-        {
-            method          => "eth.block.byNumber",
-            title           => "Get information about a block by 'number'",
-            note            => "",
-            parameterTable  => [
-                ['params: 1.',          'integer',  'true', '',   "Block number"],
-                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
-            ~,
-            returnDataTable => [
-                ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
-            ],
-        },
-        {
-            method          => "eth.block.byHash",
-            title           => "Get information about a block by 'hash'",
-            note            => "",
-            parameterTable  => [
-                ['params: 1.',          'integer',  'true', '',   "Block hash"],
-                ['params: 2.',          'bool',     'false', '',  "If true it returns the full transaction objects, if false only the hashes of the transactions."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
-            ~,
-            returnDataTable => [
-                ['data:block_hash',         'string',   'yes',                      "Block hash"],
-                ['data:block_number',       'integer',  'yes',                      "Block number"],
-                ['data:gas_used',           'integer',  'yes',                      "Gas used in block"],
-                ['data:gas_limit',          'integer',  'yes',                      "Gas limit of block"],
-                ['data:miner',              'string',   'yes',                      "Addres of block miner"],
-                ['data:parent_hash',        'string',   'yes',                      "Parent block_hash"],
-                ['data:size',               'integer',  'yes',                      "Size of block"],
-                ['data:timestamp',          'integer',  'yes',                      "Timestamp of block"],
-                ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
-                ['data:difficulty_total',   'integer',  'yes',                      "totalDifficulty of block"],
-                ['data:transactions',       'array[]',  'yes',                      "array[] with all transactions of block."],
-                ['data:transactions:*',     'string',   'yes, unless "params: 2."', "If 'params: 2.' is false, a 'string' for each tx_hash in this block."],
-                ['data:transactions:*',     'string',   'yes, if "params: 2."',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
-                ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2."', "transaction hash"],
-                ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2."', "transaction index position in the block"],
-                ['data:transactions:*:from',                'string',   'yes, if "params: 2."', "from address"],
-                ['data:transactions:*:to',                  'string',   'yes, if "params: 2."', "to address"],
-                ['data:transactions:*:gas_used',            'integer',  'yes, if "params: 2."', "gas used by tx"],
-                ['data:transactions:*:gas_provided',        'integer',  'yes, if "params: 2."', "gas provided by sender"],
-                ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2."', "cumulative gas used by tx"],
-                ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2."', "gas price in Wei"],
-                ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2."', "transaction price in Wei"],
-                ['data:transactions:*:data',                'string',   'yes, if "params: 2."', "the HEX-DATA send along with the transaction."],
-                ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2."', "value transferred in Wei."],
-                ['data:transactions:*:value_eth',           'integer',  'yes, if "params: 2."', "value transferred in ETH."],
             ],
         },
     ]);
@@ -299,7 +300,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ~,
             returnDataTable => [
-                ['data:*',              '*',        'yes',      "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
+                ['data:*',              '*',        'yes',  "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
             ],
         },
         {
