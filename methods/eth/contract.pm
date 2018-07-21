@@ -122,7 +122,7 @@ sub transaction {
 
 sub run {
     my ($cgi, $data, $node, $reqFunc, $reqFunc_run_ref, $contractName, $params) = @_;
-    my $contracts = API::methods::eth::personal::account::contracts($node);
+    my $contracts = API::methods::eth::personal::account::contracts;
     
     $params->{contract} = $contractName;
     
