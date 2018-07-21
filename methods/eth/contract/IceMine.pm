@@ -1,6 +1,7 @@
 package API::methods::eth::contract::IceMine;
 
 use strict; use warnings; use utf8; use feature ':5.10';
+use Math::BigInt;
 
 
 sub deploy {
@@ -24,6 +25,16 @@ sub logs {
     # $params->{topics} = [];
     
     return API::methods::eth::address::logs($cgi, $data, $node, $params);
+}
+
+sub valueInputs {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    $params->{address} = $contract->{address};
+    $params->{fromBlock} = $contract->{block_number};
+    $params->{toBlock}   = $contract->{crowdsaleFinished_block_number};
+    
+    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
 }
 
 sub balance {

@@ -147,22 +147,22 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
                 ['data:size',               'integer',  'yes',                      "Size of block"],
                 ['data:timestamp',          'integer',  'yes',                      "Timestamp of block"],
                 ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
-                ['data:difficulty_total',   'integer',  'yes',                      "totalDifficulty of block"],
-                ['data:transactions',       'array[]',  'yes',                      "array[] with all transactions of block."],
+                ['data:difficulty_total',   'integer',  'yes',                      "TotalDifficulty of block"],
+                ['data:transactions',       'array[]',  'yes',                      "Array[] with all transactions of block."],
                 ['data:transactions:*',     'string',   'yes, if "params: 2." != 0|2', "If 'params: 2.' is false, a 'string' for each tx_hash in this block."],
                 ['data:transactions:*',     'string',   'yes, if "params: 2." == 1',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
-                ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2." == 1', "transaction hash"],
-                ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2." == 1', "transaction index position in the block"],
-                ['data:transactions:*:from',                'string',   'yes, if "params: 2." == 1', "from address"],
-                ['data:transactions:*:to',                  'string',   'yes, if "params: 2." == 1', "to address"],
-                ['data:transactions:*:gas_used',            'integer',  'yes, if "params: 2." == 1', "gas used by tx"],
-                ['data:transactions:*:gas_provided',        'integer',  'yes, if "params: 2." == 1', "gas provided by sender"],
-                ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2." == 1', "cumulative gas used by tx"],
-                ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2." == 1', "gas price in Wei"],
-                ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2." == 1', "transaction price in Wei"],
-                ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "the HEX-DATA send along with the transaction."],
-                ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2." == 1', "value transferred in Wei."],
-                ['data:transactions:*:value_eth',           'integer',  'yes, if "params: 2." == 1', "value transferred in ETH."],
+                ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2." == 1', "Transaction hash"],
+                ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2." == 1', "Transaction index position in the block"],
+                ['data:transactions:*:from',                'string',   'yes, if "params: 2." == 1', "From address"],
+                ['data:transactions:*:to',                  'string',   'yes, if "params: 2." == 1', "To address"],
+                ['data:transactions:*:gas_used',            'integer',  'yes, if "params: 2." == 1', "Gas used by tx"],
+                ['data:transactions:*:gas_provided',        'integer',  'yes, if "params: 2." == 1', "Gas provided by sender"],
+                ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2." == 1', "Cumulative gas used by tx"],
+                ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2." == 1', "Gas price in Wei"],
+                ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2." == 1', "Transaction price in Wei"],
+                ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "The HEX-DATA send along with the transaction."],
+                ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2." == 1', "Value transferred in Wei."],
+                ['data:transactions:*:value_eth',           'float',    'yes, if "params: 2." == 1', "Value transferred in ETH."],
             ],
         },
     ]);
@@ -185,6 +185,36 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
             returnDataTable => [
                 ['data:balance_wei',                'string',   'yes', "balance in Wei"],
                 ['data:balance_eth',                'float',    'yes', "balance in ETH"],
+            ],
+        },
+        {
+            method          => "eth.address.valueInputs",
+            title           => "Get all value inputs from an address.",
+            note            => "To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!",
+            parameterTable  => [
+                ['params:address',  'string',   'true', '',         "'address' to get valueInputs for."],
+                ['params:fromBlock','integer',  'true', '',         "Starting block_number to look over"],
+                ['params:toBlock',  'integer',  'false','latest',   "Last block_number to look over"],
+                ['params:from',     'string',   'false','',         "Filter for 'from' address of value sender."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5","fromBlock":2659122,"toBlock":2659241}}'
+            ~,
+            returnDataTable => [
+                ['data:total_wei',                  'string',   'yes',  "Total value inputs for request in Wei"],
+                ['data:total_eth',                  'float',    'yes',  "Total value inputs for request in ETH"],
+                ['data:tx_count',                   'integer',  'yes',  "Transaction count of requested value inputs"],
+                ['data:transactions',               'array[]',  'yes',  "Array[] of all transactions with value on this address which matches the filter."],
+                ['data:transactions:*',             'object{}', 'no',   "Object{} of transaction details."],
+                ['data:transactions:*:tx_hash',     'string',   'yes',  "Transaction hash"],
+                ['data:transactions:*:tx_index',    'integer',  'yes',  "Transaction index position in the block"],
+                ['data:transactions:*:from',        'string',   'yes',  "From address"],
+                ['data:transactions:*:gas_provided','integer',  'yes',  "Gas provided by sender"],
+                ['data:transactions:*:block_hash',  'string',   'yes',  "Block hash"],
+                ['data:transactions:*:block_number','integer',  'yes',  "Block number"],
+                ['data:transactions:*:timestamp',   'integer',  'yes',  "Timestamp of block"],
+                ['data:transactions:*:value_wei',   'integer',  'yes',  "Value transferred in Wei."],
+                ['data:transactions:*:value_eth',   'float',    'yes',  "Value transferred in ETH."],
             ],
         },
         {
@@ -513,6 +543,24 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
             returnDataTable => [
                 ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
                 ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
+            ],
+        },
+        {
+            method          => "eth.contract.IceMine.valueInputs",
+            title           => "Get all value inputs during crowdsale of 'IceMine' contract.",
+            note            => "",
+            parameterTable  => [
+                ['params:from',     'string',   'false','',   "Filter for 'from' address of value sender."],
+            ],
+            requestExample  => qq~
+// Without filter for a specific sender of the value
+curl http://$ENV{HTTP_HOST} -d curl http://10.10.0.8:88 -d '{"method":"eth.contract.IceMine.valueInputs"}'
+
+// With filter for a specific sender of the value
+curl http://$ENV{HTTP_HOST} -d curl http://10.10.0.8:88 -d '{"method":"eth.contract.IceMine.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+            ~,
+            returnDataTable => [
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
             ],
         },
         {

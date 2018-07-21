@@ -122,7 +122,7 @@ sub transaction {
 
 sub run {
     my ($cgi, $data, $node, $reqFunc, $reqFunc_run_ref, $contractName, $params) = @_;
-    my $contracts = API::methods::eth::personal::account::contracts;
+    my $contracts = API::methods::eth::personal::account::contracts($node);
     
     $params->{contract} = $contractName;
     
@@ -139,6 +139,7 @@ sub run {
         {
             address => $contracts->{$contractName}[0] || '',
             block_number => $contracts->{$contractName}[1] || '',
+            crowdsaleFinished_block_number => $contracts->{$contractName}[2] || '',
             name => $contractName,
         }
     );

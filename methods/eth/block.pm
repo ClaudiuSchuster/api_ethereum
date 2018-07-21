@@ -18,16 +18,16 @@ my $check_basics = sub {
 my $get_block = sub {
     my ($data, $node, $raw_block, $FullTxOrHashOrNothing) = @_;
     
-    # $data->{raw_block}       = $raw_block;
-    $data->{block_hash}            = $raw_block->{hash};
-    $data->{block_number}          = hex($raw_block->{number});
+    # $data->{raw_block}        = $raw_block;
+    $data->{block_hash}       = $raw_block->{hash};
+    $data->{block_number}     = hex($raw_block->{number});
     $data->{gas_used}         = hex($raw_block->{gasUsed});
     $data->{gas_limit}        = hex($raw_block->{gasLimit});
-    $data->{miner}           = $raw_block->{miner};
+    $data->{miner}            = $raw_block->{miner};
     $data->{parent_hash}      = $raw_block->{parentHash};
-    $data->{size}            = hex($raw_block->{size});
-    $data->{timestamp}       = hex($raw_block->{timestamp});
-    $data->{difficulty}      = hex($raw_block->{difficulty});
+    $data->{size}             = hex($raw_block->{size});
+    $data->{timestamp}        = hex($raw_block->{timestamp});
+    $data->{difficulty}       = hex($raw_block->{difficulty});
     $data->{difficulty_total} = hex($raw_block->{totalDifficulty});
     
     
