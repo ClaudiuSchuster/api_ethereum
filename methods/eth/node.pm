@@ -3,6 +3,20 @@ package API::methods::eth::node;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
+sub sha3 {
+    my ($cgi, $data, $node, $params) = @_;
+    
+    return { 'rc' => 400, 'msg' => "No 'params' object{} for method-parameter submitted. Abort!" }
+        unless( defined $params && ref($params) eq 'ARRAY' );
+    return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: something needed. Abort!" }
+        unless( defined $params->[0] );
+    
+    $data->{hex} = $node->_string2hex( $params->[0] );
+    $data->{sha3} = $node->web3_sha3( $data->{hex} );
+    
+    return { 'rc' => 200 };
+}
+
 sub block {
     my ($cgi, $data, $node, $params) = @_;
     

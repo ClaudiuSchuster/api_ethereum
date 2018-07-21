@@ -81,6 +81,59 @@ sub deploy {
     return { 'rc' => 200 };
 }
 
+
+sub logs {
+    my ($cgi, $data, $node, $params) = @_;
+    my $contracts = API::methods::eth::personal::account::contracts;
+    
+    my $checks = $check_basics->($params);
+    return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
+    
+    my $startTime = time();
+    $set_contract_abi->($node, $params);
+    $params->{topic_keccak} = $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} );
+    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, [$params->{topic_keccak}]);
+    
+    my @logs;
+    for my $raw_log ( @$raw_logs ) {
+        my $log = {};
+        $log->{tx_hash} = $raw_log->{transactionHash};
+        $log->{tx_index} = hex($raw_log->{transactionIndex});
+        $log->{log_index} = hex($raw_log->{logIndex});
+        $log->{removed} = $raw_log->{removed};
+        unless( defined $params->{topic} ) {
+            $log->{data} = $raw_log->{data}; # DATA - contains one or more 32 Bytes non-indexed arguments of the log. 
+            $log->{topics} = $raw_log->{topics}; # Array of DATA - Array of 0 to 4 32 Bytes DATA of indexed log arguments.  (In solidity: The first topic is the hash of the signature of the event   (e.g. Deposit(address,bytes32,uint256)), except you declared the event with the anonymous specifier.)
+        }
+        
+        if( defined $params->{topic} && $params->{topic} =~ /^(\w+)/ ) {
+            $log->{event_name} = $1;
+            my $event = {};
+            $event->{abi} = $node->_get_event_abi($log->{event_name})->{inputs};
+            $event->{data} = $raw_log->{data};
+            $event->{topics} = $raw_log->{topics};
+            my $event_data = API::helpers::decode_log($event);
+            
+            for ( keys %$event_data ) {
+                $log->{event_data}{$_} = $event_data->{$_} if( $_ =~ /^[_a-zA-Z]?[a-zA-Z][_a-zA-Z]*/ );
+            }
+        }
+        API::methods::eth::block::byHash( $cgi, $log, $node, [
+            $raw_log->{blockHash}, 
+            (defined $params->{showtx}?$params->{showtx}:2), 
+            $log->{tx_hash},
+            undef,
+            $params->{contract}
+        ] );
+        
+        push @logs, $log;
+    }
+    $data->{logs} = \@logs;
+    $data->{log_count} = scalar @logs;
+    
+    return { 'rc' => 200 };
+}
+
 sub transaction {
     my ($cgi, $data, $node, $params) = @_;
     my $iterations = 96; # 96 iteration (min. 5 sec each) = Try min. 8 Minutes to verify the tx (wait for mined block)

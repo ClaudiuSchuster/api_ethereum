@@ -54,7 +54,39 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
                 ['data:tx_execution_time',          'integer',  'yes', "seconds till tx got mined (96 iterations á 5sec)"],
                 ['data:*',                          '*',        'yes', "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
             ],
-        },        
+        },
+        {
+            method          => "eth.contract.logs",
+            title           => "Get logs from an 'contract'",
+            note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> ",
+            parameterTable  => [
+                ['params:contract', 'string',   'true', '',     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
+                ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs."],
+                ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
+                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 and empty transactions-array[] will be returned."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"showtx":1}}'
+            ~,
+            returnDataTable => [
+                ['data:log_count',          'integer',  'yes',  "Log count of requested logs."],
+                ['data:logs',               'array[]',  'yes',  "Array[] of all logs which matches the filter (given arguments)."],
+                ['data:logs:*',             'object{}', 'no',   "Object{} of log details."],
+                ['data:logs:*:log_index',   'integer',  'yes',  "Index of log entry."],
+                ['data:logs:*:tx_hash',     'string',   'yes',  "Transaction hash"],
+                ['data:logs:*:tx_index',    'integer',  'yes',  "Transaction index position in the block"],
+                ['data:logs:*:removed',     'bool',     'yes',  "Removed state of log entry."],
+                ['data:logs:*:event_name',  'string',   'if "topic"',   "The 'name' of this event function, e.g. 'Transfer'. Not returned if 'topic' not set."],
+                ['data:logs:*:event_data',  'object{}', 'if "topic"',   "Object{} of event log data. Not returned if 'topic' not set."],
+                ['data:logs:*:event_data:*','string',   'yes',   "Diverse return arguments from event log."],
+                ['data:logs:*:data',        'string',   'unless "topic"',   "Raw, ABI encoded data. Only returned if 'topic' not set."],
+                ['data:logs:*:topics',      'array[]',  'unless "topic"',   "Raw, ABI encoded data-topics. Only returned if 'topic' not set."],
+                ['data:logs:*:*',           '*',        'yes',  "Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> for each event log entry."],
+            ],
+        },
         
     ]);
     
@@ -170,7 +202,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
                 ['data:transactions:*:cumulative_gas_used', 'integer',  'yes, if "params: 2." == 1', "Cumulative gas used by tx"],
                 ['data:transactions:*:gas_price_wei',       'integer',  'yes, if "params: 2." == 1', "Gas price in Wei"],
                 ['data:transactions:*:tx_cost_wei',         'integer',  'yes, if "params: 2." == 1', "Transaction price in Wei"],
-                ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "The HEX-DATA send along with the transaction."],
+                # ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "The HEX-DATA send along with the transaction."],
                 ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2." == 1', "Value transferred in Wei."],
                 ['data:transactions:*:value_eth',           'float',    'yes, if "params: 2." == 1', "Value transferred in ETH."],
             ],
@@ -227,46 +259,27 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"a
                 ['data:transactions:*:value_eth',   'float',    'yes',  "Value transferred in ETH."],
             ],
         },
-        {
-            method          => "eth.address.logs (DEVELOP/NOTREADY)",
-            title           => "Get logs from an 'address'",
-            note            => "",
-            parameterTable  => [
-                ['params:address',      'string',   'true', '',         "'address' to get logs from."],
-                ['params:fromBlock',    'integer',  'false','0',        "Starting block for fetching logs."],
-                ['params:topics',       'array[]',  'false','[]',       "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
-                ['params:notx',         'bool',     'false','false',    "If true does not return 'transaction' parameter."],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address":"0x02206f9f8b50d59cac1265e9234be7dda06d20f5"}}'
-            ~,
-            returnDataTable => [
-                ['data:log_count',                  'integer',  'yes', "Log count of requested logs."],
-                ['data:logs',                       'array[]',  'yes', "Array[] of all logs which matches the filter (given arguments)."],
-                ['data:logs:*',                     'object{}', 'no',  "Object{} of log details."],
-                ['data:logs:*:',                    '',   'yes',  ""],
-                ['data:logs:*:',                    '',   'yes',  ""],
-                ['data:logs:*:',                    '',   'yes',  ""],
-                ['data:logs:*:',                    '',   'yes',  ""],
-                ['data:transaction',                'object{}', 'Unless "params:notx"', "Object{} for the corresponding transaction in this block."],
-                ['data:transaction:tx_hash',        'string',   'yes', "Transaction hash"],
-                ['data:transaction:tx_index',       'integer',  'yes', "Transaction index position in the block"],
-                ['data:transaction:from',           'string',   'yes', "From address"],
-                ['data:transaction:to',             'string',   'yes', "To address"],
-                ['data:transaction:gas_provided',   'integer',  'yes', "Gas provided by sender"],
-                ['data:transaction:block_hash',     'string',   'yes', "Block hash"],
-                ['data:transaction:block_number',   'integer',  'yes', "Block number"],
-                ['data:transaction:data',           'string',   'yes', "The HEX-DATA send along with the transaction."],
-                ['data:transaction:value_wei',      'integer',  'yes', "Value transferred in Wei."],
-                ['data:transaction:value_eth',      'float',    'yes', "Value transferred in ETH."],
-            ],
-        },
     ]);
     
     
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.node',
+        },
+        {
+            method          => "eth.node.sha3",
+            title           => "Get Keccak-256 (not the standardized SHA3-256) of given data",
+            note            => "",
+            parameterTable  => [
+                ['params: 1.',  'string',  'true', '',   "Some data..."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.sha3","params":["Hey!"]}'
+            ~,
+            returnDataTable => [
+                ['data:hex',    'string',   'yes', "Given data as hex string."],
+                ['data:sha3',   'string',   'yes', "Given data as Keccak-256."],
+             ],
         },
         {
             method          => "eth.node.block",
@@ -558,18 +571,31 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.logs (DEVELOP/NOTREADY)",
+            method          => "eth.contract.IceMine.logs",
             title           => "Get logs from 'IceMine' contract",
-            note            => "",
+            note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                <p>'topics' in IceMine contract:
+                </br> - <code>Approve(address,uint256,bool)</code>
+                </br> - <code>Participate(address,uint256,uint256)</code>
+                </br> - <code>Transfer(address,address,uint256)</code>
+                </br> - <code>ForwardCrowdsaleFunds(address,address,uint256)</code>
+                </br> - <code>CrowdsaleStarted(bool)</code>
+                </br> - <code>CrowdsaleFinished(bool)</code>
+                </br> - <code>Deposit(address,uint256)</code>
+                </br> - <code>Withdraw(address,address,uint256)</code></p>
+            ",
             parameterTable  => [
-                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
-                ['params:notx',         'bool',     'false','false',    "If true does not return 'transaction' parameter."],
+                ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
+                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 and empty transactions-array[] will be returned."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"showtx":1}}'
             ~,
             returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.logs'>eth.address.logs</a> for return data."],
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data."],
             ],
         },
         {
@@ -581,10 +607,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
             ],
             requestExample  => qq~
 // Without filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d curl http://10.10.0.8:88 -d '{"method":"eth.contract.IceMine.valueInputs"}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs"}'
 
 // With filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d curl http://10.10.0.8:88 -d '{"method":"eth.contract.IceMine.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],

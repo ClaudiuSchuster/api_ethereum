@@ -1803,6 +1803,32 @@ sub _get_function_abi()
   return {};
 }
 
+=head2 _get_event_abi
+
+  Internal method.
+  Returns ABI for given event
+
+  my $function_abi = $this->_get_event_abi($function_name);
+
+  $function_name - method name to get ABI
+
+=cut
+
+sub _get_event_abi()
+{
+  my ($this, $function_name) = @_;
+  my $rec;
+  my $abi = $this->{abi};
+  foreach $rec (@$abi)
+  {
+    if($rec->{ type } eq 'event' and $rec->{ name } eq $function_name)
+    {
+      return $rec;
+    }
+  }
+  return {};
+}
+
 
 =pod
 

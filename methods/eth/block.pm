@@ -16,7 +16,7 @@ my $check_basics = sub {
 };
 
 my $get_block = sub {
-    my ($data, $node, $raw_block, $FullTxOrHashOrNothing, $txhashfilter, $txaddressfilter) = @_;
+    my ($data, $node, $raw_block, $FullTxOrHashOrNothing, $txhashfilter, $txaddressfilter, $contractName) = @_;
     
     # $data->{raw_block}        = $raw_block;
     $data->{block_hash}       = $raw_block->{hash};
@@ -31,13 +31,13 @@ my $get_block = sub {
     $data->{difficulty_total} = hex($raw_block->{totalDifficulty});
     
     
-    if($FullTxOrHashOrNothing) {
-        $data->{transactions} = [];
+    $data->{transactions} = [];
+    if($FullTxOrHashOrNothing && ref($raw_block->{transactions}) eq 'ARRAY' && $FullTxOrHashOrNothing != 2) {
         for ( @{$raw_block->{transactions}} ) {
             my $tx = {};
             $tx->{tx_hash}      = $_->{hash};
-            $tx->{tx_index}     = $_->{transactionIndex};
-            $tx->{data}         = $_->{input}; # hex input
+            $tx->{tx_index}     = hex($_->{transactionIndex});
+            # $tx->{data}         = $_->{input}; # hex input
             $tx->{gas_provided} = hex($_->{gas});
             $tx->{to}           = $_->{to};
             $tx->{from}         = $_->{from};
@@ -47,16 +47,20 @@ my $get_block = sub {
             $tx->{block_hash}   = $_->{blockHash};
             $tx->{block_number} = hex($_->{blockNumber});
             
-            if($FullTxOrHashOrNothing != 2) {
+            if( !defined $txhashfilter && !defined $txaddressfilter
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txaddressfilter || $txaddressfilter eq '')
+             || defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} ) {
+                # $tx->{data} = API::helpers::decode_input($contractName, $tx->{data}) if($contractName);  # Decode transaction 'data'
                 push(@{$data->{transactions}}, $tx) 
-                    if( !defined $txhashfilter && !defined $txaddressfilter
-                     || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txaddressfilter || $txaddressfilter eq '')
-                     || defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
-                     || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} );
-            }
+             }
         }
     } else {
-        $data->{transactions} = $raw_block->{transactions};
+        unless( $FullTxOrHashOrNothing ) {
+            for ( @{$raw_block->{transactions}} ) {
+                push(@{$data->{transactions}}, $_) if( !defined $txhashfilter || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $_ ); 
+            }
+        }
     }    
     
     return { 'rc' => 200 };
@@ -68,9 +72,9 @@ sub byNumber {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    my $raw_block = $node->eth_getBlockByNumber($params->[0], $params->[1]);
+    my $raw_block = $node->eth_getBlockByNumber($params->[0], (defined $params->[1] && $params->[1] == 2 ? 0 : $params->[1]));
     
-    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4])
 }
 
 sub byHash {
@@ -79,9 +83,9 @@ sub byHash {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    my $raw_block = $node->eth_getBlockByHash($params->[0], $params->[1]);
+    my $raw_block = $node->eth_getBlockByHash($params->[0], (defined $params->[1] && $params->[1] == 2 ? 0 : $params->[1]));
     
-    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4])
 }
 
 

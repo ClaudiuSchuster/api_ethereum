@@ -2,7 +2,7 @@ package API::methods::eth::contract::IceMine;
 
 use strict; use warnings; use utf8; use feature ':5.10';
 use Math::BigInt;
-
+use Math::BigFloat;
 
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
@@ -22,9 +22,8 @@ sub logs {
     
     $params->{address} = $contract->{address};
     $params->{fromBlock} = $contract->{block_number};
-    # $params->{topics} = [];
     
-    return API::methods::eth::address::logs($cgi, $data, $node, $params);
+    return API::methods::eth::contract::logs($cgi, $data, $node, $params);
 }
 
 sub valueInputs {
@@ -172,10 +171,10 @@ sub member {
     $data->{balance_ice}                    = $node->wei2ether( $balance )->numify();
     my $percentTotal                        = $node->contract_method_call('percentTotalOf',         { '_beneficiary' => $params->{address} });
     $data->{percentTotal}                   = $percentTotal->bstr().'';
-    $data->{percentTotal_float}             = $percentTotal->btdiv(10**21)->numify();
+    $data->{percentTotal_float}             = Math::BigFloat->new($percentTotal)->bdiv(10**21)->numify();
     my $crowdsalePercent                    = $node->contract_method_call('crowdsalePercentOf',     { '_beneficiary' => $params->{address} });
     $data->{crowdsalePercent}               = $crowdsalePercent->bstr().'';
-    $data->{crowdsalePercent_float}         = $crowdsalePercent->btdiv(10**21)->numify();
+    $data->{crowdsalePercent_float}         = Math::BigFloat->new($crowdsalePercent)->bdiv(10**21)->numify();
     my $crowdsaleInvestment                 = $node->contract_method_call('crowdsaleInvestmentOf',  { '_beneficiary' => $params->{address} });
     $data->{crowdsaleInvestment_wei}        = $crowdsaleInvestment->bstr().'';
     $data->{crowdsaleInvestment_eth}        = $node->wei2ether( $crowdsaleInvestment )->numify();
