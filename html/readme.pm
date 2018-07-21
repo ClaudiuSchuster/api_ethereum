@@ -63,6 +63,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
                 ['params:contract', 'string',   'true', '',     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
                 ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs."],
                 ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
+                ['params:toBlock','integer',    'false','0',    "Ending block for fetching logs."],
                 ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 and empty transactions-array[] will be returned."],
             ],
             requestExample  => qq~

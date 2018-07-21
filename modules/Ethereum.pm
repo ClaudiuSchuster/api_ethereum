@@ -733,13 +733,14 @@ sub eth_getBalance()
 =cut
 
 sub eth_getLogs() {
-    my ($this, $address, $fromBlock, $topics) = @_;
+    my ($this, $address, $fromBlock, $topics, $toBlock) = @_;
     
     my $rq = { jsonrpc => "2.0", 
         method => "eth_getLogs",
         params => [ { 
             address => $address,
             fromBlock => $fromBlock ? '0x'.Math::BigInt->new( $fromBlock )->to_hex() : '0x0',
+            toBlock => $toBlock ? '0x'.Math::BigInt->new( $fromBlock )->to_hex() : 'latest',
             topics => $topics || []
         } ],
         id => 74

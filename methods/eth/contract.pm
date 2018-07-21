@@ -92,7 +92,7 @@ sub logs {
     my $startTime = time();
     $set_contract_abi->($node, $params);
     $params->{topic_keccak} = $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} );
-    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, [$params->{topic_keccak}]);
+    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, [$params->{topic_keccak}], $params->{toBlock});
     
     my @logs;
     for my $raw_log ( @$raw_logs ) {
