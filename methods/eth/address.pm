@@ -24,7 +24,34 @@ sub logs {
     return { 'rc' => 400, 'msg' => "Argument 'topics' must be an array[]. Abort!" }
         if( defined $params->{topics} && ref($params->{topics}) ne 'ARRAY' );
     
-    $data->{logs} = $node->eth_getLogs($params->{address}, $params->{fromBlock}, $params->{topics});
+    my $raw_logs = $node->eth_getLogs($params->{address}, $params->{fromBlock}, $params->{topics});
+    
+    my @logs;
+    for my $raw_log ( @$raw_logs ) {
+        my $log = {};
+        $log->{tx_hash} = $raw_log->{transactionHash};
+        $log->{tx_index} = $raw_log->{transactionIndex};
+        $log->{log_index} = hex($raw_log->{logIndex});
+        $log->{removed} = $raw_log->{removed};
+        $log->{data} = $raw_log->{data}; # DATA - contains one or more 32 Bytes non-indexed arguments of the log. 
+        # $log->{data_string} = API::helpers::HexToAscii($raw_log->{data}); 
+        $log->{topics} = $raw_log->{topics}; # Array of DATA - Array of 0 to 4 32 Bytes DATA of indexed log arguments. 
+                                             # (In solidity: The first topic is the hash of the signature of the event 
+                                             # (e.g. Deposit(address,bytes32,uint256)), except you declared the event with the anonymous specifier.)
+        # $log->{topics_string} = [];
+        # for ( @{$raw_log->{topics}} ) {
+            # push @{$log->{topics_string}},  $node->_hex2string($_);
+        # }
+        API::methods::eth::block::byHash( $cgi, $log, $node, [
+            $raw_log->{blockHash}, 
+            ($params->{notx}?2:1), 
+            $log->{tx_hash}
+        ] );
+        
+        push @logs, $log;
+    }
+    $data->{logs} = \@logs;
+    $data->{log_count} = scalar @logs;
     
     return { 'rc' => 200 };
 }

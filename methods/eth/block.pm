@@ -16,7 +16,7 @@ my $check_basics = sub {
 };
 
 my $get_block = sub {
-    my ($data, $node, $raw_block, $FullTxOrHashOrNothing) = @_;
+    my ($data, $node, $raw_block, $FullTxOrHashOrNothing, $txhashfilter, $txaddressfilter) = @_;
     
     # $data->{raw_block}        = $raw_block;
     $data->{block_hash}       = $raw_block->{hash};
@@ -47,7 +47,13 @@ my $get_block = sub {
             $tx->{block_hash}   = $_->{blockHash};
             $tx->{block_number} = hex($_->{blockNumber});
             
-            push(@{$data->{transactions}}, $tx) unless($FullTxOrHashOrNothing == 2);
+            if($FullTxOrHashOrNothing != 2) {
+                push(@{$data->{transactions}}, $tx) 
+                    if( !defined $txhashfilter && !defined $txaddressfilter
+                     || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txaddressfilter || $txaddressfilter eq '')
+                     || defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
+                     || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} );
+            }
         }
     } else {
         $data->{transactions} = $raw_block->{transactions};
@@ -64,7 +70,7 @@ sub byNumber {
     
     my $raw_block = $node->eth_getBlockByNumber($params->[0], $params->[1]);
     
-    return $get_block->($data, $node, $raw_block, $params->[1])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3])
 }
 
 sub byHash {
@@ -75,7 +81,7 @@ sub byHash {
     
     my $raw_block = $node->eth_getBlockByHash($params->[0], $params->[1]);
     
-    return $get_block->($data, $node, $raw_block, $params->[1])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3])
 }
 
 

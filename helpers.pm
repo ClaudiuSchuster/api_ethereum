@@ -11,7 +11,15 @@ sub trim($) {
 } 
 
 
-
+sub HexToAscii($) {
+    my $hex = shift;
+    my $str = "";
+    for (my $i=2; $i < length($hex); $i+=2) {
+        my $code = hex(substr($hex, $i, 2));
+        $str .= chr($code);
+    }
+    return $str;
+};
 
 
 

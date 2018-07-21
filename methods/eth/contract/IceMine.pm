@@ -22,6 +22,7 @@ sub logs {
     
     $params->{address} = $contract->{address};
     $params->{fromBlock} = $contract->{block_number};
+    # $params->{topics} = [];
     
     return API::methods::eth::address::logs($cgi, $data, $node, $params);
 }

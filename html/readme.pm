@@ -118,9 +118,14 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
             parameterTable  => [
                 ['params: 1.',          'integer',  'true', '',   "Block number"],
                 ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
+                ['params: 3.',          'string',   'false', '',  "Add only transactions for given 'tx_hash' in transactions-array[]."],
+                ['params: 4.',          'string',   'false', '',  "Add only transactions for given to-'address' in transactions-array[]."],
             ],
             requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323]}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1, "0xffd5cdfbb995c76b93d174eb969b0106cc0d76277d56686560cd3ea90fdff00b"]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1, "", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'
             ~,
             returnDataTable => [
                 ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
@@ -133,9 +138,14 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323
             parameterTable  => [
                 ['params: 1.',          'string',   'true', '',   "Block hash"],
                 ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
+                ['params: 3.',          'string',   'false', '',  "Add only transactions for given 'tx_hash' in transactions-array[]."],
+                ['params: 4.',          'string',   'false', '',  "Add only transactions for given to-'address' in transactions-array[]."],
             ],
             requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc"]}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "0xffd5cdfbb995c76b93d174eb969b0106cc0d76277d56686560cd3ea90fdff00b"]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'
             ~,
             returnDataTable => [
                 ['data:block_hash',         'string',   'yes',                      "Block hash"],
@@ -149,8 +159,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
                 ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
                 ['data:difficulty_total',   'integer',  'yes',                      "TotalDifficulty of block"],
                 ['data:transactions',       'array[]',  'yes',                      "Array[] with all transactions of block."],
-                ['data:transactions:*',     'string',   'yes, if "params: 2." != 0|2', "If 'params: 2.' is false, a 'string' for each tx_hash in this block."],
-                ['data:transactions:*',     'string',   'yes, if "params: 2." == 1',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
+                ['data:transactions:*',     'object{}', 'yes, if "params: 2." != 0|2', "If 'params: 2.' is false, a 'string' for each tx_hash in this block will be returned."],
+                ['data:transactions:*',     'object{}', 'yes, if "params: 2." == 1',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
                 ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2." == 1', "Transaction hash"],
                 ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2." == 1', "Transaction index position in the block"],
                 ['data:transactions:*:from',                'string',   'yes, if "params: 2." == 1', "From address"],
@@ -190,7 +200,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
         {
             method          => "eth.address.valueInputs",
             title           => "Get all value inputs from an address.",
-            note            => "To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!",
+            note            => "<span style='color:darkred;'>To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!</span>",
             parameterTable  => [
                 ['params:address',  'string',   'true', '',         "'address' to get valueInputs for."],
                 ['params:fromBlock','integer',  'true', '',         "Starting block_number to look over"],
@@ -222,16 +232,33 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"a
             title           => "Get logs from an 'address'",
             note            => "",
             parameterTable  => [
-                ['params:address',      'string',   'true', '',   "'address' to get logs from."],
-                ['params:fromBlock',    'integer',  'false','0',   "Starting block for fetching logs."],
-                ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+                ['params:address',      'string',   'true', '',         "'address' to get logs from."],
+                ['params:fromBlock',    'integer',  'false','0',        "Starting block for fetching logs."],
+                ['params:topics',       'array[]',  'false','[]',       "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+                ['params:notx',         'bool',     'false','false',    "If true does not return 'transaction' parameter."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.logs","params":{"address":"0x02206f9f8b50d59cac1265e9234be7dda06d20f5"}}'
             ~,
             returnDataTable => [
-                ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
-                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
+                ['data:log_count',                  'integer',  'yes', "Log count of requested logs."],
+                ['data:logs',                       'array[]',  'yes', "Array[] of all logs which matches the filter (given arguments)."],
+                ['data:logs:*',                     'object{}', 'no',  "Object{} of log details."],
+                ['data:logs:*:',                    '',   'yes',  ""],
+                ['data:logs:*:',                    '',   'yes',  ""],
+                ['data:logs:*:',                    '',   'yes',  ""],
+                ['data:logs:*:',                    '',   'yes',  ""],
+                ['data:transaction',                'object{}', 'Unless "params:notx"', "Object{} for the corresponding transaction in this block."],
+                ['data:transaction:tx_hash',        'string',   'yes', "Transaction hash"],
+                ['data:transaction:tx_index',       'integer',  'yes', "Transaction index position in the block"],
+                ['data:transaction:from',           'string',   'yes', "From address"],
+                ['data:transaction:to',             'string',   'yes', "To address"],
+                ['data:transaction:gas_provided',   'integer',  'yes', "Gas provided by sender"],
+                ['data:transaction:block_hash',     'string',   'yes', "Block hash"],
+                ['data:transaction:block_number',   'integer',  'yes', "Block number"],
+                ['data:transaction:data',           'string',   'yes', "The HEX-DATA send along with the transaction."],
+                ['data:transaction:value_wei',      'integer',  'yes', "Value transferred in Wei."],
+                ['data:transaction:value_eth',      'float',    'yes', "Value transferred in ETH."],
             ],
         },
     ]);
@@ -536,13 +563,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             note            => "",
             parameterTable  => [
                 ['params:topics',       'array[]',  'false','[]',   "Filter: Array of 32 Bytes DATA topics. Topics are order-dependent. </br>Each topic can also be an array of DATA with 'or' options"],
+                ['params:notx',         'bool',     'false','false',    "If true does not return 'transaction' parameter."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
             ~,
             returnDataTable => [
-                ['data:logs',   'array[]',   'yes', "Array of all logs on this address since fromBlock which matches the filter."],
-                ['data:*',      'string',   'yes',   "(DEVELOP/NOTREADY)"],
+                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.logs'>eth.address.logs</a> for return data."],
             ],
         },
         {
