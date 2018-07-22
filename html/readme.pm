@@ -64,7 +64,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
                 ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs."],
                 ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
                 ['params:toBlock','integer',    'false','0',    "Ending block for fetching logs."],
-                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 and empty transactions-array[] will be returned."],
+                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122}}'
@@ -575,19 +575,19 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             method          => "eth.contract.IceMine.logs",
             title           => "Get logs from 'IceMine' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
-                <p>'topics' in IceMine contract:
-                </br> - <code>Approve(address,uint256,bool)</code>
-                </br> - <code>Participate(address,uint256,uint256)</code>
-                </br> - <code>Transfer(address,address,uint256)</code>
-                </br> - <code>ForwardCrowdsaleFunds(address,address,uint256)</code>
-                </br> - <code>CrowdsaleStarted(bool)</code>
-                </br> - <code>CrowdsaleFinished(bool)</code>
-                </br> - <code>Deposit(address,uint256)</code>
-                </br> - <code>Withdraw(address,address,uint256)</code></p>
+                <p><u>'topics' in IceMine contract:</u>
+                </br> <code>Approve(address,uint256,bool)</code>
+                </br> <code>Participate(address,uint256,uint256)</code>
+                </br> <code>Transfer(address,address,uint256)</code>
+                </br> <code>ForwardCrowdsaleFunds(address,address,uint256)</code>
+                </br> <code>CrowdsaleStarted(bool)</code>
+                </br> <code>CrowdsaleFinished(bool)</code>
+                </br> <code>Deposit(address,uint256)</code>
+                </br> <code>Withdraw(address,address,uint256)</code></p>
             ",
             parameterTable  => [
                 ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
-                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 and empty transactions-array[] will be returned."],
+                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'

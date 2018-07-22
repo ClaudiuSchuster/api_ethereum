@@ -47,24 +47,26 @@ sub valueInputs {
         my $block = {};
         API::methods::eth::block::byNumber( $cgi, $block, $node, [$_, 1] );
         for my $tx ( @{$block->{transactions}} ) {
-            $totalInput->badd($tx->{value_wei});
-            push @transactions, {
-                from => $tx->{from},
-                value_wei => $tx->{value_wei},
-                value_eth => $tx->{value_eth},
-                gas_provided => $tx->{gas_provided},
-                tx_hash => $tx->{tx_hash},
-                tx_index => $tx->{tx_index},
-                block_hash => $block->{block_hash},
-                block_number => $block->{block_number},
-                timestamp => $block->{timestamp},
-            } if( defined $tx->{to} && $tx->{to} eq $params->{address} && $tx->{value_wei} ne '0'  &&
-                  (!defined $params->{from} || defined $params->{from} && $params->{from} eq $tx->{from}) );
+            if( defined $tx->{to} && $tx->{to} eq $params->{address} && $tx->{value_wei} ne '0'  
+                && (!defined $params->{from} || defined $params->{from} && $params->{from} eq $tx->{from}) ) {
+                $totalInput->badd($tx->{value_wei});
+                push @transactions, {
+                    from => $tx->{from},
+                    value_wei => $tx->{value_wei},
+                    value_eth => $tx->{value_eth},
+                    gas_provided => $tx->{gas_provided},
+                    tx_hash => $tx->{tx_hash},
+                    tx_index => $tx->{tx_index},
+                    block_hash => $block->{block_hash},
+                    block_number => $block->{block_number},
+                    timestamp => $block->{timestamp},
+                }
+            }
         }
     }
     
     $data->{total_wei}    = $totalInput->bstr();
-    $data->{total_eth}    = $totalInput->numify();
+    $data->{total_eth}    = $node->wei2ether( $totalInput )->numify();
     $data->{tx_count}     = scalar @transactions;
     $data->{transactions} = \@transactions;
     
