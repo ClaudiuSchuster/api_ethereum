@@ -1,0 +1,15 @@
+[Unit]
+Description=web3server.js
+After=syslog.target network.target remote-fs.target nss-lookup.target
+ 
+[Service]
+WorkingDirectory=/ethereum/api
+ 
+ExecStart=/bin/sh -c "/ethereum/api/web3eventDecoder.js 880 >> /ethereum/api/web3eventDecoder.log 2>&1"
+ 
+Type=simple
+Restart=on-failure
+ 
+ 
+[Install]
+WantedBy=multi-user.target
