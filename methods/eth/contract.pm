@@ -91,8 +91,14 @@ sub logs {
     
     my $startTime = time();
     $set_contract_abi->($node, $params);
-    $params->{topic_keccak} = $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} );
-    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, [$params->{topic_keccak}], $params->{toBlock});
+    
+    my $raw_topics = [];
+    push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} && $params->{topic} !~ /^0x/);
+    if( ref($params->{topics}) eq 'ARRAY' ) {
+        push @{$raw_topics}, $_ for( @{$params->{topics}} );
+    }
+    $params->{raw_topics} = $raw_topics;
+    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, $raw_topics, $params->{toBlock});
     
     my @logs;
     for my $raw_log ( @$raw_logs ) {
@@ -101,7 +107,7 @@ sub logs {
         $log->{tx_index} = hex($raw_log->{transactionIndex});
         $log->{log_index} = hex($raw_log->{logIndex});
         $log->{removed} = $raw_log->{removed};
-        unless( defined $params->{topic} ) {
+        if( defined $params->{showraw} || !defined $params->{topic} ) {
             $log->{data} = $raw_log->{data}; # DATA - contains one or more 32 Bytes non-indexed arguments of the log. 
             $log->{topics} = $raw_log->{topics}; # Array of DATA - Array of 0 to 4 32 Bytes DATA of indexed log arguments.  (In solidity: The first topic is the hash of the signature of the event   (e.g. Deposit(address,bytes32,uint256)), except you declared the event with the anonymous specifier.)
         }
@@ -127,7 +133,8 @@ sub logs {
             $params->{contract}
         ] );
         
-        push @logs, $log;
+        my ($filter) = keys %{$params->{filter}} if(ref($params->{filter}) eq 'HASH');
+        push @logs, $log if( !defined $filter || defined $log->{event_data}{$filter} && $log->{event_data}{$filter} eq $params->{filter}{$filter}  );
     }
     $data->{logs} = \@logs;
     $data->{log_count} = scalar @logs;

@@ -61,16 +61,29 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> ",
             parameterTable  => [
                 ['params:contract', 'string',   'true', '',     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
-                ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs."],
-                ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
-                ['params:toBlock','integer',    'false','0',    "Ending block for fetching logs."],
+                ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs from Node."],
+                ['params:topic',    'string',   'false','',     "Event 'topic'[0] to filter for (Event-function definition string which will be converted to keccak). </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
+                ['params:topics',   'array[]',  'false','[]',   "Additional raw event topics to filter for (Order dependend! Each topic can also be an Array[] of DATA with 'or' options.).</br><em>With this parameter the filter will be executed on <u>Node-level</u> which promise u the fastest processing time for your request.</em>"],
+                ['params:filter',   'object{}', 'false','{}',   "Filter the return for \"filter\":{\"key\":\"value\"} pairs of event_data.</br><em>With this parameter the filter will be executed on <u>API-Level</u> which must process first all data returned from Node.</em>"],
+                ['params:toBlock',  'integer',  'false','0',    "Ending block for fetching logs from Node."],
                 ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
+                ['params:showraw',  'bool',     'false','false',"Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
+// Get all event logs from IceMine contract, returns ABI-encoded event data:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122}}'
+// Get all 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)"}}'
+// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on API-Level for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5':
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}}'
+// Get raw event data additional to the decoded data for the Transfer events, to use it later for the 'topics'-filter on Node-Level:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"},"showraw":true}}'
+// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on Node-Level (very fast) for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', because its order depended also the 'from-topic' must be given:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x000000000000000000000000cb682d89265ab8c7ffa882f0ceb799109bc2a8b0","0x00000000000000000000000065890c49a1628452fc9d50b720759fa7ed4ed8b5"]}}'
+// showtx example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","showtx":1}}'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"showtx":1}}'
+// showtx and showraw can be used anytime:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:log_count',          'integer',  'yes',  "Log count of requested logs."],
@@ -80,11 +93,11 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contrac
                 ['data:logs:*:tx_hash',     'string',   'yes',  "Transaction hash"],
                 ['data:logs:*:tx_index',    'integer',  'yes',  "Transaction index position in the block"],
                 ['data:logs:*:removed',     'bool',     'yes',  "Removed state of log entry."],
-                ['data:logs:*:event_name',  'string',   'if "topic"',   "The 'name' of this event function, e.g. 'Transfer'. Not returned if 'topic' not set."],
-                ['data:logs:*:event_data',  'object{}', 'if "topic"',   "Object{} of event log data. Not returned if 'topic' not set."],
+                ['data:logs:*:event_name',  'string',   'if "params:topic"',   "The 'name' of this event function, e.g. 'Transfer'. Not returned if 'topic' not set."],
+                ['data:logs:*:event_data',  'object{}', 'if "params:topic"',   "Object{} of event log data. Not returned if 'topic' not set."],
                 ['data:logs:*:event_data:*','string',   'yes',   "Diverse return arguments from event log."],
-                ['data:logs:*:data',        'string',   'unless "topic"',   "Raw, ABI encoded data. Only returned if 'topic' not set."],
-                ['data:logs:*:topics',      'array[]',  'unless "topic"',   "Raw, ABI encoded data-topics. Only returned if 'topic' not set."],
+                ['data:logs:*:data',        'string',   'unless "params:topic"',   "Raw, ABI encoded data. Only returned if 'topic' not set."],
+                ['data:logs:*:topics',      'array[]',  'unless "params:topic"',   "Raw, ABI encoded data-topics. Only returned if 'topic' not set."],
                 ['data:logs:*:*',           '*',        'yes',  "Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> for each event log entry."],
             ],
         },
@@ -575,7 +588,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             method          => "eth.contract.IceMine.logs",
             title           => "Get logs from 'IceMine' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
-                <p><u>'topics' in IceMine contract:</u>
+                <p><u>Available 'topics' in IceMine contract:</u>
                 </br> <code>Approve(address,uint256,bool)</code>
                 </br> <code>Participate(address,uint256,uint256)</code>
                 </br> <code>Transfer(address,address,uint256)</code>
@@ -586,14 +599,29 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
                 </br> <code>Withdraw(address,address,uint256)</code></p>
             ",
             parameterTable  => [
-                ['params:topic',    'string',   'false','',     "Event topic to filter for (it will be converted to keccak). </br>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned."],
-                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
+                ['params:fromBlock','integer',  'false','contract-creation',"Starting block for fetching logs from Node."],
+                ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for (Event-function definition string which will be converted to keccak). </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
+                ['params:topics',   'array[]',  'false','[]',               "Additional raw event topics to filter for (Order dependend! Each topic can also be an Array[] of DATA with 'or' options.).</br><em>With this parameter the filter will be executed on <u>Node-level</u> which promise u the fastest processing time for your request.</em>"],
+                ['params:filter',   'object{}', 'false','{}',               "Filter the return for \"filter\":{\"key\":\"value\"} pairs of event_data.</br><em>With this parameter the filter will be executed on <u>API-Level</u> which must process first all data returned from Node.</em>"],
+                ['params:toBlock',  'integer',  'false','0',                "Ending block for fetching logs from Node."],
+                ['params:showtx',   'integer',  'false','2',                "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
+                ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
+// Get all event logs from IceMine contract, returns ABI-encoded event data:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
+// Get all 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
+// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on API-Level for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5':
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}}'
+// Get raw event data additional to the decoded data for the Transfer events, to use it later for the 'topics'-filter on Node-Level:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"},"showraw":true}}'
+// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on Node-Level (very fast) for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', because its order depended also the 'from-topic' must be given:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x000000000000000000000000cb682d89265ab8c7ffa882f0ceb799109bc2a8b0","0x00000000000000000000000065890c49a1628452fc9d50b720759fa7ed4ed8b5"]}}'
+// showtx example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"showtx":1}}'
+// showtx and showraw can be used anytime:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data."],
