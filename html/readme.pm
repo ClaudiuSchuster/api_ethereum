@@ -602,7 +602,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
                 ['params:fromBlock','integer',  'false','contract-creation',"Starting block for fetching logs from Node."],
                 ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for (Event-function definition string which will be converted to keccak). </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
                 ['params:topics',   'array[]',  'false','[]',               "Additional raw event topics to filter for (Order dependend! Each topic can also be an Array[] of DATA with 'or' options.).</br><em>With this parameter the filter will be executed on <u>Node-level</u> which promise u the fastest processing time for your request.</em>"],
-                ['params:filter',   'object{}', 'false','{}',               "Filter the return for \"filter\":{\"key\":\"value\"} pairs of event_data.</br><em>With this parameter the filter will be executed on <u>API-Level</u> which must process first all data returned from Node.</em>"],
+                ['params:filter',   'object{}', 'false','{}',               "Filter the return for \"filter\":{\"key\":\"value\"} pair (only one!) in event_data.</br><em>With this parameter the filter will be executed on <u>API-Level</u> which must process first all data returned from Node.</em>"],
                 ['params:toBlock',  'integer',  'false','0',                "Ending block for fetching logs from Node."],
                 ['params:showtx',   'integer',  'false','2',                "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
@@ -610,13 +610,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             requestExample  => qq~
 // Get all event logs from IceMine contract, returns ABI-encoded event data:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
-// Get all 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
+// Get 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
-// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on API-Level for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5':
+// Get (decoded) 'Transfer' event logs from IceMine contract, filter on API-Level for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5':
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}}'
 // Get raw event data additional to the decoded data for the Transfer events, to use it later for the 'topics'-filter on Node-Level:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","filter":{"to":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"},"showraw":true}}'
-// Get all (decoded) 'Transfer' event logs from IceMine contract, filter on Node-Level (very fast) for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', because its order depended also the 'from-topic' must be given:
+// Get (decoded) 'Transfer' event logs from IceMine contract, filter on Node-Level (very fast) for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', because its order depended also the 'from-topic' must be given:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x000000000000000000000000cb682d89265ab8c7ffa882f0ceb799109bc2a8b0","0x00000000000000000000000065890c49a1628452fc9d50b720759fa7ed4ed8b5"]}}'
 // showtx example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
