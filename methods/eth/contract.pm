@@ -112,7 +112,7 @@ sub logs {
             $event->{abi} = $node->_get_event_abi($log->{event_name})->{inputs};
             $event->{data} = $raw_log->{data};
             $event->{topics} = $raw_log->{topics};
-            my $trash = shift @{$event->{topics}};
+            splice(@{$event->{topics}},0,1);
             my $event_data = API::helpers::decode_log($event);
             
             for ( keys %$event_data ) {
