@@ -3,9 +3,8 @@
 ### Service URLs
 
 
-* API: http://10.10.0.8:88/
+* JSON-API: http://10.10.0.8:88/
 * API-Documentation: http://10.10.0.8:88/readme
-* Simple frontend: http://10.10.0.8:88/eth
 
 
 ### Perl Dependencies:
