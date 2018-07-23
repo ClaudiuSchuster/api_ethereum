@@ -81,10 +81,6 @@ sub deploy {
     return { 'rc' => 200 };
 }
 
-sub test {
-
-}
-
 sub logs {
     my ($cgi, $data, $node, $params) = @_;
     my $contracts = API::methods::eth::personal::account::contracts;

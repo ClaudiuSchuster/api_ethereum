@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine','eth.contract.IceMine_Mining']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -682,6 +682,12 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
                 ['data:tokenAmount_ici',                'string',   'yes', "Ici amount"],
                 ['data:tokenAmount_ice',                'float',    'yes', "ICE amount"],
             ],
+        },
+    ]);
+    
+    API::html::readme::print::ReadmeClass([
+        {
+            readmeClass  => 'eth.contract.IceMine_Mining',
         },
     ]);
     
