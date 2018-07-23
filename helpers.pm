@@ -12,12 +12,12 @@ sub trim($) {
     return $string;
 } 
 
-sub decode_input($$) {
-    my $contractName = shift;
-    my $input = shift;
+# sub decode_input($$) {
+    # my $contractName = shift;
+    # my $input = shift;
 
-    return decode_json( `./ethereum-input-decoder.js $contractName $input` );
-}
+    # return decode_json( `./ethereum-input-decoder.js $contractName $input` );
+# }
 
 sub decode_log($) {
     my $json = JSON->new->encode($_[0]);

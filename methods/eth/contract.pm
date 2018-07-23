@@ -81,6 +81,9 @@ sub deploy {
     return { 'rc' => 200 };
 }
 
+sub test {
+
+}
 
 sub logs {
     my ($cgi, $data, $node, $params) = @_;
@@ -95,7 +98,21 @@ sub logs {
     my $raw_topics = [];
     push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} && $params->{topic} !~ /^0x/);
     if( ref($params->{topics}) eq 'ARRAY' ) {
-        push @{$raw_topics}, $_ for( @{$params->{topics}} );
+        for my $basetopic ( @{$params->{topics}} ) {
+            if( ref($basetopic) eq 'ARRAY' ) {
+                my @ary;
+                for ( @$basetopic ) {
+                    ( length($_) == 66 )
+                    ? push @ary, $_
+                    : push @ary, '0x'.lc(sprintf('%064s', substr($_, 2)));
+                }
+                push @{$raw_topics}, \@ary;
+            } else {
+                ( length($basetopic) == 66 )
+                ? push @{$raw_topics}, $basetopic
+                : push @{$raw_topics}, '0x'.lc(sprintf('%064s', substr($basetopic, 2)));
+            }
+        }
     }
     $params->{raw_topics} = $raw_topics;
     my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, $raw_topics, $params->{toBlock});
@@ -120,10 +137,7 @@ sub logs {
             $event->{topics} = $raw_log->{topics};
             splice(@{$event->{topics}},0,1);
             my $event_data = API::helpers::decode_log($event);
-            
-            for ( keys %$event_data ) {
-                $log->{event_data}{$_} = $event_data->{$_} if( $_ =~ /^[_a-zA-Z]?[a-zA-Z][_a-zA-Z]*/ );
-            }
+            $log->{event_data}{$_} = $event_data->{$_} for( keys %$event_data );
         }
         API::methods::eth::block::byHash( $cgi, $log, $node, [
             $raw_log->{blockHash}, 
@@ -133,8 +147,7 @@ sub logs {
             $params->{contract}
         ] );
         
-        my ($filter) = keys %{$params->{filter}} if(ref($params->{filter}) eq 'HASH');
-        push @logs, $log if( !defined $filter || defined $log->{event_data}{$filter} && $log->{event_data}{$filter} eq $params->{filter}{$filter}  );
+        push @logs, $log;
     }
     $data->{logs} = \@logs;
     $data->{log_count} = scalar @logs;
