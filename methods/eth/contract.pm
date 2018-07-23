@@ -98,19 +98,15 @@ sub logs {
     if( ref($params->{topics}) eq 'ARRAY' ) {
         for my $basetopic ( @{$params->{topics}} ) {
             if( ref($basetopic) eq 'ARRAY' ) {
-                my @ary;
+                my @inner_raw_topics;
                 for my $innerTopic ( @$basetopic ) {
                     $innerTopic = $params->{address} if( $innerTopic eq 'contract' );
-                    ( length($innerTopic) == 66 )
-                    ? push @ary, $innerTopic
-                    : push @ary, '0x'.lc(sprintf('%064s', substr($innerTopic, 2)));
+                    push @inner_raw_topics, ( length($innerTopic) == 66 ? $innerTopic : '0x'.lc(sprintf('%064s', substr($innerTopic, 2))) );
                 }
-                push @{$raw_topics}, \@ary;
+                push @{$raw_topics}, \@inner_raw_topics;
             } else {
                 $basetopic = $params->{address} if( $basetopic eq 'contract' );
-                ( length($basetopic) == 66 )
-                ? push @{$raw_topics}, $basetopic
-                : push @{$raw_topics}, '0x'.lc(sprintf('%064s', substr($basetopic, 2)));
+                push @{$raw_topics}, ( length($basetopic) == 66 ? $basetopic : '0x'.lc(sprintf('%064s', substr($basetopic, 2))) );
             }
         }
     }
