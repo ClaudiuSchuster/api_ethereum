@@ -27,6 +27,9 @@
  - *. . . and possibly others . . .*
 
 
+### Test-Contract:
+ - https://rinkeby.etherscan.io/address/0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0
+ 
 ### Rinkeby Authenticated Faucet:
  - https://www.rinkeby.io/#faucet
  - https://twitter.com/ClaudiuSchuster/status/1015429498765041665
