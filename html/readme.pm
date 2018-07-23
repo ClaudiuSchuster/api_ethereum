@@ -62,8 +62,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
             parameterTable  => [
                 ['params:contract', 'string',   'true', '',     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
                 ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs from Node."],
-                ['params:topic',    'string',   'false','',     "Event 'topic'[0] to filter for (Event-function definition string which will be converted to keccak). </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
-                ['params:topics',   'array[]',  'false','[]',   "Filter topics, 'ContractName' <em>(will be auto converted)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.)."],
+                ['params:topic',    'string',   'false','',     "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
+                ['params:topics',   'array[]',  'false','[]',   "Filter topics, 'ContractName' <em>(will be auto converted)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em>"],
                 ['params:toBlock',  'integer',  'false','latest',"Ending block for fetching logs from Node."],
                 ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
                 ['params:showraw',  'bool',     'false','false',"Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
@@ -614,8 +614,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             ",
             parameterTable  => [
                 ['params:fromBlock','integer',  'false','contract-creation',"Starting block for fetching logs from Node."],
-                ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for (Event-function definition string which will be converted to keccak). </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
-                ['params:topics',   'array[]',  'false','[]',   "Filter topics, 'ContractName' <em>(will be auto converted)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.)."],
+                ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
+                ['params:topics',   'array[]',  'false','[]',               "Filter topics, 'ContractName' <em>(will be auto converted)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em>"],
                 ['params:toBlock',  'integer',  'false','latest',           "Ending block for fetching logs from Node."],
                 ['params:showtx',   'integer',  'false','2',                "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
