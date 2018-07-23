@@ -102,14 +102,14 @@ sub logs {
             if( ref($basetopic) eq 'ARRAY' ) {
                 my @ary;
                 for my $innerTopic ( @$basetopic ) {
-                    $innerTopic = $params->{address} if( $innerTopic eq $params->{contract});
+                    $innerTopic = $params->{address} if( $innerTopic eq 'contract' );
                     ( length($innerTopic) == 66 )
                     ? push @ary, $innerTopic
                     : push @ary, '0x'.lc(sprintf('%064s', substr($innerTopic, 2)));
                 }
                 push @{$raw_topics}, \@ary;
             } else {
-                $basetopic = $params->{address} if( $basetopic eq $params->{contract});
+                $basetopic = $params->{address} if( $basetopic eq 'contract' );
                 ( length($basetopic) == 66 )
                 ? push @{$raw_topics}, $basetopic
                 : push @{$raw_topics}, '0x'.lc(sprintf('%064s', substr($basetopic, 2)));
