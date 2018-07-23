@@ -18,6 +18,8 @@ my $check_basics = sub {
         return { 'rc' => 400, 'msg' => "Contract '$params->{contract}' not found in methods/eth/personal/account.pm. Abort!" }
             unless( defined $contracts->{$params->{contract}}[0] );
             
+        $params->{address} = $contracts->{$params->{contract}}[0] unless( defined $params->{address} );
+            
         return { 'rc' => 400, 'msg' => "Contract ABI 'contracts/$params->{contract}.abi' not found. Abort!" }
             unless( -e 'contracts/'.$params->{contract}.'.abi' );
     }
@@ -92,18 +94,22 @@ sub logs {
     $set_contract_abi->($node, $params);
     
     my $raw_topics = [];
-    push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} && $params->{topic} !~ /^0x/);
+    ( defined $params->{topic} && ($params->{topic} !~ /^0x/ || length($params->{topic}) != 66) )
+        ? push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) )
+        : push @{$raw_topics}, $params->{topic};
     if( ref($params->{topics}) eq 'ARRAY' ) {
         for my $basetopic ( @{$params->{topics}} ) {
             if( ref($basetopic) eq 'ARRAY' ) {
                 my @ary;
-                for ( @$basetopic ) {
-                    ( length($_) == 66 )
-                    ? push @ary, $_
-                    : push @ary, '0x'.lc(sprintf('%064s', substr($_, 2)));
+                for my $innerTopic ( @$basetopic ) {
+                    $innerTopic = $params->{address} if( $innerTopic eq $params->{contract});
+                    ( length($innerTopic) == 66 )
+                    ? push @ary, $innerTopic
+                    : push @ary, '0x'.lc(sprintf('%064s', substr($innerTopic, 2)));
                 }
                 push @{$raw_topics}, \@ary;
             } else {
+                $basetopic = $params->{address} if( $basetopic eq $params->{contract});
                 ( length($basetopic) == 66 )
                 ? push @{$raw_topics}, $basetopic
                 : push @{$raw_topics}, '0x'.lc(sprintf('%064s', substr($basetopic, 2)));
