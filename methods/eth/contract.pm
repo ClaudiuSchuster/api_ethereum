@@ -94,9 +94,7 @@ sub logs {
     $set_contract_abi->($node, $params);
     
     my $raw_topics = [];
-    ( defined $params->{topic} && ($params->{topic} !~ /^0x/ || length($params->{topic}) != 66) )
-        ? push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) )
-        : push @{$raw_topics}, $params->{topic};
+    push @{$raw_topics}, $node->web3_sha3( $node->_string2hex($params->{topic}) ) if( defined $params->{topic} && $params->{topic} !~ /^0x/ );
     if( ref($params->{topics}) eq 'ARRAY' ) {
         for my $basetopic ( @{$params->{topics}} ) {
             if( ref($basetopic) eq 'ARRAY' ) {
