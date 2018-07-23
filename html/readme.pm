@@ -81,8 +81,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contrac
 // Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf':
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
-// The same as before but mixed filter with a RAW-DATA and 'ContractName' in to-address-array for example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["0xCB682D89265ab8C7ffA882f0Ceb799109BC2A8B0",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","contract","0x00000000000000000000000021c3ec39329b5ee1394e890842f679e93fe648bf"]]}}'
+// 'contract' used as one of two recipients example:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","showraw":true}}'
@@ -633,8 +633,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{
 // Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf ("contract" will be replaced with contract address):
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
-// The same as before but mixed with a RAW-DATA in filter and explicitely give 'from'-address and contract in to or's for example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0xCB682D89265ab8C7ffA882f0Ceb799109BC2A8B0",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","contract","0x00000000000000000000000021c3ec39329b5ee1394e890842f679e93fe648bf"]]}}'
+// 'contract' used as one of two recipients example:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showraw":true}}'
