@@ -36,9 +36,9 @@ sub valueInputs {
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'fromBlock' needed. Abort!" }
         unless( defined $params->{fromBlock} );
     unless( defined $params->{toBlock} ) {
-        my $tmpData = {}; # $tmpData->{block_number} for current block
-        API::methods::eth::node::block({}, $tmpData, $node);
-        $params->{toBlock} = $tmpData->{block_number} 
+        my $block = {}; # $block->{block_number} for current block
+        API::methods::eth::node::block({}, $block, $node);
+        $params->{toBlock} = $block->{block_number} 
     }
     
     my $totalInput = Math::BigInt->new( 0 );
@@ -47,10 +47,14 @@ sub valueInputs {
         my $block = {};
         API::methods::eth::block::byNumber( $cgi, $block, $node, [$_, 1] );
         for my $tx ( @{$block->{transactions}} ) {
-            if( defined $tx->{to} && $tx->{to} eq $params->{address} && $tx->{value_wei} ne '0'  
-                && (!defined $params->{from} || defined $params->{from} && $params->{from} eq $tx->{from}) ) {
-                $totalInput->badd($tx->{value_wei});
+            if( defined $tx->{to} && $tx->{to} eq $params->{address} && ($tx->{value_wei} ne '0' || $params->{showempty} )
+              && (!defined $params->{from} || defined $params->{from} && $params->{from} eq $tx->{from}) ) {
+                my $receiptParams->{tx} = $tx->{tx_hash};
+                my $receipt = {};
+                API::methods::eth::tx::receipt($cgi, $receipt, $node,$receiptParams);
+                $totalInput->badd($tx->{value_wei}) if( $receipt->{status} );
                 push @transactions, {
+                    receipt => $params->{showreceipt} ? $receipt : {},
                     from => $tx->{from},
                     value_wei => $tx->{value_wei},
                     value_eth => $tx->{value_eth},
@@ -60,7 +64,7 @@ sub valueInputs {
                     block_hash => $block->{block_hash},
                     block_number => $block->{block_number},
                     timestamp => $block->{timestamp},
-                }
+                } if( $params->{showfailed} || $receipt->{status} );
             }
         }
     }

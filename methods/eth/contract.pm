@@ -90,6 +90,8 @@ sub logs {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
+    $params->{fromBlock} = $contracts->{$params->{contract}}[1] unless( defined $params->{fromBlock} );
+    
     my $startTime = time();
     $set_contract_abi->($node, $params);
     
@@ -111,7 +113,7 @@ sub logs {
         }
     }
     $params->{raw_topics} = $raw_topics;
-    my $raw_logs = $node->eth_getLogs($contracts->{$params->{contract}}[0], $params->{fromBlock}, $raw_topics, $params->{toBlock});
+    my $raw_logs = $node->eth_getLogs($params->{address}, $params->{fromBlock}, $raw_topics, $params->{toBlock});
     
     my @logs;
     for my $raw_log ( @$raw_logs ) {

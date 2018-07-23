@@ -60,35 +60,38 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
             title           => "Get logs from an 'contract'",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> ",
             parameterTable  => [
-                ['params:contract', 'string',   'true', '',     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
-                ['params:fromBlock','integer',  'false','0',    "Starting block for fetching logs from Node."],
-                ['params:topic',    'string',   'false','',     "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
-                ['params:topics',   'array[]',  'false','[]',   "Filter topics, \"contract\" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em>"],
-                ['params:toBlock',  'integer',  'false','latest',"Ending block for fetching logs from Node."],
-                ['params:showtx',   'integer',  'false','2',    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
-                ['params:showraw',  'bool',     'false','false',"Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
+                ['params:contract', 'string',   'true', '',                     "'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder."],
+                ['params:topic',    'string',   'false','',                     "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
+                ['params:topics',   'array[]',  'false','[]',                   "Filter topics, \"contract\" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em>"],
+                ['params:fromBlock','integer',  'false','contract-creation',    "Starting block for fetching logs from Node."],
+                ['params:toBlock',  'integer',  'false','latest',               "Ending block for fetching logs from Node."],
+                ['params:showtx',   'integer',  'false','2',                    "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
+                ['params:showraw',  'bool',     'false','false',                "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
 // Get all event logs from IceMine contract, returns ABI-encoded event data:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine"}}'
 
 // Get all 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)"}}'
 
 // Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ('contract' will be replaced with contracts address 32Byte-DATA):
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
 
 // Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf':
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
 // 'contract' used as one of two recipients example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+
+// Get finishing event (block and so on also...) from IceMine crowdsale:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"CrowdsaleFinished(bool)"}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","showraw":true}}'
 
 // showtx example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","fromBlock":2659122,"topic":"Transfer(address,address,uint256)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","showtx":1}}'
 
 // showtx and showraw can be used anytime:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","showtx":1,"showraw":true}}'
@@ -262,13 +265,18 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
             title           => "Get all value inputs from an address.",
             note            => "<span style='color:darkred;'>To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!</span>",
             parameterTable  => [
-                ['params:address',  'string',   'true', '',         "'address' to get valueInputs for."],
-                ['params:fromBlock','integer',  'true', '',         "Starting block_number to look over"],
-                ['params:toBlock',  'integer',  'false','latest',   "Last block_number to look over"],
-                ['params:from',     'string',   'false','',         "Filter for 'from' address of value sender."],
+                ['params:address',      'string',   'true', '',         "'address' to get valueInputs for."],
+                ['params:fromBlock',    'integer',  'true', '',         "Starting block_number to look over"],
+                ['params:toBlock',      'integer',  'false','latest',   "Last block_number to look over"],
+                ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
+                ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
+                ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
+                ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5","fromBlock":2659122,"toBlock":2659241}}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
             ~,
             returnDataTable => [
                 ['data:total_wei',                  'string',   'yes',  "Total value inputs for request in Wei"],
@@ -285,6 +293,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"a
                 ['data:transactions:*:timestamp',   'integer',  'yes',  "Timestamp of block"],
                 ['data:transactions:*:value_wei',   'integer',  'yes',  "Value transferred in Wei."],
                 ['data:transactions:*:value_eth',   'float',    'yes',  "Value transferred in ETH."],
+                ['data:transactions:*:receipt',     'object{}', 'yes',  "Value transferred in ETH."],
+                ['data:transactions:*:receipt:*',   '*', 'if \'params:showreceipt\'',  "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
             ],
         },
     ]);
@@ -613,9 +623,9 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
                 </br> <code>Withdraw(address,address,uint256)</code></p>
             ",
             parameterTable  => [
-                ['params:fromBlock','integer',  'false','contract-creation',"Starting block for fetching logs from Node."],
                 ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
                 ['params:topics',   'array[]',  'false','[]',               "Filter topics, \"contract\" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em>"],
+                ['params:fromBlock','integer',  'false','contract-creation',"Starting block for fetching logs from Node."],
                 ['params:toBlock',  'integer',  'false','latest',           "Ending block for fetching logs from Node."],
                 ['params:showtx',   'integer',  'false','2',                "If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned."],
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
@@ -636,6 +646,9 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{
 // 'contract' used as one of two recipients example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
+// Get finishing event (block and so on also...) from IceMine crowdsale:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"CrowdsaleFinished(bool)"}}'
+
 // Get raw event data additional to the decoded DATA for the Transfer events:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showraw":true}}'
 
@@ -654,7 +667,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{
             title           => "Get all value inputs during crowdsale of 'IceMine' contract.",
             note            => "",
             parameterTable  => [
-                ['params:from',     'string',   'false','',   "Filter for 'from' address of value sender."],
+                ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
+                ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
+                ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
+                ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
             ],
             requestExample  => qq~
 // Without filter for a specific sender of the value
@@ -662,6 +678,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs"}'
 
 // With filter for a specific sender of the value
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
