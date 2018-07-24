@@ -1410,7 +1410,7 @@ sub compile_and_deploy_contract()
 
   my $contract_src_path = 'contracts/'.$contract_name.'.sol';
   my $bin_solc = '/usr/bin/solc';
-  my $cmd = "$bin_solc github.com/=contracts/github.com/ --optimize --optimize-runs 200 --bin --abi $contract_src_path -o contracts --overwrite";
+  my $cmd = "$bin_solc github.com/=contracts/github.com/ =contracts/ --optimize --optimize-runs 200 --bin --abi $contract_src_path -o contracts --overwrite";
   if(system($cmd))
   {
     die sprintf("Failed to compile $contract_name with value %d\n", $? >> 8);
