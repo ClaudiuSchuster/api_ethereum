@@ -110,7 +110,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contrac
                 ['data:logs:*:data',        'string',   'if !"params:topic" || "params:showraw"',   "Raw, ABI encoded data. Only returned if 'topic' not set."],
                 ['data:logs:*:topics',      'array[]',  'if !"params:topic" || "params:showraw"',   "Raw, ABI encoded data-topics. Only returned if 'topic' not set."],
                 ['data:logs:*:transactions','array[]',  'if "params:showtx"',                       "The transaction details for this log-entry from helper method <a href='#eth.block.byHash'>eth.block.byHash</a>"],
-                ['data:logs:*:transactions:*','*',      'if "params:showtx"',                       "See helper method <a href='#eth.block.byHash'>eth.block.byHash</a> 'transactions' return parameter for return-data."],
+                ['data:logs:*:transactions:*','*',      'yes',                                       "See helper method <a href='#eth.block.byHash'>eth.block.byHash</a> 'transactions' return parameter for return-data."],
                 ['data:logs:*:*',           '*',        'yes',                                      "Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> for each event log entry."],
             ],
         },
@@ -224,8 +224,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
                 ['data:difficulty',         'integer',  'yes',                      "Difficulty of block"],
                 ['data:difficulty_total',   'integer',  'yes',                      "TotalDifficulty of block"],
                 ['data:transactions',       'array[]',  'yes',                      "Array[] with all transactions of block."],
-                ['data:transactions:*',     'object{}', 'yes, if "params: 2." != 0|2', "If 'params: 2.' is false, a 'string' for each tx_hash in this block will be returned."],
-                ['data:transactions:*',     'object{}', 'yes, if "params: 2." == 1',     "If 'params: 2.' is true, a object{} for each transaction in this block."],
+                ['data:transactions:*',     'object{}', 'yes, if "params: 2." != 0|2', "If 'params: 2.' == 0, a 'string' for each tx_hash in this block will be returned."],
+                ['data:transactions:*',     'object{}', 'yes, if "params: 2." == 1',     "If 'params: 2.' == 1, a object{} for each transaction in this block will be returned."],
                 ['data:transactions:*:tx_hash',             'string',   'yes, if "params: 2." == 1', "Transaction hash"],
                 ['data:transactions:*:tx_index',            'integer',  'yes, if "params: 2." == 1', "Transaction index position in the block"],
                 ['data:transactions:*:from',                'string',   'yes, if "params: 2." == 1', "From address"],
@@ -708,6 +708,21 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
     API::html::readme::print::ReadmeClass([
         {
             readmeClass  => 'eth.contract.IceMine_Mining',
+        },
+        {
+            method          => "eth.contract.IceMine.deploy",
+            title           => "Deploy 'IceMine' contract",
+            note            => "",
+            parameterTable  => [
+                ['params:constructor',  'object{}', 'false',    '{ *from IceMine_Mining.pm* }', qq~'Constructor' parameters will be read from IceMine.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
+            ],
+            requestExample  => qq~
+// Deploy constract 'IceMine_Mining' with constructor from IceMine_Mining.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.deploy"}'
+            ~,
+            returnDataTable => [
+                ['data:*',              '*',        'yes',  "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
+            ],
         },
     ]);
     

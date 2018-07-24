@@ -198,10 +198,10 @@ sub run {
     
     $params->{contract} = $contractName;
     
-    my $checks = $check_basics->($params);
+    my $checks = $check_basics->( $params, ($reqFunc eq 'deploy' ? 'simpleCheck' : 0) );
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    $set_contract_abi->($node, $params);
+    $set_contract_abi->($node, $params) unless( $reqFunc eq 'deploy' );
     
     return $reqFunc_run_ref->(
         $cgi,
