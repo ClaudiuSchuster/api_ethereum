@@ -5,8 +5,9 @@
 * API-Documentation: http://10.10.0.8:88/readme
 
 ### Test-Contract:
- - https://rinkeby.etherscan.io/address/0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0
- 
+ Distribution: https://rinkeby.etherscan.io/address/0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0
+ Mining: https://rinkeby.etherscan.io/address/0x1c5b5e9e527b41f055a88695e8c0349caec9b5a6
+
 ### Ethereum Contract ABI Converter:
  - https://abi.sonnguyen.ws/
  
