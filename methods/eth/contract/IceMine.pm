@@ -8,10 +8,11 @@ sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $params->{constructor} = {
-        _cap => 10,
-        _wallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',
-        _owner => '0x',
-        # _owner => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3',
+        _crowdsaleCapEth => 10,
+        _crowdsaleWallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',
+        _teamContract    => '0x58f94C8dD0E40258EE2BD766508964b941147bd8',
+        _teamShare       => 40,
+        _owner           => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3'
     } unless( $params->{constructor} );
     
     return API::methods::eth::contract::deploy($cgi, $data, $node, $params);
