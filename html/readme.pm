@@ -414,77 +414,33 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.approveTeam",
-            title           => "Approve Team members in 'IceMine' contract",
+            method          => "eth.contract.IceMine.approve",
+            title           => "Approve member in 'IceMine' contract",
             note            => "",
             parameterTable  => [
                 ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
-                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","share":8}~],
-                ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
-                ['params:members:*:share',          'string',   'false',    '', "Team-'share' of member."],
-            ],
-            requestExample  => qq~
-// Approve Team member(s) and set their share from given parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveTeam","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","share":8}]}}'
-
-// Team members and shares will be read from IceMine.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveTeam"}'
-            ~,
-            returnDataTable => [
-                ['data:*',              'object{}',  'no',      "member-'address' named object{} for each team-member."],
-                ['data:*:share',        'integer',   'yes',     "'share' of this team-member."],
-                ['data:*:*',            '*',        'yes',      "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
-            ],
-        },
-        {
-            method          => "eth.contract.IceMine.approvePrivate",
-            title           => "Approve private crowdsale members in 'IceMine' contract",
-            note            => "",
-            parameterTable  => [
-                ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
-                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0}~],
+                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":true}~],
                 ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
                 ['params:members:*:ethMinPurchase', 'string',   'false',    '', "'ethMinPurchase' of member."],
+                ['params:members:*:privateSale',    'bool',     'false',    '', "'privateSale' state of member."],
             ],
             requestExample  => qq~
-// ApprovePrivate member(s) and set their ethMinPurchase from given parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approvePrivate","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0}]}}'
-
-// Private crowdsale members and their ethMinPurchase will be read from IceMine.pm:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approvePrivate"}'
-            ~,
-            returnDataTable => [
-                ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each private crowdsale member."],
-                ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this private crowdsale ember."],
-                ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
-            ],
-        },
-        {
-            method          => "eth.contract.IceMine.approveWhitelist",
-            title           => "Approve whitelisted crowdsale members in 'IceMine' contract",
-            note            => "",
-            parameterTable  => [
-                ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
-                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0}~],
-                ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
-                ['params:members:*:ethMinPurchase', 'string',   'false',    '', "'ethMinPurchase' of member."],
-            ],
-            requestExample  => qq~
-// ApproveWhitelist member(s) and set their ethMinPurchase from given parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0}]}}'
+// Approve member(s) and set their ethMinPurchase from given parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":true}]}}'
 
 // Whitelisted crowdsale members and their ethMinPurchase will be read from IceMine.pm
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist"}'
             ~,
             returnDataTable => [
                 ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each whitelisted crowdsale member."],
-                ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale ember."],
+                ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale member."],
+                ['data:*:privateSale',          'bool',     'yes',  "'privateSale' state of this whitelisted crowdsale member."],
                 ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
             ],
         },
         {
             method          => "eth.contract.IceMine.setOwner",
-            title           => "Initiate a withdrawal for a 'IceMine' contract member",
+            title           => "Set new owner of 'IceMine' contract",
             note            => "",
             parameterTable  => [
                 ['params:newOwner',      'string',    'false',  '',   "'address' of newOwner"],
@@ -541,11 +497,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:balance_wei',                    'string',   'yes', "Balance of contract in Wei"],
                 ['data:balance_eth',                    'float',    'yes', "Balance of contract in ETH"],
                 ['data:crowdsaleWallet',                'string',   'yes', "Address where crowdsale funds are collected"],
-                ['data:percentMultiplier',              'string',   'yes', "Percent-value percentMultiplier to avoid floats. (10**21)"],
                 ['data:crowdsaleRemainingWei_wei',      'string',   'yes', "Remeining Wei to buy in crowdsale"],
                 ['data:crowdsaleRemainingWei_eth',      'float',    'yes', "Remeining ETH to buy in crowdsale"],
-                ['data:crowdsaleSupply_ici',            'string',   'yes', "Remaining amount of totalSupply (Ici) which will be available for Crowdsale"],
-                ['data:crowdsaleSupply_ice',            'float',    'yes', "Remaining amount of totalSupply in ICE which will be available for Crowdsale"],
                 ['data:crowdsaleRemainingToken_ici',    'string',   'yes', "Remaining Ici for purchase in crowdsale"],
                 ['data:crowdsaleRemainingToken_ice',    'float',    'yes', "Remaining ICE for purchase in crowdsale"],
                 ['data:crowdsaleRaised_wei',            'string',   'yes', "Amount of wei raised in crowdsale in Wei"],
@@ -553,7 +506,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:crowdsaleCap_wei',               'string',   'yes', "Wei after crowdsale is finished"],
                 ['data:crowdsaleCap_eth',               'float',    'yes', "ETH after crowdsale is finished"],
                 ['data:crowdsaleCalcToken_1wei',        'integer',  'yes', "Ici (10**-18 ICE) amount in crowdsale for 1 Wei"],
-                ['data:crowdsaleInitialized',           'bool',     'yes', "true after owner initialized the contract"],
                 ['data:crowdsaleOpen',                  'bool',     'yes', "true if crowdsale is open for investors"],
                 ['data:crowdsaleFinished',              'bool',     'yes', "true after crowdsaleCap was reached"],
             ],
@@ -589,12 +541,6 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
                 ['data:unpaid_eth',                 'float',    'yes', "Unpaid ETH amount"],
                 ['data:balance_ici',                'string',   'yes', "Ici balance"],
                 ['data:balance_ice',                'float',    'yes', "ICE balance"],
-                ['data:percentTotal',               'string',   'yes', "percentTotal as in contract (use 'percentMultiplier')"],
-                ['data:percentTotal_float',         'float',    'yes', "percentTotal as float representative"],
-                ['data:crowdsalePercent',           'string',   'yes', "crowdsalePercent as in contract (use 'percentMultiplier')"],
-                ['data:crowdsalePercent_float',     'float',    'yes', "crowdsalePercent as float representative"],
-                ['data:crowdsaleInvestment_wei',    'string',   'yes', "Invested Wei into crowdsale"],
-                ['data:crowdsaleInvestment_eth',    'float',    'yes', "Invested ETH into crowdsale"],
             ],
         },
         {
@@ -615,14 +561,19 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
             title           => "Get logs from 'IceMine' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
                 <p><u>Available 'topics' in IceMine contract:</u>
+                </br> <code>SetOwner(address)</code>
+                </br> <code>SetDepositor(address)</code>
+                </br> <code>SetWithdrawer(address)</code>
+                </br> <code>SetTeamContract(address)</code>
                 </br> <code>Approve(address,uint256,bool)</code>
                 </br> <code>Participate(address,uint256,uint256)</code>
                 </br> <code>Transfer(address,address,uint256)</code>
                 </br> <code>ForwardCrowdsaleFunds(address,address,uint256)</code>
                 </br> <code>CrowdsaleStarted(bool)</code>
                 </br> <code>CrowdsaleFinished(bool)</code>
+                </br> <code>Withdraw(address,address,uint256)</code>
                 </br> <code>Deposit(address,uint256)</code>
-                </br> <code>Withdraw(address,address,uint256)</code></p>
+                </p>
             ",
             parameterTable  => [
                 ['params:topic',    'string',   'false','',                 "Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em>"],
