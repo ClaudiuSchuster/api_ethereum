@@ -8,7 +8,6 @@ sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $params->{constructor} = {
-        # _owner => '0x',
         _owner => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3',
     } unless( $params->{constructor} );
     
