@@ -95,12 +95,6 @@ sub setOwner {
     return API::methods::eth::contract::transaction($cgi, $data, $node, $params);
 }
 
-# TEAM
-# { address => '0xE1F41867532c5c5F63179c9Ec7819d8D3BF772d8', share => 12 },
-# { address => '0x587f82E14ccc1176525233ec7166d2f5d19B9A17', share => 9 },
-# { address => '0x79691D048AD362Fc59dEB87c6f459393Bd63B791', share => 8 },
-# { address => '0xbed0bccb8398577C6920625c693602D2abaF50C6', share => 11 },
-
 sub approve {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
@@ -113,17 +107,30 @@ sub approve {
         { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0, privateSale => 1 },
         ## PublicSale
         { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1, privateSale => 0 },
-        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 0, privateSale => 0 },
+        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 1, privateSale => 0 },
         { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0, privateSale => 0 },
+        ## ShouldFailCauseGas
+        { address => '0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0', ethMinPurchase => 0, privateSale => 0 },
     ];
     
     $params->{function} = 'approve';
     for ( @$members ) {
         my $data_tmp = {};
-        $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} || 0, _privateSale => $_->{privateSale} || 0 };
-        my $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
+        my $return = API::methods::eth::tx::estimateGas($cgi, $data_tmp, $node, {to => $_->{address}, value => ''.(8 * 10**18).''});
         return $return unless( defined $return->{rc} && $return->{rc} == 200 );
+        my $estimated_gas = $data_tmp->{gas_estimated};
+        
+        
+        if( $estimated_gas <= 23000 ) {
+            $data_tmp = {};
+            $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} || 0, _privateSale => $_->{privateSale} || 0 };
+            $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
+            return $return unless( defined $return->{rc} && $return->{rc} == 200 );
+        } else {
+           $data_tmp = { 'error' => "estimated_gas of address to high. Abort whitelisting!" };
+        }
         $data->{$_->{address}} = $data_tmp;
+        $data->{$_->{address}}{'estimated_gas'} = $estimated_gas;
         $data->{$_->{address}}{'ethMinPurchase'} = $_->{ethMinPurchase};
         $data->{$_->{address}}{'privateSale'} = $_->{privateSale};
     }

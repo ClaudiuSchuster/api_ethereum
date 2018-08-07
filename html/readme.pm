@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine','eth.contract.IceMine_Mining']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine','eth.contract.IceMine_Mining','eth.contract.IceMine_Team']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -155,6 +155,25 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e6
             parameterTable  => [],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
+            ~,
+            returnDataTable => [
+                ['data:gas_price_wei',              'integer',  'yes', "Current gas price in Wei"],
+            ],
+        },
+        {
+            method          => "eth.tx.estimateGas",
+            title           => "Get estimated gas for transaction with specified params",
+            note            => "",
+            parameterTable  => [
+                ['params:to',       'string',    'true',  '',   "Recipient address of the transaction."],
+                ['params:value',    'string',    'true',  '',   "Wei amount sent with this transaction."],
+                ['params:data',     'string',    'true',  '',   "Hash of the method signature and ABI encoded parameters."],
+                ['params:from',     'string',    'true',  '',   "The address the transaction is sent from."],
+            ],
+            requestExample  => qq~
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0","value":"8000000000000000000"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xabBD3f423CaF2571116750c21a981532Ee1D7065","value":"8000000000000000000"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xFa52274DD61E1643d2205169732f29114BC240b3","value":"8000000000000000000"}}'
             ~,
             returnDataTable => [
                 ['data:gas_price_wei',              'integer',  'yes', "Current gas price in Wei"],
@@ -413,7 +432,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
         {
             method          => "eth.contract.IceMine.approve",
             title           => "Approve member in 'IceMine' contract",
-            note            => "",
+            note            => "If <code>estimated_gas</code> of address is >23000 the whitelisting of this address will abort. and <code>data:*:error</code> will be returned.",
             parameterTable  => [
                 ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
                 ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":1}~],
@@ -432,7 +451,9 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve"}'
                 ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each whitelisted crowdsale member."],
                 ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale member."],
                 ['data:*:privateSale',          'integer',  'yes',  "'privateSale' state of this whitelisted crowdsale member, 0 or 1."],
-                ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
+                ['data:*:estimated_gas',        'integer',  'yes',  "estimated_gas of member-address."],
+                ['data:*:error',                'integer',  'no',   "Whitelisting of member will be aborted with 'error'-reason if <code>'estimated_gas' > 23000</code>."],
+                ['data:*:*',                    '*',        'yes, if not \'error\'',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
             ],
         },
         {

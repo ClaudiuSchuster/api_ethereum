@@ -3,7 +3,6 @@ package API::methods::eth::contract::IceMine_Team;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
-
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
@@ -49,6 +48,12 @@ sub read {
     
     return { 'rc' => 200 };
 }
+
+# TEAM
+# { address => '0xE1F41867532c5c5F63179c9Ec7819d8D3BF772d8', share => 12 },
+# { address => '0x587f82E14ccc1176525233ec7166d2f5d19B9A17', share => 9 },
+# { address => '0x79691D048AD362Fc59dEB87c6f459393Bd63B791', share => 8 },
+# { address => '0xbed0bccb8398577C6920625c693602D2abaF50C6', share => 11 },
 
 
 1;

@@ -33,6 +33,17 @@ sub gasprice {
     return { 'rc' => 200 };
 }
 
+sub estimateGas {
+    my ($cgi, $data, $node, $params) = @_;
+    
+    $params->{value} = sprintf("0x%X", $params->{value}) if( defined $params->{value} );
+    $params->{gas} = sprintf("0x%X", $params->{gas}) if( defined $params->{gas} );
+    
+    $data->{gas_estimated} = hex($node->eth_estimateGas($params));
+    
+    return { 'rc' => 200 };
+}
+
 sub receipt {
     my ($cgi, $data, $node, $params) = @_;
     

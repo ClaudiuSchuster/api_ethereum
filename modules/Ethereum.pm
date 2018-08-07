@@ -1024,9 +1024,10 @@ sub eth_call()
 sub eth_estimateGas()
 {
   my ($this, $params) = @_;
-  my $to = $params->{ to };
-  my $data = $params->{ data };
-  my $rq = { jsonrpc => "2.0", method => "eth_estimateGas", params => [ { to => $to, data => $data} ], id => 1 };
+  # my $to = $params->{ to };
+  # my $data = $params->{ data };
+  my $rq = { jsonrpc => "2.0", method => "eth_estimateGas", params => [ $params ], id => 1 };
+  # my $rq = { jsonrpc => "2.0", method => "eth_estimateGas", params => [ { to => $to, data => $data} ], id => 1 };
   return $this->_node_request($rq)-> { result };
 }
 
