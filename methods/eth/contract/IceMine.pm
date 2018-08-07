@@ -130,7 +130,7 @@ sub approve {
            $data_tmp = { 'error' => "estimated_gas of address to high. Abort whitelisting!" };
         }
         $data->{$_->{address}} = $data_tmp;
-        $data->{$_->{address}}{'estimated_gas'} = $estimated_gas;
+        $data->{$_->{address}}{'gas_estimated'} = $estimated_gas;
         $data->{$_->{address}}{'ethMinPurchase'} = $_->{ethMinPurchase};
         $data->{$_->{address}}{'privateSale'} = $_->{privateSale};
     }
