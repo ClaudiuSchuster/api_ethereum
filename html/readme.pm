@@ -24,12 +24,9 @@ sub print {
                 ['params:constructor',  'object{}',  'false', '{ }', qq~'Constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}~],
             ],
             requestExample  => qq~
-// Generic example:
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"HelloWorld"}}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
-
-// Deploy IceMine Smart Contract:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"IceMine","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'
             ~,
             returnDataTable => [
                 ['data:address',        'string',   'yes', "Contract address"],
@@ -419,22 +416,22 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             note            => "",
             parameterTable  => [
                 ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
-                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":true}~],
+                ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":1}~],
                 ['params:members:*:address',        'string',   'false',    '', "'address' of member."],
                 ['params:members:*:ethMinPurchase', 'string',   'false',    '', "'ethMinPurchase' of member."],
-                ['params:members:*:privateSale',    'bool',     'false',    '', "'privateSale' state of member."],
+                ['params:members:*:privateSale',    'integer',  'false',    '', "'privateSale' state of member, 0 or 1."],
             ],
             requestExample  => qq~
 // Approve member(s) and set their ethMinPurchase from given parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":true}]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":1}]}}'
 
 // Whitelisted crowdsale members and their ethMinPurchase will be read from IceMine.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approveWhitelist"}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve"}'
             ~,
             returnDataTable => [
                 ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each whitelisted crowdsale member."],
                 ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale member."],
-                ['data:*:privateSale',          'bool',     'yes',  "'privateSale' state of this whitelisted crowdsale member."],
+                ['data:*:privateSale',          'integer',  'yes',  "'privateSale' state of this whitelisted crowdsale member, 0 or 1."],
                 ['data:*:*',                    '*',        'yes',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
             ],
         },

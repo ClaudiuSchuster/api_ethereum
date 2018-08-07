@@ -95,21 +95,23 @@ sub setOwner {
 sub approve {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
-    return { 'rc' => 400, 'msg' => "'members' array[] of object{}'s parameter incorrect. Abort!" }
-        if( defined $params->{members} && ( ref($params->{members}) ne 'ARRAY' || !defined $params->{members}[0]{address} || !defined $params->{members}[0]{ethMinPurchase} ) );
+    return { 'rc' => 400, 'msg' => "'members' parameter musst be an array[] of object{}'s. Abort!" }
+        if( defined $params->{members} && ( ref($params->{members}) ne 'ARRAY' || ref($params->{members}[0]) ne 'HASH' ) );
         
     my $members =  $params->{members} || [
-        { address => '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', ethMinPurchase => 1, privateSale => \1 },
-        { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0, privateSale => \1 },
-        { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1, privateSale => \0 },
-        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 0, privateSale => \0 },
-        { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0, privateSale => \0 },
+        ## PrivateSale
+        { address => '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', ethMinPurchase => 1, privateSale => 1 },
+        { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0, privateSale => 1 },
+        ## PublicSale
+        { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1, privateSale => 0 },
+        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 0, privateSale => 0 },
+        { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0, privateSale => 0 },
     ];
     
     $params->{function} = 'approve';
     for ( @$members ) {
         my $data_tmp = {};
-        $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase}, _privateSale => $_->{privateSale} };
+        $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} || 0, _privateSale => $_->{privateSale} || 0 };
         my $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
         return $return unless( defined $return->{rc} && $return->{rc} == 200 );
         $data->{$_->{address}} = $data_tmp;
