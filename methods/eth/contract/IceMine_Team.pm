@@ -1,4 +1,4 @@
-package API::methods::eth::contract::IceMine_Mining;
+package API::methods::eth::contract::IceMine_Team;
 
 use strict; use warnings; use utf8; use feature ':5.10';
 
@@ -45,30 +45,10 @@ sub read {
     $data->{address}               = $contract->{address};
     $data->{block_number}          = $contract->{block_number};
     $data->{owner}                 = $node->contract_method_call('owner');
-    $data->{withdrawal_address}    = $node->contract_method_call('WITHDRAWAL_ADDRESS');
-    $data->{distribution_contract} = $node->contract_method_call('DISTRIBUTION_CONTRACT');
-    $data->{oraclize_query}        = $node->contract_method_call('ORACLIZE_QUERY');
     balance($cgi, $data, $node, $params, $contract);
     
     return { 'rc' => 200 };
 }
-
-# sub withdraw {
-    # my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    # return { 'rc' => 400, 'msg' => "Insufficient arguments submitted: 'address' of _beneficiary needed. Abort!" }
-        # unless( $params->{address} );
-        
-    # return { 'rc' => 400, 'msg' => "Member '$params->{address}' has no unpaid_wei. Abort!" }
-        # unless( $node->contract_method_call('unpaidOf', { '_beneficiary' => $params->{address} })->bgt(0) );
-    
-    # $params->{function} = 'withdrawOf';
-    # $params->{function_params} = {
-        # _beneficiary => $params->{address}
-    # };
-    
-    # return API::methods::eth::contract::transaction($cgi, $data, $node, $params);
-# }
 
 
 1;

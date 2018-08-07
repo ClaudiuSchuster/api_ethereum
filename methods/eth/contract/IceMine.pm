@@ -32,6 +32,15 @@ sub valueInputs {
     
     $params->{address} = $contract->{address};
     $params->{fromBlock} = $contract->{block_number};
+    
+    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
+}
+
+sub valueInputsCrowdsale {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    $params->{address} = $contract->{address};
+    $params->{fromBlock} = $contract->{block_number};
     $params->{toBlock} = $contract->{crowdsaleFinished_block_number} if( $contract->{crowdsaleFinished_block_number} );
     
     return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);

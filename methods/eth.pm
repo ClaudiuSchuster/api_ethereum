@@ -12,6 +12,7 @@ use methods::eth::block;
 use methods::eth::address;
 use methods::eth::contract;
 use methods::eth::contract::IceMine;
+use methods::eth::contract::IceMine_Team;
 use methods::eth::contract::IceMine_Mining;
 
 
