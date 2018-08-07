@@ -118,19 +118,19 @@ sub approve {
         my $data_tmp = {};
         my $return = API::methods::eth::tx::estimateGas($cgi, $data_tmp, $node, {to => $_->{address}, value => ''.(8 * 10**18).''});
         return $return unless( defined $return->{rc} && $return->{rc} == 200 );
-        my $estimated_gas = $data_tmp->{gas_estimated};
+        my $gas_estimated = $data_tmp->{gas_estimated};
         
         
-        if( $estimated_gas <= 23000 ) {
+        if( $gas_estimated <= 23000 ) {
             $data_tmp = {};
             $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} || 0, _privateSale => $_->{privateSale} || 0 };
             $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
             return $return unless( defined $return->{rc} && $return->{rc} == 200 );
         } else {
-           $data_tmp = { 'error' => "estimated_gas of address to high. Abort whitelisting!" };
+           $data_tmp = { 'error' => "gas_estimated of address to high. Abort whitelisting!" };
         }
         $data->{$_->{address}} = $data_tmp;
-        $data->{$_->{address}}{'gas_estimated'} = $estimated_gas;
+        $data->{$_->{address}}{'gas_estimated'} = $gas_estimated;
         $data->{$_->{address}}{'ethMinPurchase'} = $_->{ethMinPurchase};
         $data->{$_->{address}}{'privateSale'} = $_->{privateSale};
     }
