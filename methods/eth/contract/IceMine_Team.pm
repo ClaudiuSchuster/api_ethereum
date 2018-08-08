@@ -53,7 +53,7 @@ sub read {
 # { address => '0xE1F41867532c5c5F63179c9Ec7819d8D3BF772d8', share => 12 },
 # { address => '0x587f82E14ccc1176525233ec7166d2f5d19B9A17', share => 9 },
 # { address => '0x79691D048AD362Fc59dEB87c6f459393Bd63B791', share => 8 },
-# { address => '0xbed0bccb8398577C6920625c693602D2abaF50C6', share => 11 },
+# { address => '0xf86c18344130714a1eb96f077fbaabf51cd6d236', share => 11 },
 
 
 1;

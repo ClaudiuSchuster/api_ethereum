@@ -103,12 +103,12 @@ sub approve {
         
     my $members =  $params->{members} || [
         ## PrivateSale
-        { address => '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', ethMinPurchase => 1, privateSale => 1 },
-        { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0, privateSale => 1 },
+        { address => '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5', ethMinPurchase => 1, privateSale => 1 },  ## 1
+        { address => '0x2D6650fB71D71bc62848b24c2b427e83fd9a512A', ethMinPurchase => 0, privateSale => 1 },  ## 4
         ## PublicSale
-        { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1, privateSale => 0 },
-        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 1, privateSale => 0 },
-        { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0, privateSale => 0 },
+        { address => '0x748fe7617Cc2Fa2C734F591beF9072862c674901', ethMinPurchase => 1, privateSale => 0 },  ## 2
+        { address => '0x5e8834D8536Bf15dea25e19D0a274457517fA7dB', ethMinPurchase => 1, privateSale => 0 },  ## 3
+        { address => '0xf03857DBF29B381C18538cf08b7E973620A1a354', ethMinPurchase => 0, privateSale => 0 },  ## 5
         ## ShouldFailCauseGas
         { address => '0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0', ethMinPurchase => 0, privateSale => 0 },
     ];
