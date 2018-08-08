@@ -432,7 +432,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
         {
             method          => "eth.contract.IceMine.approve",
             title           => "Approve member in 'IceMine' contract",
-            note            => "If <code>gas_estimated</code> of address is >23000 the whitelisting of this address will abort. and <code>data:*:error</code> will be returned.",
+            note            => "If <code>gas_estimated</code> of address is >23300 the whitelisting of this address will abort. and <code>data:*:error</code> will be returned.",
             parameterTable  => [
                 ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
                 ['params:members:*',                'object{}', 'false',    '', qq~Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":1}~],
@@ -452,7 +452,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve"}'
                 ['data:*:ethMinPurchase',       'integer',  'yes',  "'ethMinPurchase' of this whitelisted crowdsale member."],
                 ['data:*:privateSale',          'integer',  'yes',  "'privateSale' state of this whitelisted crowdsale member, 0 or 1."],
                 ['data:*:gas_estimated',        'integer',  'yes',  "gas_estimated of member-address."],
-                ['data:*:error',                'integer',  'no',   "Whitelisting of member will be aborted with 'error'-reason if <code>'gas_estimated' > 23000</code>."],
+                ['data:*:error',                'integer',  'no',   "Whitelisting of member will be aborted with 'error'-reason if <code>'gas_estimated' > 23300</code>."],
                 ['data:*:*',                    '*',        'yes, if not \'error\'',  "Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>."],
             ],
         },

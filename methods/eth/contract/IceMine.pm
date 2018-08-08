@@ -121,7 +121,7 @@ sub approve {
         my $gas_estimated = $data_tmp->{gas_estimated};
         
         
-        if( $gas_estimated <= 23000 ) {
+        if( $gas_estimated <= 23300 ) {
             $data_tmp = {};
             $params->{function_params} = { _beneficiary => $_->{address}, _ethMinPurchase => $_->{ethMinPurchase} || 0, _privateSale => $_->{privateSale} || 0 };
             $return = API::methods::eth::contract::transaction($cgi, $data_tmp, $node, $params);
