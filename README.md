@@ -5,9 +5,9 @@
 * API-Documentation: http://10.10.0.8:88/readme
 
 ### Test-Contract:
- IceMine: https://rinkeby.etherscan.io/address/0xb5Ec6824E872A756Bb1e9Df8c6621F31723CEa52#code \
+ IceMine: https://rinkeby.etherscan.io/address/0x4ddeb637a8f389b3201708a48bb23af48bb4eb4b#code \
  IceMine_Team:  \
- IceMine_Mining: https://rinkeby.etherscan.io/address/0xabBD3f423CaF2571116750c21a981532Ee1D7065#code
+ IceMine_Mining: https://rinkeby.etherscan.io/address/0x24a0ee63ead1e60c8f7b2cd8c61cf65d6198b8e2#code
 
 ### Ethereum Contract ABI Converter:
  - https://abi.sonnguyen.ws/
