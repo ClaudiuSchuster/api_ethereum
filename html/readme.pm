@@ -165,15 +165,17 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.gasprice"}'
             title           => "Get estimated gas for transaction with specified params",
             note            => "",
             parameterTable  => [
-                ['params:to',       'string',    'true',  '',   "Recipient address of the transaction."],
-                ['params:value',    'string',    'true',  '',   "Wei amount sent with this transaction."],
-                ['params:data',     'string',    'true',  '',   "Hash of the method signature and ABI encoded parameters."],
-                ['params:from',     'string',    'true',  '',   "The address the transaction is sent from."],
+                ['params:to',       'string',    'false',  '',   "Recipient address of the transaction."],
+                ['params:value',    'string',    'false',  '',   "Wei amount sent with this transaction."],
+                ['params:data',     'string',    'false',  '',   "Hash of the method signature and ABI encoded parameters."],
+                ['params:from',     'string',    'false',  '',   "The address the transaction is sent from."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0","value":"8000000000000000000"}}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xabBD3f423CaF2571116750c21a981532Ee1D7065","value":"8000000000000000000"}}'
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xFa52274DD61E1643d2205169732f29114BC240b3","value":"8000000000000000000"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0x7a96bb1261cbad172d81747792010381f9b3c37c","value":"8000000000000000000"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0xe1863c4fb745c2b56e4ef0accb0a28dc8dfaeeae","value":"8000000000000000000"}}'
             ~,
             returnDataTable => [
                 ['data:gas_estimated',              'integer',  'yes', "gas_estimated of given parameters."],

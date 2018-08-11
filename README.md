@@ -4,11 +4,6 @@
 * JSON-API: http://10.10.0.8:88/
 * API-Documentation: http://10.10.0.8:88/readme
 
-### Test-Contract:
- IceMine: https://rinkeby.etherscan.io/address/0xecdeb15e9736a6a77fa35219b2974a256450b85c#code \
- IceMine_Team:  \
- IceMine_Mining: https://rinkeby.etherscan.io/address/0x84f3f59c6555827530dc6f0237780a1ddf73be62#code
-
 ### Ethereum Contract ABI Converter:
  - https://abi.sonnguyen.ws/
  
