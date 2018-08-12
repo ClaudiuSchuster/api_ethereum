@@ -762,6 +762,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.balance"}
                 </br> <code>Set_DISTRIBUTION_CONTRACT(address)</code>
                 </br> <code>Set_WITHDRAWAL_ADDRESS(address)</code>
                 </br> <code>Set_ORACLIZE_QUERY(string)</code>
+                </br> <code>Set_ORACLIZE_GAS_PRICE(uint256)</code>
                 </br> <code>InitiateWithdraw(uint256,uint256,uint256,bytes32,uint256)</code>
                 </br> <code>DeletePendingWithdraw(bytes32)</code>
                 </br> <code>Deposit(address,uint256)</code>
