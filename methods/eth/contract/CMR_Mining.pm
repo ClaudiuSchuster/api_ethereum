@@ -46,7 +46,7 @@ sub member {
         unless( $params->{address} );
     
     $data->{share}      = $node->contract_method_call('shareOf',    { '_member' => $params->{address} })->numify();
-    my $unpaid          = $node->contract_method_call('unpaidOf',   { '_beneficiary' => $params->{address} });
+    my $unpaid          = $node->contract_method_call('unpaidOf',   { '_member' => $params->{address} });
     $data->{unpaid_wei} = $unpaid->bstr().'';
     $data->{unpaid_eth} = $node->wei2ether( $unpaid )->numify();
 
@@ -63,7 +63,8 @@ sub read {
     balance($cgi, $data, $node, $params, $contract);
     
     for ( @{$data->{memberIndex}} ) {
-        member($cgi, $data->{member}{$_}, $node, { address => $_ }, $contract);
+        $data->{members}{$_} = {};
+        member($cgi, $data->{members}{$_}, $node, { address => $_ }, $contract);
     }
     
     return { 'rc' => 200 };

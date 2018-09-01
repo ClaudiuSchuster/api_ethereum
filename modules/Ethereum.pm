@@ -1686,7 +1686,7 @@ sub _unmarshal()
     elsif($cur_param_type eq 'address')
     {
       my $hunk='0x'.substr($raw_data, $current_out_param_position, 64);
-      $hunk =~ s/00//g;
+      $hunk =~ s/(?<![a-zA-Z1-9])00//g; ## PROBABLY DELETE TOTALY THIS LINE????
       $return_value->{ $cur_param_name } = $hunk;
       $current_out_param_position += 64;
     }
