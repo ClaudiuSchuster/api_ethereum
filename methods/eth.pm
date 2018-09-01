@@ -14,6 +14,7 @@ use methods::eth::contract;
 use methods::eth::contract::IceMine;
 use methods::eth::contract::IceMine_Team;
 use methods::eth::contract::IceMine_Mining;
+use methods::eth::contract::CMR_Mining;
 
 
 sub run {
