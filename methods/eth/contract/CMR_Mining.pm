@@ -2,6 +2,8 @@ package API::methods::eth::contract::CMR_Mining;
 
 use strict; use warnings; use utf8; use feature ':5.10';
 
+use Math::BigInt;
+
 sub logs {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
@@ -9,15 +11,6 @@ sub logs {
     $params->{fromBlock} = $contract->{block_number};
     
     return API::methods::eth::contract::logs($cgi, $data, $node, $params);
-}
-
-sub valueInputs {
-    my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    $params->{address} = $contract->{address};
-    $params->{fromBlock} = $contract->{block_number};
-    
-    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
 }
 
 sub balance {
@@ -49,6 +42,20 @@ sub member {
     my $unpaid          = $node->contract_method_call('unpaidOf',   { '_member' => $params->{address} });
     $data->{unpaid_wei} = $unpaid->bstr().'';
     $data->{unpaid_eth} = $node->wei2ether( $unpaid )->numify();
+    
+    
+    my $logData = {};
+    logs($cgi, $logData, $node, { contract => $params->{contract}, topic => 'Withdraw(address,uint256)', topics => [ $params->{address} ] }, $contract);
+    
+    $data->{withdrawalCount} = $logData->{log_count};
+    
+    my $withdrawed = Math::BigInt->new();
+    for ( @{$logData->{logs}} ) {
+        $withdrawed->badd( $_->{event_data}{value} );  
+    }
+    
+    $data->{withdrawed_wei} = $withdrawed->bstr().'';
+    $data->{withdrawed_eth} = $node->wei2ether( $withdrawed )->numify();
 
     return { 'rc' => 200 };
 }
@@ -64,7 +71,7 @@ sub read {
     
     for ( @{$data->{memberIndex}} ) {
         $data->{members}{$_} = {};
-        member($cgi, $data->{members}{$_}, $node, { address => $_ }, $contract);
+        member($cgi, $data->{members}{$_}, $node, { contract => $params->{contract}, address => $_ }, $contract);
     }
     
     return { 'rc' => 200 };
