@@ -48,14 +48,16 @@ sub member {
     logs($cgi, $logData, $node, { contract => $params->{contract}, topic => 'Withdraw(address,uint256)', topics => [ $params->{address} ] }, $contract);
     
     $data->{withdrawalCount} = $logData->{log_count};
-    
     my $withdrawed = Math::BigInt->new();
     for ( @{$logData->{logs}} ) {
         $withdrawed->badd( $_->{event_data}{value} );  
     }
-    
     $data->{withdrawed_wei} = $withdrawed->bstr().'';
     $data->{withdrawed_eth} = $node->wei2ether( $withdrawed )->numify();
+    
+    my $total = $withdrawed->badd( $unpaid );
+    $data->{total_wei} = $total->bstr().'';
+    $data->{total_eth} = $node->wei2ether( $total )->numify();
 
     return { 'rc' => 200 };
 }
@@ -73,6 +75,17 @@ sub read {
         $data->{members}{$_} = {};
         member($cgi, $data->{members}{$_}, $node, { contract => $params->{contract}, address => $_ }, $contract);
     }
+    
+    my $logData = {};
+    logs($cgi, $logData, $node, { contract => $params->{contract}, topic => 'Deposit(address,uint256)' }, $contract);
+    
+    $data->{depositCount} = $logData->{log_count};
+    my $deposited = Math::BigInt->new();
+    for ( @{$logData->{logs}} ) {
+        $deposited->badd( $_->{event_data}{value} );  
+    }
+    $data->{deposited_wei} = $deposited->bstr().'';
+    $data->{deposited_eth} = $node->wei2ether( $deposited )->numify();
     
     return { 'rc' => 200 };
 }
