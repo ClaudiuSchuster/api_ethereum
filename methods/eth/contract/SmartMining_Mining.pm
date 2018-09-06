@@ -1,7 +1,6 @@
-package API::methods::eth::contract::IceMine_Mining;
+package API::methods::eth::contract::SmartMining_Mining;
 
 use strict; use warnings; use utf8; use feature ':5.10';
-
 
 
 sub deploy {
@@ -30,15 +29,6 @@ sub balance {
     return API::methods::eth::address::balance($cgi, $data, $node, $params);
 }
 
-sub valueInputs {
-    my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    $params->{address} = $contract->{address};
-    $params->{fromBlock} = $contract->{block_number};
-    
-    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
-}
-
 sub read {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
@@ -52,6 +42,15 @@ sub read {
     
     return { 'rc' => 200 };
 }
+
+# sub valueInputs {
+    # my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    # $params->{address} = $contract->{address};
+    # $params->{fromBlock} = $contract->{block_number};
+    
+    # return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
+# }
 
 # sub withdraw {
     # my ($cgi, $data, $node, $params, $contract) = @_;

@@ -1,8 +1,9 @@
-package API::methods::eth::contract::IceMine;
+package API::methods::eth::contract::SmartMining;
 
 use strict; use warnings; use utf8; use feature ':5.10';
 use Math::BigInt;
 use Math::BigFloat;
+
 
 sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
@@ -25,25 +26,6 @@ sub logs {
     $params->{fromBlock} = $contract->{block_number};
     
     return API::methods::eth::contract::logs($cgi, $data, $node, $params);
-}
-
-sub valueInputs {
-    my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    $params->{address} = $contract->{address};
-    $params->{fromBlock} = $contract->{block_number};
-    
-    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
-}
-
-sub valueInputsCrowdsale {
-    my ($cgi, $data, $node, $params, $contract) = @_;
-    
-    $params->{address} = $contract->{address};
-    $params->{fromBlock} = $contract->{block_number};
-    $params->{toBlock} = $contract->{crowdsaleFinished_block_number} if( $contract->{crowdsaleFinished_block_number} );
-    
-    return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
 }
 
 sub balance {
@@ -205,6 +187,16 @@ sub crowdsaleCalcTokenAmount {
 
     return { 'rc' => 200 };
 }
+
+# sub valueInputsCrowdsale {
+    # my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    # $params->{address} = $contract->{address};
+    # $params->{fromBlock} = $contract->{block_number};
+    # $params->{toBlock} = $contract->{crowdsaleFinished_block_number} if( $contract->{crowdsaleFinished_block_number} );
+    
+    # return API::methods::eth::address::valueInputs($cgi, $data, $node, $params);
+# }
 
 
 

@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.IceMine','eth.contract.IceMine_Mining','eth.contract.IceMine_Team','eth.contract.CMR_Mining']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - ethereum.spreadblock.local',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.SmartMining','eth.contract.SmartMining_Mining','eth.contract.SmartMining_Team','eth.contract.CMR_Mining']);
     
     
     API::html::readme::print::ReadmeClass([
@@ -45,7 +45,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.deploy","params":{"contr
             ],
             requestExample  => qq~
 // Generic example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"contract":"IceMine","function":"withdrawOf","function_params":{"_beneficiary":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"contract":"SmartMining","function":"withdrawOf","function_params":{"_beneficiary":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}}'
             ~,
             returnDataTable => [
                 ['data:tx_execution_time',          'integer',  'yes', "seconds till tx got mined (96 iterations á 5sec)"],
@@ -66,32 +66,32 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.transaction","params":{"
                 ['params:showraw',  'bool',     'false','false',                "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
-// Get all event logs from IceMine contract, returns ABI-encoded event data:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine"}}'
+// Get all event logs from SmartMining contract, returns ABI-encoded event data:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining"}}'
 
-// Get all 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)"}}'
+// Get all 'Transfer' event logs from SmartMining contract, returns decoded human readable 'event_data' parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)"}}'
 
-// Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ('contract' will be replaced with contracts address 32Byte-DATA):
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ('contract' will be replaced with contracts address 32Byte-DATA):
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
 
-// Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf':
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf':
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
 // 'contract' used as one of two recipients example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
-// Get finishing event (block and so on also...) from IceMine crowdsale:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"CrowdsaleFinished(bool)"}}'
+// Get finishing event (block and so on also...) from SmartMining crowdsale:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"CrowdsaleFinished(bool)"}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","showraw":true}}'
 
 // showtx example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","topic":"Transfer(address,address,uint256)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","showtx":1}}'
 
 // showtx and showraw can be used anytime:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"IceMine","showtx":1,"showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:log_count',          'integer',  'yes',                                      "Log count of requested logs."],
@@ -280,43 +280,43 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
                 ['data:balance_eth',                'float',    'yes', "balance in ETH"],
             ],
         },
-        {
-            method          => "eth.address.valueInputs",
-            title           => "Get all value inputs from an address.",
-            note            => "<span style='color:darkred;'>To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!</span>",
-            parameterTable  => [
-                ['params:address',      'string',   'true', '',         "'address' to get valueInputs for."],
-                ['params:fromBlock',    'integer',  'true', '',         "Starting block_number to look over"],
-                ['params:toBlock',      'integer',  'false','latest',   "Last block_number to look over"],
-                ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
-                ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
-                ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
-                ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
-            ],
-            requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5","fromBlock":2659122,"toBlock":2659241}}'
+        # {
+            # method          => "eth.address.valueInputs",
+            # title           => "Get all value inputs from an address.",
+            # note            => "<span style='color:darkred;'>To loop over a lot of blocks can be a realy time consuming process and you cannot stop it anymore!</br>Filter your request to specific blocks or don't use this generic function!</span>",
+            # parameterTable  => [
+                # ['params:address',      'string',   'true', '',         "'address' to get valueInputs for."],
+                # ['params:fromBlock',    'integer',  'true', '',         "Starting block_number to look over"],
+                # ['params:toBlock',      'integer',  'false','latest',   "Last block_number to look over"],
+                # ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
+                # ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
+                # ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
+                # ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
+            # ],
+            # requestExample  => qq~
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.valueInputs","params":{"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5","fromBlock":2659122,"toBlock":2659241}}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
-            ~,
-            returnDataTable => [
-                ['data:total_wei',                  'string',   'yes',  "Total value inputs for request in Wei"],
-                ['data:total_eth',                  'float',    'yes',  "Total value inputs for request in ETH"],
-                ['data:tx_count',                   'integer',  'yes',  "Transaction count of requested value inputs"],
-                ['data:transactions',               'array[]',  'yes',  "Array[] of all transactions with value on this address which matches the filter."],
-                ['data:transactions:*',             'object{}', 'no',   "Object{} of transaction details."],
-                ['data:transactions:*:tx_hash',     'string',   'yes',  "Transaction hash"],
-                ['data:transactions:*:tx_index',    'integer',  'yes',  "Transaction index position in the block"],
-                ['data:transactions:*:from',        'string',   'yes',  "From address"],
-                ['data:transactions:*:gas_provided','integer',  'yes',  "Gas provided by sender"],
-                ['data:transactions:*:block_hash',  'string',   'yes',  "Block hash"],
-                ['data:transactions:*:block_number','integer',  'yes',  "Block number"],
-                ['data:transactions:*:timestamp',   'integer',  'yes',  "Timestamp of block"],
-                ['data:transactions:*:value_wei',   'integer',  'yes',  "Value transferred in Wei."],
-                ['data:transactions:*:value_eth',   'float',    'yes',  "Value transferred in ETH."],
-                ['data:transactions:*:receipt',     'object{}', 'yes',  "Value transferred in ETH."],
-                ['data:transactions:*:receipt:*',   '*', 'if \'params:showreceipt\'',  "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
-            ],
-        },
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"address":"0xadb7ff320fbdf1eb61ee05f6edf89783a466f3bf","from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+            # ~,
+            # returnDataTable => [
+                # ['data:total_wei',                  'string',   'yes',  "Total value inputs for request in Wei"],
+                # ['data:total_eth',                  'float',    'yes',  "Total value inputs for request in ETH"],
+                # ['data:tx_count',                   'integer',  'yes',  "Transaction count of requested value inputs"],
+                # ['data:transactions',               'array[]',  'yes',  "Array[] of all transactions with value on this address which matches the filter."],
+                # ['data:transactions:*',             'object{}', 'no',   "Object{} of transaction details."],
+                # ['data:transactions:*:tx_hash',     'string',   'yes',  "Transaction hash"],
+                # ['data:transactions:*:tx_index',    'integer',  'yes',  "Transaction index position in the block"],
+                # ['data:transactions:*:from',        'string',   'yes',  "From address"],
+                # ['data:transactions:*:gas_provided','integer',  'yes',  "Gas provided by sender"],
+                # ['data:transactions:*:block_hash',  'string',   'yes',  "Block hash"],
+                # ['data:transactions:*:block_number','integer',  'yes',  "Block number"],
+                # ['data:transactions:*:timestamp',   'integer',  'yes',  "Timestamp of block"],
+                # ['data:transactions:*:value_wei',   'integer',  'yes',  "Value transferred in Wei."],
+                # ['data:transactions:*:value_eth',   'float',    'yes',  "Value transferred in ETH."],
+                # ['data:transactions:*:receipt',     'object{}', 'yes',  "Value transferred in ETH."],
+                # ['data:transactions:*:receipt:*',   '*', 'if \'params:showreceipt\'',  "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
+            # ],
+        # },
     ]);
     
     
@@ -414,26 +414,26 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.node.info"}'
     
     API::html::readme::print::ReadmeClass([
         {
-            readmeClass  => 'eth.contract.IceMine',
+            readmeClass  => 'eth.contract.SmartMining',
         },
         {
-            method          => "eth.contract.IceMine.deploy",
-            title           => "Deploy 'IceMine' contract",
+            method          => "eth.contract.SmartMining.deploy",
+            title           => "Deploy 'SmartMining' contract",
             note            => "",
             parameterTable  => [
-                ['params:constructor',  'object{}', 'false',    '{ *from IceMine.pm* }', qq~'Constructor' parameters will be read from IceMine.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
+                ['params:constructor',  'object{}', 'false',    '{ *from SmartMining.pm* }', qq~'Constructor' parameters will be read from SmartMining.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
             ],
             requestExample  => qq~
-// Deploy constract 'IceMine' with constructor from IceMine.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
+// Deploy constract 'SmartMining' with constructor from SmartMining.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.deploy"}'
             ~,
             returnDataTable => [
                 ['data:*',              '*',        'yes',  "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine.approve",
-            title           => "Approve member in 'IceMine' contract",
+            method          => "eth.contract.SmartMining.approve",
+            title           => "Approve member in 'SmartMining' contract",
             note            => "If <code>gas_estimated</code> of address is >23300 the whitelisting of this address will abort. and <code>data:*:error</code> will be returned.",
             parameterTable  => [
                 ['params:members',                  'array[]',  'false',    '', "Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]"],
@@ -444,10 +444,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.deploy"}'
             ],
             requestExample  => qq~
 // Approve member(s) and set their ethMinPurchase from given parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":1}]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.approve","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":1}]}}'
 
-// Whitelisted crowdsale members and their ethMinPurchase will be read from IceMine.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve"}'
+// Whitelisted crowdsale members and their ethMinPurchase will be read from SmartMining.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.approve"}'
             ~,
             returnDataTable => [
                 ['data:*',                      'object{}', 'no',   "member-'address' named object{} for each whitelisted crowdsale member."],
@@ -459,46 +459,46 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.approve"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.setOwner",
-            title           => "Set new owner of 'IceMine' contract",
+            method          => "eth.contract.SmartMining.setOwner",
+            title           => "Set new owner of 'SmartMining' contract",
             note            => "",
             parameterTable  => [
                 ['params:newOwner',      'string',    'false',  '',   "'address' of newOwner"],
             ],
             requestExample  => qq~
 // Set new owner to 'newOwner' parameter.
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.setOwner","params":{"newOwner":"0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.setOwner","params":{"newOwner":"0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3"}}'
 
-// Set new owner to newOwner from IceMine.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.setOwner"}'
+// Set new owner to newOwner from SmartMining.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.setOwner"}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine.withdraw",
-            title           => "Initiate a withdrawal for a 'IceMine' contract member",
+            method          => "eth.contract.SmartMining.withdraw",
+            title           => "Initiate a withdrawal for a 'SmartMining' contract member",
             note            => "",
             parameterTable  => [
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
             ],
             requestExample  => qq~
 // Withdraw unpaid amount of member 0xe1f4.....72d8, returns a rc == 400 error if member has no unpaid_wei.
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine.read",
-            title           => "Read 'IceMine' contract",
+            method          => "eth.contract.SmartMining.read",
+            title           => "Read 'SmartMining' contract",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Info from contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
+// Read Info from contract 'SmartMining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.read"}'
             ~,
             returnDataTable => [
                 ['data:address',                        'string',   'yes', "Contract address"],
@@ -509,7 +509,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
                 ['data:decimals',                       'integer',  'yes', "EIP-20 decimals"],
                 ['data:totalSupply_ici',                'string',   'yes', "EIP-20 totalSupply"],
                 ['data:totalSupply_ice',                'float',    'yes', "totalSupply(Ici) in ICE"],
-                ['data:memberCount',                    'integer',  'yes', "Count of all IceMine members inclusive the team"],
+                ['data:memberCount',                    'integer',  'yes', "Count of all SmartMining members inclusive the team"],
                 ['data:memberIndex',                    'array[]',  'yes', "array[] with 'string' of all member addresses"],
                 ['data:crowdsalePercentOfTotalSupply',  'integer',  'yes', "Percent of totalSupply which will be available for Crowdsale"],
                 ['data:withdrawer',                     'string',   'yes', "Address of allowed executor for automatic processed member whitdrawals"],
@@ -531,13 +531,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.read"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.balance",
-            title           => "Get 'IceMine' contract balance",
+            method          => "eth.contract.SmartMining.balance",
+            title           => "Get 'SmartMining' contract balance",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Info from contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.balance"}'
+// Read Info from contract 'SmartMining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.balance"}'
             ~,
             returnDataTable => [
                 ['data:balance_wei',        'string',   'yes', "Balance of contract in Wei"],
@@ -545,15 +545,15 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.balance"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine.member",
-            title           => "Read member-info from 'IceMine' contract",
+            method          => "eth.contract.SmartMining.member",
+            title           => "Read member-info from 'SmartMining' contract",
             note            => "",
             parameterTable  => [
                 ['params:address',      'string',    'true',  '',   "'address' of member"],
             ],
             requestExample  => qq~
-// use contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
+// use contract 'SmartMining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.member","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
             ~,
             returnDataTable => [
                 ['data:crowdsaleIsMember',          'bool',     'yes', "true if address is member of Contract"],
@@ -564,23 +564,23 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.member","params"
             ],
         },
         {
-            method          => "eth.contract.IceMine.memberIndex",
-            title           => "Read all member addresses from 'IceMine' contract",
+            method          => "eth.contract.SmartMining.memberIndex",
+            title           => "Read all member addresses from 'SmartMining' contract",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// use contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
+// use contract 'SmartMining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.memberIndex"}'
             ~,
             returnDataTable => [
                 ['data:memberIndex',        'array[]',   'yes',     "array[] with 'string' of all member addresses"],
             ],
         },
         {
-            method          => "eth.contract.IceMine.logs",
-            title           => "Get logs from 'IceMine' contract",
+            method          => "eth.contract.SmartMining.logs",
+            title           => "Get logs from 'SmartMining' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
-                <p><u>Available 'topics' in IceMine contract:</u>
+                <p><u>Available 'topics' in SmartMining contract:</u>
                 </br> <code>SetOwner(address)</code>
                 </br> <code>SetDepositor(address)</code>
                 </br> <code>SetWithdrawer(address)</code>
@@ -604,47 +604,47 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.memberIndex"}'
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
-// Get all event logs from IceMine contract, returns ABI-encoded event data:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs"}'
+// Get all event logs from SmartMining contract, returns ABI-encoded event data:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs"}'
 
-// Get 'Transfer' event logs from IceMine contract, returns decoded human readable 'event_data' parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
+// Get 'Transfer' event logs from SmartMining contract, returns decoded human readable 'event_data' parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
 
-// Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ("contract" will be replaced with contract address):
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ("contract" will be replaced with contract address):
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
 
-// Get (decoded) 'Transfer' event logs from IceMine contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf ("contract" will be replaced with contract address):
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf ("contract" will be replaced with contract address):
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
 // 'contract' used as one of two recipients example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
 
-// Get finishing event (block and so on also...) from IceMine crowdsale:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"CrowdsaleFinished(bool)"}}'
+// Get finishing event (block and so on also...) from SmartMining crowdsale:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"CrowdsaleFinished(bool)"}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","showraw":true}}'
 
 // showtx example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
 
 // showtx and showraw can be used anytime:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.logs","params":{"showtx":1,"showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","params":{"showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine.crowdsaleCalcTokenAmount",
-            title           => "Calc Ici for Wei in 'IceMine' contract crowdsale",
+            method          => "eth.contract.SmartMining.crowdsaleCalcTokenAmount",
+            title           => "Calc Ici for Wei in 'SmartMining' contract crowdsale",
             note            => "",
             parameterTable  => [
                 ['params:weiAmount',      'string (or integer)',    'true',  '',   "'weiAmount' to calculate"],
             ],
             requestExample  => qq~
-// use contract 'IceMine'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTokenAmount","params":{"weiAmount":"800000000000"}}'
+// use contract 'SmartMining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.crowdsaleCalcTokenAmount","params":{"weiAmount":"800000000000"}}'
             ~,
             returnDataTable => [
                 ['data:tokenAmount_ici',                'string',   'yes', "Ici amount"],
@@ -656,51 +656,51 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine.crowdsaleCalcTok
     
     API::html::readme::print::ReadmeClass([
         {
-            readmeClass  => 'eth.contract.IceMine_Mining',
+            readmeClass  => 'eth.contract.SmartMining_Mining',
         },
         {
-            method          => "eth.contract.IceMine_Mining.deploy",
-            title           => "Deploy 'IceMine_Mining' contract",
+            method          => "eth.contract.SmartMining_Mining.deploy",
+            title           => "Deploy 'SmartMining_Mining' contract",
             note            => "",
             parameterTable  => [
-                ['params:constructor',  'object{}', 'false',    '{ *from IceMine_Mining.pm* }', qq~'Constructor' parameters will be read from IceMine_Mining.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
+                ['params:constructor',  'object{}', 'false',    '{ *from SmartMining_Mining.pm* }', qq~'Constructor' parameters will be read from SmartMining_Mining.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
             ],
             requestExample  => qq~
-// Deploy constract 'IceMine_Mining' with constructor from IceMine_Mining.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.deploy"}'
+// Deploy constract 'SmartMining_Mining' with constructor from SmartMining_Mining.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.deploy"}'
             ~,
             returnDataTable => [
                 ['data:*',              '*',        'yes',  "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine_Mining.read",
-            title           => "Read 'IceMine_Mining' contract",
+            method          => "eth.contract.SmartMining_Mining.read",
+            title           => "Read 'SmartMining_Mining' contract",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Info from contract 'IceMine_Mining'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.read"}'
+// Read Info from contract 'SmartMining_Mining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.read"}'
             ~,
             returnDataTable => [
                 ['data:address',                'string',   'yes', "Contract address"],
                 ['data:block_number',           'integer',  'yes', "Block number of contract creation block."],
                 ['data:owner',                  'string',   'yes', "Contract owner address"],
-                ['data:withdrawal_address',     'string',   'yes', "IceMine controlled address which will trade received ETH against EUR for paying the operating costs"],
-                ['data:distribution_contract',  'string',   'yes', "IceMine 'crowdsale & profit distribution'-contract address"],
+                ['data:withdrawal_address',     'string',   'yes', "SmartMining controlled address which will trade received ETH against EUR for paying the operating costs"],
+                ['data:distribution_contract',  'string',   'yes', "SmartMining 'crowdsale & profit distribution'-contract address"],
                 ['data:oraclize_query',         'integer',  'yes', "Oraclize URL query e.g. json(https://api.kraken.com/0/public/Ticker?pair=ETHEUR).result.XETHZEUR.c.0"],
                 ['data:balance_wei',            'string',   'yes', "Balance of contract in Wei"],
                 ['data:balance_eth',            'float',    'yes', "Balance of contract in ETH"],
             ],
         },
         {
-            method          => "eth.contract.IceMine_Mining.balance",
-            title           => "Get 'IceMine_Mining' contract balance",
+            method          => "eth.contract.SmartMining_Mining.balance",
+            title           => "Get 'SmartMining_Mining' contract balance",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Info from contract 'IceMine_Mining'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.balance"}'
+// Read Info from contract 'SmartMining_Mining'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.balance"}'
             ~,
             returnDataTable => [
                 ['data:balance_wei',        'string',   'yes', "Balance of contract in Wei"],
@@ -708,10 +708,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.balance"}
             ],
         },
         {
-            method          => "eth.contract.IceMine_Mining.logs",
-            title           => "Get logs from 'IceMine_Mining' contract",
+            method          => "eth.contract.SmartMining_Mining.logs",
+            title           => "Get logs from 'SmartMining_Mining' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
-                <p><u>Available 'topics' in IceMine_Mining contract:</u>
+                <p><u>Available 'topics' in SmartMining_Mining contract:</u>
                 </br> <code>SetOwner(address)</code>
                 </br> <code>Set_DISTRIBUTION_CONTRACT(address)</code>
                 </br> <code>Set_WITHDRAWAL_ADDRESS(address)</code>
@@ -735,78 +735,78 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.balance"}
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
-// Get all event logs from IceMine_Mining contract, returns ABI-encoded event data:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.logs"}'
+// Get all event logs from SmartMining_Mining contract, returns ABI-encoded event data:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.logs"}'
 
-// Get 'Deposit' event logs from IceMine_Mining contract, returns decoded human readable 'event_data' parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.logs","params":{"topic":"Deposit(address,uint256)"}}'
+// Get 'Deposit' event logs from SmartMining_Mining contract, returns decoded human readable 'event_data' parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"Deposit(address,uint256)"}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showraw":true}}'
 
 // showtx example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showtx":1}}'
 
 // showtx and showraw can be used anytime:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.logs","params":{"showtx":1,"showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data."],
             ],
         },
-        {
-            method          => "eth.contract.IceMine_Mining.valueInputs",
-            title           => "Get all value inputs of 'IceMine_Mining' contract.",
-            note            => "",
-            parameterTable  => [
-                ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
-                ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
-                ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
-                ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
-            ],
-            requestExample  => qq~
-// Without filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.valueInputs"}'
+        # {
+            # method          => "eth.contract.SmartMining_Mining.valueInputs",
+            # title           => "Get all value inputs of 'SmartMining_Mining' contract.",
+            # note            => "",
+            # parameterTable  => [
+                # ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
+                # ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
+                # ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
+                # ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
+            # ],
+            # requestExample  => qq~
+# // Without filter for a specific sender of the value
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.valueInputs"}'
 
-// With filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+# // With filter for a specific sender of the value
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Mining.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
-            ~,
-            returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
-            ],
-        },
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Mining.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+            # ~,
+            # returnDataTable => [
+                # ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
+            # ],
+        # },
     ]);
     
     
     API::html::readme::print::ReadmeClass([
         {
-            readmeClass  => 'eth.contract.IceMine_Team',
+            readmeClass  => 'eth.contract.SmartMining_Team',
         },
         {
-            method          => "eth.contract.IceMine_Team.deploy",
-            title           => "Deploy 'IceMine_Team' contract",
+            method          => "eth.contract.SmartMining_Team.deploy",
+            title           => "Deploy 'SmartMining_Team' contract",
             note            => "",
             parameterTable  => [
-                ['params:constructor',  'object{}', 'false',    '{ *from IceMine_Team.pm* }', qq~'Constructor' parameters will be read from IceMine_Team.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
+                ['params:constructor',  'object{}', 'false',    '{ *from SmartMining_Team.pm* }', qq~'Constructor' parameters will be read from SmartMining_Team.pm (if not set). e.g.: {"initString":"Init String","initValue":102}~],
             ],
             requestExample  => qq~
-// Deploy constract 'IceMine_Team' with constructor from IceMine_Team.pm
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.deploy"}'
+// Deploy constract 'SmartMining_Team' with constructor from SmartMining_Team.pm
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.deploy"}'
             ~,
             returnDataTable => [
                 ['data:*',              '*',        'yes',  "See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data."],
             ],
         },
         {
-            method          => "eth.contract.IceMine_Team.read",
-            title           => "Read 'IceMine_Team' contract",
+            method          => "eth.contract.SmartMining_Team.read",
+            title           => "Read 'SmartMining_Team' contract",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Info from contract 'IceMine_Team'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.read"}'
+// Read Info from contract 'SmartMining_Team'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.read"}'
             ~,
             returnDataTable => [
                 ['data:address',                'string',   'yes', "Contract address"],
@@ -815,13 +815,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.read"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine_Team.balance",
-            title           => "Get 'IceMine_Team' contract balance",
+            method          => "eth.contract.SmartMining_Team.balance",
+            title           => "Get 'SmartMining_Team' contract balance",
             note            => "",
             parameterTable  => [],
             requestExample  => qq~
-// Read Balance from contract 'IceMine_Team'
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.balance"}'
+// Read Balance from contract 'SmartMining_Team'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.balance"}'
             ~,
             returnDataTable => [
                 ['data:balance_wei',        'string',   'yes', "Balance of contract in Wei"],
@@ -829,10 +829,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.balance"}'
             ],
         },
         {
-            method          => "eth.contract.IceMine_Team.logs",
-            title           => "Get logs from 'IceMine_Team' contract",
+            method          => "eth.contract.SmartMining_Team.logs",
+            title           => "Get logs from 'SmartMining_Team' contract",
             note            => "'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
-                <p><u>Available 'topics' in IceMine_Team contract:</u>
+                <p><u>Available 'topics' in SmartMining_Team contract:</u>
                 </p>
             ",
             parameterTable  => [
@@ -844,48 +844,48 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.balance"}'
                 ['params:showraw',  'bool',     'false','false',            "Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em>"],
             ],
             requestExample  => qq~
-// Get all event logs from IceMine_Team contract, returns ABI-encoded event data:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.logs"}'
+// Get all event logs from SmartMining_Team contract, returns ABI-encoded event data:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.logs"}'
 
-// Get 'Deposit' event logs from IceMine_Team contract, returns decoded human readable 'event_data' parameter:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.logs","params":{"topic":""}}'
+// Get 'Deposit' event logs from SmartMining_Team contract, returns decoded human readable 'event_data' parameter:
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":""}}'
 
 // Get raw event data additional to the decoded DATA for the Transfer events:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.logs","params":{"topic":"","showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":"","showraw":true}}'
 
 // showtx example:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.logs","params":{"topic":"","showtx":1}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":"","showtx":1}}'
 
 // showtx and showraw can be used anytime:
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.logs","params":{"showtx":1,"showraw":true}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"showtx":1,"showraw":true}}'
             ~,
             returnDataTable => [
                 ['data:*',        '*',   'yes', "See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data."],
             ],
         },
-        {
-            method          => "eth.contract.IceMine_Team.valueInputs",
-            title           => "Get all value inputs of 'IceMine_Team' contract.",
-            note            => "",
-            parameterTable  => [
-                ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
-                ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
-                ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
-                ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
-            ],
-            requestExample  => qq~
-// Without filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.valueInputs"}'
+        # {
+            # method          => "eth.contract.SmartMining_Team.valueInputs",
+            # title           => "Get all value inputs of 'SmartMining_Team' contract.",
+            # note            => "",
+            # parameterTable  => [
+                # ['params:from',         'string',   'false','',         "Filter for 'from' address of value sender."],
+                # ['params:showreceipt',  'bool',     'false','false',    "Returns also the transactions receipt."],
+                # ['params:showempty',    'bool',     'false','false',    "Returns also transactions without value."],
+                # ['params:showfailed',   'bool',     'false','false',    "Returns also the failed transactions. (They will not be added to total ETH calculation, but to 'tx_count'.)"],
+            # ],
+            # requestExample  => qq~
+# // Without filter for a specific sender of the value
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.valueInputs"}'
 
-// With filter for a specific sender of the value
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+# // With filter for a specific sender of the value
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.valueInputs","params":{"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.IceMine_Team.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
-            ~,
-            returnDataTable => [
-                ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
-            ],
-        },
+# curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining_Team.valueInputs","params":{"showreceipt":true,"showempty":true,"showfailed":true,"from":"0x65890c49a1628452fc9d50b720759fa7ed4ed8b5"}}'
+            # ~,
+            # returnDataTable => [
+                # ['data:*',        '*',   'yes', "See generic method <a href='#eth.address.valueInputs'>eth.address.valueInputs</a> for return data."],
+            # ],
+        # },
     ]);
     
         
