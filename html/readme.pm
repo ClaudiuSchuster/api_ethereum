@@ -588,10 +588,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.memberIndex"
                 </br> <code>Approve(address,uint256,bool)</code>
                 </br> <code>Participate(address,uint256,uint256)</code>
                 </br> <code>Transfer(address,address,uint256)</code>
-                </br> <code>ForwardCrowdsaleFunds(address,address,uint256)</code>
+                </br> <code>ForwardCrowdsaleFunds(address,uint256)</code>
                 </br> <code>CrowdsaleStarted(bool)</code>
                 </br> <code>CrowdsaleFinished(bool)</code>
-                </br> <code>Withdraw(address,address,uint256)</code>
+                </br> <code>Withdraw(address,uint256)</code>
                 </br> <code>Deposit(address,uint256)</code>
                 </p>
             ",
