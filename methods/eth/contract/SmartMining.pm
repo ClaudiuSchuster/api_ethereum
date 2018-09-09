@@ -127,8 +127,8 @@ sub member {
         unless( $params->{address} );
     
     my $balance                             = $node->contract_method_call('balanceOf',              { '_beneficiary' => $params->{address} });
-    $data->{balance_ici}                    = $balance->bstr().'';
-    $data->{balance_ice}                    = $node->wei2ether( $balance )->numify();
+    $data->{balance_coini}                  = $balance->bstr().'';
+    $data->{balance_coins}                  = $node->wei2ether( $balance )->numify();
     my $unpaid                              = $node->contract_method_call('unpaidOf',               { '_beneficiary' => $params->{address} });
     $data->{unpaid_wei}                     = $unpaid->bstr().'';
     $data->{unpaid_eth}                     = $node->wei2ether( $unpaid )->numify();
@@ -146,8 +146,8 @@ sub read {
     $data->{symbol}                          = substr($node->contract_method_call('symbol'), 1);
     $data->{decimals}                        = $node->contract_method_call('decimals')->numify();
     my $totalSupply                          = $node->contract_method_call('totalSupply');
-    $data->{totalSupply_ici}                 = $totalSupply->bstr().'';
-    $data->{totalSupply_ice}                 = $node->wei2ether( $totalSupply )->numify();
+    $data->{totalSupply_coini}               = $totalSupply->bstr().'';
+    $data->{totalSupply_coins}               = $node->wei2ether( $totalSupply )->numify();
     $data->{memberCount}                     = $node->contract_method_call('memberCount')->numify();
     $data->{crowdsaleOpen}                   = \($node->contract_method_call('crowdsaleOpen')->numify());
     $data->{crowdsaleFinished}               = \($node->contract_method_call('crowdsaleFinished')->numify());
@@ -166,8 +166,8 @@ sub read {
     $data->{crowdsaleRemainingWei_wei}       = $weiRemaining->bstr().'';
     $data->{crowdsaleRemainingWei_eth}       = $node->wei2ether( $weiRemaining )->numify();
     my $crowdsaleRemainingToken              = $node->contract_method_call('crowdsaleRemainingToken');
-    $data->{crowdsaleRemainingToken_ici}     = $crowdsaleRemainingToken->bstr().'';
-    $data->{crowdsaleRemainingToken_ice}     = $node->wei2ether( $crowdsaleRemainingToken )->numify();
+    $data->{crowdsaleRemainingToken_coini}   = $crowdsaleRemainingToken->bstr().'';
+    $data->{crowdsaleRemainingToken_coins}   = $node->wei2ether( $crowdsaleRemainingToken )->numify();
     $data->{crowdsaleCalcToken_1wei}         = $node->contract_method_call('crowdsaleCalcTokenAmount',{ '_weiAmount' => 1 })->numify();
     memberIndex($cgi, $data, $node, $params, $contract);
     balance($cgi, $data, $node, $params, $contract);
@@ -182,8 +182,8 @@ sub crowdsaleCalcTokenAmount {
         unless( $params->{weiAmount} );
     
     my $crowdsaleCalcTokenAmount            = $node->contract_method_call('crowdsaleCalcTokenAmount',  { '_weiAmount' => $params->{weiAmount} });
-    $data->{tokenAmount_ici}                = $crowdsaleCalcTokenAmount->bstr().'';
-    $data->{tokenAmount_ice}                = $node->wei2ether( $crowdsaleCalcTokenAmount )->numify();
+    $data->{tokenAmount_coini}              = $crowdsaleCalcTokenAmount->bstr().'';
+    $data->{tokenAmount_coins}              = $node->wei2ether( $crowdsaleCalcTokenAmount )->numify();
 
     return { 'rc' => 200 };
 }

@@ -507,8 +507,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.read"}'
                 ['data:name',                           'string',   'yes', "EIP-20 name"],
                 ['data:symbol',                         'string',   'yes', "EIP-20 symbol"],
                 ['data:decimals',                       'integer',  'yes', "EIP-20 decimals"],
-                ['data:totalSupply_ici',                'string',   'yes', "EIP-20 totalSupply"],
-                ['data:totalSupply_ice',                'float',    'yes', "totalSupply(Ici) in ICE"],
+                ['data:totalSupply_coini',                'string',   'yes', "EIP-20 totalSupply"],
+                ['data:totalSupply_coins',                'float',    'yes', "totalSupply(Ici) in ICE"],
                 ['data:memberCount',                    'integer',  'yes', "Count of all SmartMining members inclusive the team"],
                 ['data:memberIndex',                    'array[]',  'yes', "array[] with 'string' of all member addresses"],
                 ['data:crowdsalePercentOfTotalSupply',  'integer',  'yes', "Percent of totalSupply which will be available for Crowdsale"],
@@ -519,8 +519,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.read"}'
                 ['data:crowdsaleWallet',                'string',   'yes', "Address where crowdsale funds are collected"],
                 ['data:crowdsaleRemainingWei_wei',      'string',   'yes', "Remeining Wei to buy in crowdsale"],
                 ['data:crowdsaleRemainingWei_eth',      'float',    'yes', "Remeining ETH to buy in crowdsale"],
-                ['data:crowdsaleRemainingToken_ici',    'string',   'yes', "Remaining Ici for purchase in crowdsale"],
-                ['data:crowdsaleRemainingToken_ice',    'float',    'yes', "Remaining ICE for purchase in crowdsale"],
+                ['data:crowdsaleRemainingToken_coini',    'string',   'yes', "Remaining Ici for purchase in crowdsale"],
+                ['data:crowdsaleRemainingToken_coins',    'float',    'yes', "Remaining ICE for purchase in crowdsale"],
                 ['data:crowdsaleRaised_wei',            'string',   'yes', "Amount of wei raised in crowdsale in Wei"],
                 ['data:crowdsaleRaised_eth',            'float',    'yes', "Amount of wei raised in crowdsale in ETH"],
                 ['data:crowdsaleCap_wei',               'string',   'yes', "Wei after crowdsale is finished"],
@@ -559,8 +559,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.member","par
                 ['data:crowdsaleIsMember',          'bool',     'yes', "true if address is member of Contract"],
                 ['data:unpaid_wei',                 'string',   'yes', "Unpaid Wei amount"],
                 ['data:unpaid_eth',                 'float',    'yes', "Unpaid ETH amount"],
-                ['data:balance_ici',                'string',   'yes', "Ici balance"],
-                ['data:balance_ice',                'float',    'yes', "ICE balance"],
+                ['data:balance_coini',                'string',   'yes', "Ici balance"],
+                ['data:balance_coins',                'float',    'yes', "ICE balance"],
             ],
         },
         {
@@ -647,8 +647,8 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.logs","param
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.contract.SmartMining.crowdsaleCalcTokenAmount","params":{"weiAmount":"800000000000"}}'
             ~,
             returnDataTable => [
-                ['data:tokenAmount_ici',                'string',   'yes', "Ici amount"],
-                ['data:tokenAmount_ice',                'float',    'yes', "ICE amount"],
+                ['data:tokenAmount_coini',                'string',   'yes', "Ici amount"],
+                ['data:tokenAmount_coins',                'float',    'yes', "ICE amount"],
             ],
         },
     ]);
