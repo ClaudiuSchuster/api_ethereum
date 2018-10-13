@@ -27,8 +27,8 @@ my $get_block = sub {
     $data->{parent_hash}      = $raw_block->{parentHash};
     $data->{size}             = hex($raw_block->{size});
     $data->{timestamp}        = hex($raw_block->{timestamp});
-    # $data->{difficulty}       = hex($raw_block->{difficulty});
-    # $data->{difficulty_total} = hex($raw_block->{totalDifficulty});
+    $data->{difficulty}       = hex($raw_block->{difficulty});
+    $data->{difficulty_total} = hex($raw_block->{totalDifficulty});
     
     
     $data->{transactions} = [];
