@@ -10,7 +10,7 @@ my $check_basics = sub {
     return { 'rc' => 400, 'msg' => "No 'params' array[] for block_number / block_hash submitted. Abort!" }
         unless( defined $params && ref($params) eq 'ARRAY' );
     return { 'rc' => 400, 'msg' => "Insufficient arguments submitted. Abort!" }
-        unless( $params->[0] );
+        unless( defined $params->[0] );
         
     return { 'rc' => 200 };
 };
