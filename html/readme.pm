@@ -197,15 +197,26 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.tx.estimateGas","params":{"to":"0
                 ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
                 ['params: 3.',          'string',   'false', '',  "Add only transactions for given 'tx_hash' in transactions-array[]."],
                 ['params: 4.',          'string',   'false', '',  "Add only transactions for given to-'address' in transactions-array[]."],
+                ['params: 5.',          'string',   'false', '',  "Add only transactions for given from-'address' in transactions-array[]."],
             ],
             requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011]}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 2]}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1, "0xffd5cdfbb995c76b93d174eb969b0106cc0d76277d56686560cd3ea90fdff00b"]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1]}'
 
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323, 1, "", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "0x792432118435bd58ddd478c80dc5657785204dd876d6e095ec08e2c6c4eb2e7e"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "0xee097ff2d75523c83b4b1320479900c33bf22cc0"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "", "0x007f7f58d3eb5b7510a301ecc749fc1fcddbe14d"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "0xb1abce2918e21ddb93aa452731a12672a3d9f75a", "0x007f7f58d3eb5b7510a301ecc749fc1fcddbe14d"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "0xbf9e0819bc5779df2bf8d5eb9ece42d289d0e4d6029ce4ec623d8367e8e859db", "", "0xc47aaa860008be6f65b58c6c6e02a84e666efe31"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[100011, 1, "0xbf9e0819bc5779df2bf8d5eb9ece42d289d0e4d6029ce4ec623d8367e8e859db", "0xee097ff2d75523c83b4b1320479900c33bf22cc0"]}'
             ~,
             returnDataTable => [
                 ['data:*',                          '*',        'yes', "See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data."],
@@ -220,9 +231,12 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byNumber","params":[2323323
                 ['params: 2.',          'integer',  'false', '0', "If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[]."],
                 ['params: 3.',          'string',   'false', '',  "Add only transactions for given 'tx_hash' in transactions-array[]."],
                 ['params: 4.',          'string',   'false', '',  "Add only transactions for given to-'address' in transactions-array[]."],
+                ['params: 5.',          'string',   'false', '',  "Add only transactions for given from-'address' in transactions-array[]."],
             ],
             requestExample  => qq~
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc"]}'
+
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 2]}'
 
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
 

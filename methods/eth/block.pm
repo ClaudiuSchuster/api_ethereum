@@ -16,7 +16,7 @@ my $check_basics = sub {
 };
 
 my $get_block = sub {
-    my ($data, $node, $raw_block, $FullTxOrHashOrNothing, $txhashfilter, $txaddressfilter, $contractName) = @_;
+    my ($data, $node, $raw_block, $FullTxOrHashOrNothing, $txhashfilter, $txToAddressFilter, $txFromAddressFilter, $contractName) = @_;
     
     # $data->{raw_block}        = $raw_block;
     $data->{block_hash}       = $raw_block->{hash};
@@ -47,13 +47,18 @@ my $get_block = sub {
             $tx->{block_hash}   = $_->{blockHash};
             $tx->{block_number} = hex($_->{blockNumber});
             
-            if( !defined $txhashfilter && !defined $txaddressfilter
-             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txaddressfilter || $txaddressfilter eq '')
-             || defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
-             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txaddressfilter && $txaddressfilter ne '' && $txaddressfilter eq $tx->{to} ) {
+            if( !defined $txhashfilter && !defined $txToAddressFilter && !defined $txFromAddressFilter
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txToAddressFilter || $txToAddressFilter eq '') && (!defined $txFromAddressFilter || $txFromAddressFilter eq '')
+             || defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '') && (!defined $txFromAddressFilter || $txFromAddressFilter eq '')
+             || defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from} && (!defined $txhashfilter || $txhashfilter eq '') && (!defined $txToAddressFilter || $txToAddressFilter eq '')
+             || defined $txFromAddressFilter && $txFromAddressFilter ne '' && defined $txToAddressFilter && $txToAddressFilter ne '' && $txFromAddressFilter eq $tx->{from} && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to}
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from}
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to} && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from}
+            ) {
                 # $tx->{data} = API::helpers::decode_input($contractName, $tx->{data}) if($contractName);  # Decode transaction 'data'
                 push(@{$data->{transactions}}, $tx) 
-             }
+            }
         }
     } else {
         unless( $FullTxOrHashOrNothing ) {
@@ -74,7 +79,7 @@ sub byNumber {
     
     my $raw_block = $node->eth_getBlockByNumber($params->[0], (defined $params->[1] && $params->[1] == 2 ? 0 : $params->[1]));
     
-    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4], $params->[5])
 }
 
 sub byHash {
@@ -85,7 +90,7 @@ sub byHash {
     
     my $raw_block = $node->eth_getBlockByHash($params->[0], (defined $params->[1] && $params->[1] == 2 ? 0 : $params->[1]));
     
-    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4])
+    return $get_block->($data, $node, $raw_block, $params->[1], $params->[2], $params->[3], $params->[4], $params->[5])
 }
 
 
