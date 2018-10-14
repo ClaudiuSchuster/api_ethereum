@@ -270,10 +270,13 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
             title           => "Get the ETH balance of 'address'",
             note            => "",
             parameterTable  => [
-                ['params:address',      'string',    'true',  '',   "'address' to get balance for."],
+                ['params:address',      'string',    'true',  '',       "'address' to get balance for."],
+                ['params:block',        'string',    'false', 'latest', "'block'-number to get balance for address."],
             ],
             requestExample  => qq~
-curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347"}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347","block":6411147}}'
+curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347","block":6411148}}'
             ~,
             returnDataTable => [
                 ['data:balance_wei',                'string',   'yes', "balance in Wei"],
