@@ -49,12 +49,12 @@ my $get_block = sub {
             
             if( !defined $txhashfilter && !defined $txToAddressFilter && !defined $txFromAddressFilter
              || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && (!defined $txToAddressFilter || $txToAddressFilter eq '') && (!defined $txFromAddressFilter || $txFromAddressFilter eq '')
-             || defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '') && (!defined $txFromAddressFilter || $txFromAddressFilter eq '')
+             || defined $txToAddressFilter && $txToAddressFilter ne '' && defined $tx->{to} && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '') && (!defined $txFromAddressFilter || $txFromAddressFilter eq '')
              || defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from} && (!defined $txhashfilter || $txhashfilter eq '') && (!defined $txToAddressFilter || $txToAddressFilter eq '')
-             || defined $txFromAddressFilter && $txFromAddressFilter ne '' && defined $txToAddressFilter && $txToAddressFilter ne '' && $txFromAddressFilter eq $tx->{from} && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
-             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to}
+             || defined $txFromAddressFilter && $txFromAddressFilter ne '' && defined $txToAddressFilter && $txToAddressFilter ne '' && $txFromAddressFilter eq $tx->{from} && defined $tx->{to} && $txToAddressFilter eq $tx->{to} && (!defined $txhashfilter || $txhashfilter eq '')
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && defined $tx->{to} && $txToAddressFilter eq $tx->{to}
              || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from}
-             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && $txToAddressFilter eq $tx->{to} && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from}
+             || defined $txhashfilter && $txhashfilter ne '' && $txhashfilter eq $tx->{tx_hash} && defined $txToAddressFilter && $txToAddressFilter ne '' && defined $tx->{to} && $txToAddressFilter eq $tx->{to} && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $txFromAddressFilter eq $tx->{from}
             ) {
                 # $tx->{data} = API::helpers::decode_input($contractName, $tx->{data}) if($contractName);  # Decode transaction 'data'
                 push(@{$data->{transactions}}, $tx) 
