@@ -7,7 +7,7 @@ use Math::BigInt;
 our $add_tx_receipt = sub {
     my ($data, $node, $Rresult, $Tresult) = @_;
     
-    $data->{status}                 = hex($Rresult->{status});
+    $data->{status}                 = hex($Rresult->{status} || 1);
     $data->{tx_hash}                = $Rresult->{transactionHash};
     $data->{tx_index}               = hex($Rresult->{transactionIndex});
     $data->{block_hash}             = $Rresult->{blockHash};
@@ -16,8 +16,11 @@ our $add_tx_receipt = sub {
     $data->{to}                     = $Rresult->{to};
     $data->{gas_used}               = hex($Rresult->{gasUsed});
     $data->{cumulative_gas_used}    = hex($Rresult->{cumulativeGasUsed});
-    $data->{gas_price_wei}          = $node->eth_gasPrice()->numify();
-    $data->{tx_cost_wei}            = $data->{gas_price_wei} * $data->{cumulative_gas_used};
+    my $gasPriceBig                 = defined $Tresult->{gasPrice} ? Math::BigInt->new( $Tresult->{gasPrice} ) : $node->eth_gasPrice();
+    $data->{gas_price_wei}          = $gasPriceBig->numify() || $gasPriceBig->numify();
+    my $tx_cost_wei                 = $gasPriceBig->bmul($data->{gas_used});
+    $data->{tx_cost_wei}            = $tx_cost_wei->bstr().'';
+    $data->{tx_cost_eth}            = $node->wei2ether($tx_cost_wei)->numify();
     
     $data->{data}                   = $Tresult->{input}; # hex input
     my $value                       = Math::BigInt->new( $Tresult->{value} );
