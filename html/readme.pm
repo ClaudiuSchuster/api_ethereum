@@ -271,6 +271,7 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.block.byHash","params":["0x67e9a1
                 # ['data:transactions:*:data',                'string',   'yes, if "params: 2." == 1', "The HEX-DATA send along with the transaction."],
                 ['data:transactions:*:value_wei',           'integer',  'yes, if "params: 2." == 1', "Value transferred in Wei."],
                 ['data:transactions:*:value_eth',           'float',    'yes, if "params: 2." == 1', "Value transferred in ETH."],
+                ['data:transactions:*:receipt:*',           '*',        'yes', "Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>."],
             ],
         },
     ]);

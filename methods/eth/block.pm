@@ -57,7 +57,11 @@ my $get_block = sub {
              || defined $txhashfilter && $txhashfilter ne '' && $tx->{tx_hash} =~ /$txhashfilter/i && defined $txToAddressFilter && $txToAddressFilter ne '' && defined $tx->{to} && $tx->{to} =~ /$txToAddressFilter/i && defined $txFromAddressFilter && $txFromAddressFilter ne '' && $tx->{from} =~ /$txFromAddressFilter/i
             ) {
                 # $tx->{data} = API::helpers::decode_input($contractName, $tx->{data}) if($contractName);  # Decode transaction 'data'
-                push(@{$data->{transactions}}, $tx) 
+                $tx->{receipt} = {};
+                my $Rresult = $node->eth_getTransactionReceipt( $tx->{tx_hash} )->{result};
+                my $Tresult = $node->eth_getTransactionByHash( $tx->{tx_hash} );
+                $API::methods::eth::tx::add_tx_receipt->($tx->{receipt}, $node, $Rresult, $Tresult);
+                push(@{$data->{transactions}}, $tx);
             }
         }
     } else {
