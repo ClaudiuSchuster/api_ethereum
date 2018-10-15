@@ -873,14 +873,29 @@ sub eth_getBlockTransactionCountByHash()
 
 =pod
 
-=head2 eth_getBlockTransactionCountByNumber
+=head2 eth_getUncleByBlockHashAndIndex
+
+=cut
+
+sub eth_getUncleByBlockHashAndIndex()
+{
+  my ($this, $hash, $index) = @_;
+  my $rq = { jsonrpc => "2.0", 
+             method => "eth_getUncleByBlockHashAndIndex",
+             params => [ $hash, $index ], 
+             id => 1
+           };
+    return $this->_node_request($rq)->{result};
+}
+
+
+=pod
+
+=head2 eth_getUncleCountByBlockHash
 
   ## TODO
 
 =cut
-
-
-=pod
 
 =head2 eth_getUncleCountByBlockHash
 

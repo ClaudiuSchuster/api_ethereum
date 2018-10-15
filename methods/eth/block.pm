@@ -30,6 +30,15 @@ my $get_block = sub {
     $data->{difficulty}       = Math::BigInt->new( $raw_block->{difficulty} )->bstr().'';
     $data->{difficulty_total} = Math::BigInt->new( $raw_block->{totalDifficulty} )->bstr().'';
     
+    my $uncleCount            = scalar @{$raw_block->{uncles}};
+    my $uncleDifficulty       = Math::BigInt->new();
+    for (my $i=0; $i < $uncleCount; $i++) {
+        my $raw_uncle = $node->eth_getUncleByBlockHashAndIndex( $data->{block_hash}, "0x".sprintf("%X",$i) );
+        my $difficulty = Math::BigInt->new( $raw_uncle->{difficulty} );
+        $uncleDifficulty->badd($difficulty);
+        # push(@{$data->{uncles}}, $raw_uncle);
+    }
+    $data->{difficulty_uncles} = $uncleDifficulty ->bstr().'';
     
     $data->{transactions} = [];
     if($FullTxOrHashOrNothing && ref($raw_block->{transactions}) eq 'ARRAY' && $FullTxOrHashOrNothing != 2) {
