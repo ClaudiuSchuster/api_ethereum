@@ -74,7 +74,7 @@ sub read {
     
     my $block = {};
     my $return = API::methods::eth::block::byNumber($cgi, $block, $node, [$data->{current_block_number}, 2]);
-    return { 'rc' => 500 } unless( $return->{rc} == 200 );
+    return $return unless( $return->{rc} == 200 );
     $data->{timestamp} = $block->{timestamp};
     
     for ( @{$data->{memberIndex}} ) {
