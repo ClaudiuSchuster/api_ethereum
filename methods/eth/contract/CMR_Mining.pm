@@ -72,6 +72,11 @@ sub read {
     memberIndex($cgi, $data, $node, $params, $contract);
     balance($cgi, $data, $node, $params, $contract);
     
+    my $block = {};
+    my $return = API::methods::eth::block::byNumber($cgi, $block, $node, [$data->{current_block_number}, 2]);
+    return { 'rc' => 500 } unless( $return->{rc} == 200 );
+    $data->{timestamp} = $block->{timestamp};
+    
     for ( @{$data->{memberIndex}} ) {
         $data->{members}{$_} = {};
         member($cgi, $data->{members}{$_}, $node, { contract => $params->{contract}, address => $_ }, $contract);
