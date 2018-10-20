@@ -65,9 +65,10 @@ sub member {
 sub read {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
-    $data->{address}        = $contract->{address};
-    $data->{block_number}   = $contract->{block_number};
-    $data->{memberCount}    = $node->contract_method_call('memberCount')->numify();
+    $data->{address}               = $contract->{address};
+    $data->{contract_block_number} = $contract->{block_number};
+    $data->{current_block_number}  = $node->eth_blockNumber();
+    $data->{memberCount}           = $node->contract_method_call('memberCount')->numify();
     memberIndex($cgi, $data, $node, $params, $contract);
     balance($cgi, $data, $node, $params, $contract);
     
