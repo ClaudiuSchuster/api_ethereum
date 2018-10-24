@@ -6,6 +6,7 @@ use warnings;
 
 use HTTP::Request;
 use LWP::UserAgent;
+use LWP::Protocol::https;
 use JSON;
 use Math::BigInt;
 use Math::BigFloat;
@@ -713,14 +714,13 @@ sub eth_blockNumber()
 
 sub eth_getBalance()
 {
-  my ($this, $addr, $block_number) = @_;
+  my ($this, $addr, $block_number, $endpoint) = @_;
   my $rq = { jsonrpc => "2.0", method => "eth_getBalance", params => [ $addr, $block_number ], id => 1};
-  my $hex_string = $this->_node_request($rq)-> { result };
+  my $hex_string = $this->_node_request($rq, $endpoint)-> { result };
   my $dec = Math::BigInt->new($hex_string);
   return $dec;
   #return $hex_string;
 }
-
 
 =head2 eth_getLogs
 
@@ -1972,9 +1972,9 @@ sub _string2hex()
 
 sub _node_request()
 {
-  my ($this, $json_data) = @_;
+  my ($this, $json_data, $endpoint) = @_;
 
-  my $req = HTTP::Request->new(POST => $this->{api_url});
+  my $req = HTTP::Request->new(POST => defined $endpoint ? $endpoint : $this->{api_url});
   $req->header('Content-Type' => 'application/json');
   my $ua = LWP::UserAgent->new;
   my $data = encode_json($json_data);

@@ -20,7 +20,13 @@ sub balance {
     my $checks = $check_basics->($params);
     return $checks unless( defined $checks->{rc} && $checks->{rc} == 200 );
     
-    my $balance_wei         = $node->eth_getBalance($params->{address}, defined $params->{block} ? "0x".sprintf("%X", $params->{block}) : "latest");
+    my $balance_wei;
+    eval {
+        $balance_wei = $node->eth_getBalance($params->{address}, defined $params->{block} ? "0x".sprintf("%X", $params->{block}) : "latest");
+        1;
+    } or do {
+        $balance_wei = $node->eth_getBalance($params->{address}, defined $params->{block} ? "0x".sprintf("%X", $params->{block}) : "latest", API::methods::eth::personal::account::infuraApiEndpoint);
+    };
     $data->{balance_wei}    = $balance_wei->bstr().'';
     $data->{balance_eth}    = $node->wei2ether( $balance_wei )->numify();
     
