@@ -25,7 +25,12 @@ sub run {
     ### Initialize Ethereum Node
     my $node;
     eval {
-        $node = API::modules::Ethereum->new( $API::dev ? API::methods::eth::personal::account::infuraApiEndpoint : 'http://127.0.0.1:8545/' );  # IciIce: 'http://159.69.126.148:8545/' ; SimpleIce: 'http://94.130.152.20:8545/'
+        $node = API::modules::Ethereum->new(
+            defined $API::dev && $API::dev eq 'dev'    ? 'http://159.69.126.148:8545/'
+          : defined $API::dev && $API::dev eq 'simple' ? 'http://94.130.152.20:8545/'
+          : defined $API::dev && $API::dev eq 'infura' ? API::methods::eth::personal::account::infuraApiEndpoint
+          : 'http://127.0.0.1:8545/'
+        );
         $node->set_debug_mode( 1 );
         $node->set_show_progress( 1 );
         1; 
