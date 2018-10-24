@@ -1,15 +1,19 @@
 [Unit]
 Description=api.pl
 After=syslog.target network.target remote-fs.target nss-lookup.target
- 
+
+
 [Service]
-WorkingDirectory=/ethereum/api
- 
-ExecStart=/bin/sh -c "/ethereum/api/api.pl 88 >> /ethereum/api/log.log 2>&1"
- 
 Type=simple
 Restart=on-failure
- 
- 
+
+WorkingDirectory=/root/api_ethereum
+
+ExecStart=/bin/sh -c "/root/api_ethereum/api.pl 88 >> /root/api_ethereum/log.log 2>&1"
+# ExecStart=/bin/sh -c "/root/api_ethereum/api.pl 88 'rinkeby' >> /root/api_ethereum/log-rinkeby.log 2>&1"
+# ExecStart=/bin/sh -c "/root/api_ethereum/api.pl 88 'infura' >> /root/api_ethereum/log-infura.log 2>&1"
+# ExecStart=/bin/sh -c "/root/api_ethereum/api.pl 88 'http://nodeToConnect.notIn.AccountsPm:8545/' >> /root/api_ethereum/log.log 2>&1"
+
+
 [Install]
 WantedBy=multi-user.target
