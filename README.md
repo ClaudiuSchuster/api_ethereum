@@ -17,6 +17,7 @@
  - File::Slurper
  - HTTP::Request
  - LWP::UserAgent
+ - LWP::Protocol::https
  - Math::BigFloat
  - Math::BigInt
  - JSON
