@@ -14,13 +14,14 @@ use server;
 
 
 ### SERVER OPTIONS
-our $dev = $ARGV[1] || 0;
+our $node = $ARGV[1] || 0;           # Node to connect e.g. 'http://159.69.126.148:8545/', 'infura' for infura.io, or 'rinkeby' for Rinkeby Network. If not set API::methods::eth::personal::account::defaultApiEndpoint will be used.
+
 my %preforkOptions = (               # Options will be passed to Net::Server::PreFork
     prefork           => 1,          # Default: 0  -  Per default, prefork is turned off (e.g. server runs singlethreaded with Net::Server::Single instead of Net::Server::PreFork). This is very usefull for debugging and backward compatibility.
-    min_servers       => $dev?1: 4,  # Default: 5  -  The minimum number of servers to keep running.
-    min_spare_servers => $dev?1: 2,  # Default: 2  -  The minimum number of servers to have waiting for requests. Minimum and maximum numbers should not be set to close to each other or the server will fork and kill children too often.
-    max_spare_servers => $dev?4: 10, # Default: 10 -  The maximum number of servers to have waiting for requests. See min_spare_servers.
-    max_servers       => $dev?8: 60, # Default: 50 -  The maximum number of child servers to start. This does not apply to dequeue processes.
+    min_servers       => 4,          # Default: 5  -  The minimum number of servers to keep running.
+    min_spare_servers => 2,          # Default: 2  -  The minimum number of servers to have waiting for requests. Minimum and maximum numbers should not be set to close to each other or the server will fork and kill children too often.
+    max_spare_servers => 10,         # Default: 10 -  The maximum number of servers to have waiting for requests. See min_spare_servers.
+    max_servers       => 60,         # Default: 50 -  The maximum number of child servers to start. This does not apply to dequeue processes.
     max_requests      => 1200,       # Default: 1000 
     check_for_dead    => 24,         # Default: 30
     check_for_waiting => 8,          # Default: 10 -  Seconds to wait before checking to see if we can kill off some waiting servers.

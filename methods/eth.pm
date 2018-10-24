@@ -26,10 +26,10 @@ sub run {
     my $node;
     eval {
         $node = API::modules::Ethereum->new(
-            $API::dev eq 'dev'    ? 'http://159.69.126.148:8545/'
-          : $API::dev eq 'simple' ? 'http://94.130.152.20:8545/'
-          : $API::dev eq 'infura' ? API::methods::eth::personal::account::infuraApiEndpoint
-          : 'http://127.0.0.1:8545/'
+            $API::node eq 'rinkeby' ? API::methods::eth::personal::account::rinkebyApiEndpoint
+          : $API::node eq 'infura'  ? API::methods::eth::personal::account::infuraApiEndpoint
+          : $API::node ? $API::node
+          : API::methods::eth::personal::account::defaultApiEndpoint
         );
         $node->set_debug_mode( 1 );
         $node->set_show_progress( 1 );
