@@ -13,7 +13,7 @@
 
 
 ### Perl Dependencies:
- - HTTP::Server::Simple::CGI::PreFork   (requires IPv6 and debian packages 'libssl-dev' & 'libz-dev')
+ - HTTP::Server::Simple::CGI::PreFork   (requires IPv6 or libio-socket-inet6-perl and debian packages 'libssl-dev' & 'libz-dev')
  - File::Slurper
  - HTTP::Request
  - LWP::UserAgent
@@ -23,7 +23,7 @@
  - JSON
  - *______ below should be installed by previous automatically ______*
  - HTTP::Server::Simple
- - IO::Socket::INET6
+ - IO::Socket::INET6  (if libio-socket-inet6-perl is not installed / only IPv4 as example)
  - Net::Server
  - Net::Server::PreFork
  - Net::Server::Proto::SSLEAY
