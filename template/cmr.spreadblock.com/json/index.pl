@@ -3,7 +3,6 @@
 use strict; use warnings; use utf8; use feature ':5.10';
 
 use LWP;
-use JSON;
 use JSON::PP qw(decode_json);
 
 
@@ -43,24 +42,21 @@ sub getData {
                 exit 1;
             } elsif ( $maxBlocktime < (time - $data->{data}{timestamp}) && $fails < scalar @$nodes) {
                 $results{$data->{data}{timestamp}} = $data;
+                $results{$data->{data}{timestamp}}{json} = $res->content;
                 $fails++;
                 next;
             } else {
                 $results{$data->{data}{timestamp}} = $data;
+                $results{$data->{data}{timestamp}}{json} = $res->content;
             }
         }
         
         my @SRK = sort { $a <=> $b } keys %results;
-        return $results{$SRK[-1]} if( $maxBlocktime > (time - $results{$SRK[-1]}->{data}{timestamp}) || $fails == scalar @$nodes ); 
+        return $results{$SRK[-1]}->{json} if( $maxBlocktime > (time - $results{$SRK[-1]}->{data}{timestamp}) || $fails == scalar @$nodes ); 
     }
 }
 
-
-my $data = getData('{"method":"eth.contract.CMR_Mining.read"}', ['http://192.168.102.10:88','http://192.168.102.10:90','http://localhost:88']);
-
-eval { print JSON->new->pretty->encode($data); 1; } or do {
-    print $@;
-};
+print getData('{"method":"eth.contract.CMR_Mining.read"}', ['http://192.168.102.10:88','http://192.168.102.10:90','http://localhost:88']);
 
 
 1;
