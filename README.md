@@ -12,6 +12,11 @@
  - https://twitter.com/ClaudiuSchuster/status/1015429498765041665
 
 
+### Perl Dependencies Installation Commands:
+apt update && apt install cpan libio-socket-inet6-perl libssl-dev libz-dev \
+cpan App::cpanminus \
+cpanm HTTP::Server::Simple::CGI::PreFork File::Slurper HTTP::Request LWP::UserAgent LWP::Protocol::https Math::BigInt Math::BigFloat JSON
+ 
 ### Perl Dependencies:
  - HTTP::Server::Simple::CGI::PreFork   (requires IPv6 or libio-socket-inet6-perl and debian packages 'libssl-dev' & 'libz-dev')
  - File::Slurper
