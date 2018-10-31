@@ -44,7 +44,9 @@ sub coinbase {
 sub balance {
     my ($cgi, $data, $node, $params) = @_;
     
-    $params->{address} = $node->eth_coinbase();
+    eval{ $params->{address} = $node->eth_coinbase(); 1; } or do { 
+          $params->{address} = '0x0000000000000000000000000000000000000000';
+    };
     return API::methods::eth::address::balance($cgi, $data, $node, $params);
 }
 
