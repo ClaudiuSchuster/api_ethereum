@@ -175,6 +175,26 @@ sub read {
     return { 'rc' => 200 };
 }
 
+sub crowdsale {
+    my ($cgi, $data, $node, $params, $contract) = @_;
+    
+    $data->{address}                         = $contract->{address};
+    $data->{block_number}                    = $contract->{block_number};
+    $data->{crowdsaleOpen}                   = \($node->contract_method_call('crowdsaleOpen')->numify());
+    $data->{crowdsaleFinished}               = \($node->contract_method_call('crowdsaleFinished')->numify());
+    my $weiRaised                            = $node->contract_method_call('crowdsaleRaised');
+    $data->{crowdsaleRaised_wei}             = $weiRaised->bstr().'';
+    $data->{crowdsaleRaised_eth}             = $node->wei2ether( $weiRaised )->numify();
+    my $weiRemaining                         = $node->contract_method_call('crowdsaleRemainingWei');
+    $data->{crowdsaleRemainingWei_wei}       = $weiRemaining->bstr().'';
+    $data->{crowdsaleRemainingWei_eth}       = $node->wei2ether( $weiRemaining )->numify();
+    my $crowdsaleRemainingToken              = $node->contract_method_call('crowdsaleRemainingToken');
+    $data->{crowdsaleRemainingToken_coini}   = $crowdsaleRemainingToken->bstr().'';
+    $data->{crowdsaleRemainingToken_coins}   = $node->wei2ether( $crowdsaleRemainingToken )->numify();
+    
+    return { 'rc' => 200 };
+}
+
 sub crowdsaleCalcTokenAmount {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
