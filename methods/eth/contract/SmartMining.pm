@@ -11,8 +11,8 @@ sub deploy {
     $params->{constructor} = {
         _crowdsaleCapEth => 10,
         _crowdsaleWallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',
-        _teamContract    => '0x58f94C8dD0E40258EE2BD766508964b941147bd8',
-        _teamShare       => 40,
+        _teamContract    => '0x1234567890123456789012345678901234567890',
+        _teamShare       => 20,
         _owner           => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3'
     } unless( $params->{constructor} );
     
