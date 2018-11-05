@@ -3,6 +3,22 @@ package API::methods::eth::node;
 use strict; use warnings; use utf8; use feature ':5.10';
 
 
+my $personal_unlockAccount = sub {
+    my $node = shift;
+    
+    eval {
+        $node->personal_unlockAccount(
+            API::methods::eth::personal::account::address, 
+            API::methods::eth::personal::account::password,
+            60
+        );
+    } or do {
+        return { 'rc' => 500, 'msg' => "error.personal_unlockAccount: ".$@ };
+    };
+    
+    return { 'rc' => 200 };
+};
+
 sub sha3 {
     my ($cgi, $data, $node, $params) = @_;
     
@@ -50,6 +66,52 @@ sub balance {
           $params->{address} = '0x0000000000000000000000000000000000000000';
     };
     return API::methods::eth::address::balance($cgi, $data, $node, $params);
+}
+
+sub exchange {
+    my ($cgi, $data, $node, $params) = @_;
+    my $iterations = 96; # 96 iteration (min. 5 sec each) = Try min. 8 Minutes to verify the tx (wait for mined block)
+    my $txGas = 21000;
+    my $minAmount = 0.1;  # 0.1 ETH to send at least
+    my $remainingFunds = Math::BigInt->new('0x16345785D8A0000'); #0.1 ETH to remain on address
+    my $remainingFunds_eth = $node->wei2ether( $remainingFunds )->numify();
+    
+    my $startTime = time();
+    my $result = $personal_unlockAccount->($node);
+    return $result unless( defined $result->{rc} && $result->{rc} == 200 );
+    
+    my $gasPrice = $node->eth_gasPrice();
+    my $balance_wei = $node->eth_getBalance(API::methods::eth::personal::account::address, 'latest');
+    my $balance_eth = $node->wei2ether( $balance_wei )->numify();
+    my $txCost = $gasPrice * $txGas;
+    my $txCost_eth = $node->wei2ether( $txCost )->numify();
+    my $value = $balance_wei->bsub($txCost)->bsub($remainingFunds);
+    
+    return { rc => 500, msg => "Not enaugh funds ($balance_eth ETH), must send|hold at least $minAmount|$remainingFunds_eth ETH. (tx-cost will be $txCost_eth ETH)" } unless( $node->wei2ether( $value )->numify() >= $minAmount );
+    return { rc => 500, msg => "No target exchange-adddress in accounts.pm" } unless( API::methods::eth::personal::account::krakenAddress );
+    # return { rc => 800, msg => "from:".API::methods::eth::personal::account::address." to:".API::methods::eth::personal::account::krakenAddress." gas:".sprintf('0x%x', $txGas)." gasPrice:".$gasPrice->as_hex()." value:".$value->as_hex() };
+
+    eval {
+        my $tx = $node->eth_sendTransaction({
+            from     => API::methods::eth::personal::account::address,
+            to       => API::methods::eth::personal::account::krakenAddress,
+            gas      => sprintf('0x%x', $txGas),
+            gasPrice => $gasPrice->as_hex(),
+            value    => $value->as_hex()
+        });
+     
+        $result = $node->wait_for_transaction($tx, $iterations, $node->get_show_progress());
+        return { 'rc' => 500, 'msg' =>  "Could not verify transaction after $iterations iterations." } unless( defined $result );
+        1; 
+    } or do {
+        return { 'rc' => 500, 'msg' => "error.node.exchange: ".$@ };
+    };
+    
+    API::methods::eth::block::byHash( $cgi, $data, $node, [$result->{blockHash}, 2] );
+    $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
+    $data->{tx_execution_time} = time() - $startTime;
+    
+    return { rc => 200 };
 }
 
 sub info {

@@ -975,9 +975,11 @@ sub eth_sendTransaction()
   my $from = $params->{ from };
   my $to = $params->{ to };
   my $gas = $params->{ gas };
+  my $gasPrice = $params->{ gasPrice };
   my $data = $params->{ data };
+  my $value = $params->{ value };
 
-  my $rq = { jsonrpc => "2.0", method => "eth_sendTransaction", params => [ { from => $from, to => $to, gas => $gas, data => $data } ], id => 1 };
+  my $rq = { jsonrpc => "2.0", method => "eth_sendTransaction", params => [ { from => $from, to => $to, gas => $gas, gasPrice => $gasPrice, data => $data, value => $value } ], id => 1 };
   my $rc = $this->_node_request($rq);
   return $rc-> { result };
 }
@@ -1126,7 +1128,6 @@ sub sendTransaction()
   my $rc = $this->eth_sendTransaction($params);
   return $rc;
 }
-
 
 =pod
 
