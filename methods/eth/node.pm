@@ -36,7 +36,9 @@ sub accounts {
 sub coinbase {
     my ($cgi, $data, $node, $params) = @_;
     
-    $data->{eth_coinbase} = $node->eth_coinbase();
+    eval{ $data->{eth_coinbase} = $node->eth_coinbase(); 1; } or do { 
+          $data->{eth_coinbase} = '0x0000000000000000000000000000000000000000';
+    };
     
     return { 'rc' => 200 };
 }
