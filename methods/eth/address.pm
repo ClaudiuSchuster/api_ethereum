@@ -27,8 +27,14 @@ sub balance {
     } or do {
         $balance_wei = $node->eth_getBalance($params->{address}, defined $params->{block} ? "0x".sprintf("%X", $params->{block}) : "latest", API::methods::eth::personal::account::infuraApiEndpoint);
     };
+    $data->{block_number}   = $node->eth_blockNumber();
     $data->{balance_wei}    = $balance_wei->bstr().'';
     $data->{balance_eth}    = $node->wei2ether( $balance_wei )->numify();
+    
+    my $block = {};
+    my $return = API::methods::eth::block::byNumber($cgi, $block, $node, [$data->{block_number}, 2]);
+    return $return unless( $return->{rc} == 200 );
+    $data->{timestamp} = $block->{timestamp};
     
     return { 'rc' => 200 };
 }

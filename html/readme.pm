@@ -296,8 +296,10 @@ curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"addre
 curl http://$ENV{HTTP_HOST} -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347","block":6411148}}'
             ~,
             returnDataTable => [
-                ['data:balance_wei',                'string',   'yes', "balance in Wei"],
-                ['data:balance_eth',                'float',    'yes', "balance in ETH"],
+                ['data:block_number',       'integer',  'yes', "Block number"],
+                ['data:timestamp',          'integer',  'yes', "Timestamp of block"],
+                ['data:balance_wei',        'string',   'yes', "balance in Wei"],
+                ['data:balance_eth',        'float',    'yes', "balance in ETH"],
             ],
         },
         # {
