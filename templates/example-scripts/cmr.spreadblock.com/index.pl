@@ -9,25 +9,25 @@ use Date::Format;
 
 print "Content-type: text/html\r\n\r\n";
 
-
 sub getData {
-    my $qry = shift;
-    my $nodes = shift;
+    my $query = shift;
+    my $endpoints = shift;
     
     my $maxBlocktime = 600; # Last block timestamp $maxBlocktime seconds ago...
 
     my %results;
     my $fails = 0;
-    for ( @$nodes ) {
-        my $req = HTTP::Request->new( 'POST', $_ );
+    for my $api_url ( @$endpoints ) {
+        my $req = HTTP::Request->new( 'POST', $api_url );
         $req->header( 'Content-Type' => 'application/json' );
-        $req->content( $qry );
+        $req->content( $query );
         my $lwp = LWP::UserAgent->new;
         my $res = $lwp->request( $req );
         
-        my $data;
+        my $data = {};
         eval { 
             $data = decode_json( $res->content );
+            $data->{data}{api_url} = $api_url;
             unless( defined $data->{meta}{rc} && $data->{meta}{rc} == 200 && defined $data->{data}{timestamp} ) {
                 $fails++;
                 next;
@@ -35,14 +35,14 @@ sub getData {
             1; 
         } or do {
             $fails++;
-            next unless( $fails == scalar @$nodes );
+            next unless( $fails == scalar @$endpoints );
         };
         
-        unless( $fails == scalar @$nodes && scalar keys %results ) {
-            if( $fails == scalar @$nodes ) {
+        unless( $fails == scalar @$endpoints && scalar keys %results ) {
+            if( $fails == scalar @$endpoints ) {
                 print "<strong>There was a problem, could not connect to any API :-(</strong> </br></br>\n\n";
                 exit 1;
-            } elsif ( $maxBlocktime < (time - $data->{data}{timestamp}) && $fails < scalar @$nodes) {
+            } elsif ( $maxBlocktime < (time - $data->{data}{timestamp}) && $fails < scalar @$endpoints) {
                 $results{$data->{data}{timestamp}} = $data->{data};
                 $fails++;
                 next;
@@ -52,12 +52,12 @@ sub getData {
         }
         
         my @SRK = sort { $a <=> $b } keys %results;
-        return $results{$SRK[-1]} if( $maxBlocktime > (time - $results{$SRK[-1]}->{timestamp}) || $fails == scalar @$nodes ); 
+        return $results{$SRK[-1]} if( $maxBlocktime > (time - $results{$SRK[-1]}->{timestamp}) || $fails == scalar @$endpoints ); 
     }
 }
 
 
-my $data = getData('{"method":"eth.contract.CMR_Mining.read"}', ['http://192.168.102.10:88','http://192.168.102.10:90','http://localhost:88']);
+my $data = getData('{"method":"eth.contract.CMR_Mining.read"}', ['http://ethereum-full.mine.io:88','http://ethereum-rinkeby.mine.io:88','http://ethereum-full.mine.io:91','http://ethereum-rinkeby:91','http://localhost:91']);
 
 print "<html><head><title>CMR_Mining</title>\n";
 print qq~  
@@ -111,7 +111,7 @@ print "<a title='Click to open contract on Etherscan.io ...' href='https://ether
 print "</th></tr>";
 print "<tr><th colspan='".(1 + scalar @members)."' style='padding-bottom:4px; padding-top:2px; border-top:0;'>";
 print "<span style='padding: 0 0 0 0;color:#006600;'>Holding ".sprintf("%.3f", $data->{balance_eth})." ETH from $data->{depositCount} deposits over total ".sprintf("%.3f", $data->{deposited_eth})." ETH</span>";
-print "</br><span style='color:#006600; font-size:15px;'>@ Ethereum block #<a title='Click to open block on Etherscan.io ...' href='https://etherscan.io/block/$data->{current_block_number}' target='_blank'>".$data->{current_block_number}."</a> ".time2str("[%Y/%m/%d-%X]",$data->{timestamp})."</span>";
+print "</br><span style='color:#006600;'>@ ".$data->{api_url}." Block #<a title='Click to open block on Etherscan.io ...' href='https://etherscan.io/block/$data->{block_number}' target='_blank'>".$data->{block_number}."</a> ".time2str("[%Y/%m/%d-%X]",$data->{timestamp})."</span>";
 print "</th></tr>";
 print "<tr><th>Member Address</th>";
 print "<th title='$_'>".substr($_, 0, 7).'....'.substr($_, -5)."</th>" for( @members );
@@ -143,5 +143,6 @@ print "</tr>";
 print "</table>";
 
 print "\n\n</body></html>";
+
 
 1;

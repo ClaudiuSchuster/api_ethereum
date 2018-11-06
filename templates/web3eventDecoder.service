@@ -3,9 +3,9 @@ Description=web3eventDecoder.js
 After=syslog.target network.target remote-fs.target nss-lookup.target
  
 [Service]
-WorkingDirectory=/ethereum/api
+WorkingDirectory=/root/api_ethereum
  
-ExecStart=/bin/sh -c "/ethereum/api/web3eventDecoder.js 880 >> /ethereum/api/web3eventDecoder.log 2>&1"
+ExecStart=/bin/sh -c "/root/api_ethereum/web3eventDecoder.js 880 >> /root/api-web3eventDecoder.log 2>&1"
  
 Type=simple
 Restart=on-failure
