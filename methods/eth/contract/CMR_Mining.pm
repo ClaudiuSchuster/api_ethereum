@@ -67,13 +67,13 @@ sub read {
     
     $data->{address}               = $contract->{address};
     $data->{contract_block_number} = $contract->{block_number};
-    $data->{current_block_number}  = $node->eth_blockNumber();
+    $data->{block_number}          = $node->eth_blockNumber();
     $data->{memberCount}           = $node->contract_method_call('memberCount')->numify();
     memberIndex($cgi, $data, $node, $params, $contract);
     balance($cgi, $data, $node, $params, $contract);
     
     my $block = {};
-    my $return = API::methods::eth::block::byNumber($cgi, $block, $node, [$data->{current_block_number}, 2]);
+    my $return = API::methods::eth::block::byNumber($cgi, $block, $node, [$data->{block_number}, 2]);
     return $return unless( $return->{rc} == 200 );
     $data->{timestamp} = $block->{timestamp};
     
