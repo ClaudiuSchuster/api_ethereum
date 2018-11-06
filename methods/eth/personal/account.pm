@@ -13,6 +13,9 @@ sub password {
          : $API::node ne 'infura'  ? "MainnetPassword"
          : "";
 }
+sub krakenAddress {
+    return $API::node !~ /infura|rinkeby/ ? "0xD6a033F1C688752bb8508c1e48e5cCf0d42b5fdC" : 0;
+}
 
 
 sub defaultApiEndpoint {
