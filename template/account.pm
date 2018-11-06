@@ -6,17 +6,16 @@ use strict; use warnings; use utf8; use feature ':5.10';
 
 
 sub address {
-    return $API::node eq 'rinkeby' ? "0xRinkebyAddr"
-         : $API::node ne 'infura'  ? "0xMainnetAddr"
-         : "";
+    return $API::node eq 'rinkeby' ? "0xRinkebyAddr"     # Rinkeby
+                                   : "0xMainnetAddr";    # ETH-Mainnet
 }
 sub password {
-    return $API::node eq 'rinkeby' ? "RinkebyPassword"
-         : $API::node ne 'infura'  ? "MainnetPassword"
-         : "";
+    return $API::node eq 'rinkeby' ? "RinkebyPassword"    # Rinkeby
+         : $API::node ne 'infura'  ? "MainnetPassword"    # ETH-Mainnet
+         : "";    # Infura
 }
 sub krakenAddress {
-    return $API::node !~ /infura|rinkeby/ ? "0xD6a033F1C688752bb8508c1e48e5cCf0d42b5fdC" : 0;
+    return $API::node !~ /infura|rinkeby/ ? "0xExchangeAddress" : 0;
 }
 
 

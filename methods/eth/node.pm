@@ -52,9 +52,7 @@ sub accounts {
 sub coinbase {
     my ($cgi, $data, $node, $params) = @_;
     
-    eval{ $data->{eth_coinbase} = $node->eth_coinbase(); 1; } or do { 
-          $data->{eth_coinbase} = '0x0000000000000000000000000000000000000000';
-    };
+    $data->{eth_coinbase} = API::methods::eth::personal::account::address || '0x0000000000000000000000000000000000000000';
     
     return { 'rc' => 200 };
 }
@@ -62,9 +60,8 @@ sub coinbase {
 sub balance {
     my ($cgi, $data, $node, $params) = @_;
     
-    eval{ $params->{address} = $node->eth_coinbase(); 1; } or do { 
-          $params->{address} = '0x0000000000000000000000000000000000000000';
-    };
+    $params->{address} = API::methods::eth::personal::account::address || '0x0000000000000000000000000000000000000000';
+    
     return API::methods::eth::address::balance($cgi, $data, $node, $params);
 }
 
