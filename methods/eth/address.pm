@@ -27,7 +27,7 @@ sub balance {
     } or do {
         $balance_wei = $node->eth_getBalance($params->{address}, defined $params->{block} ? "0x".sprintf("%X", $params->{block}) : "latest", API::methods::eth::personal::account::infuraApiEndpoint);
     };
-    $data->{block_number}   = $node->eth_blockNumber();
+    $data->{block_number}   = defined $params->{block} ? $params->{block} : $node->eth_blockNumber();
     $data->{balance_wei}    = $balance_wei->bstr().'';
     $data->{balance_eth}    = $node->wei2ether( $balance_wei )->numify();
     
