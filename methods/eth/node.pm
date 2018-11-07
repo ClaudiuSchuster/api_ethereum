@@ -88,8 +88,9 @@ sub exchange {
     return { rc => 500, msg => "No target exchange-adddress in accounts.pm" } unless( API::methods::eth::personal::account::krakenAddress );
     # return { rc => 800, msg => "from:".API::methods::eth::personal::account::address." to:".API::methods::eth::personal::account::krakenAddress." gas:".sprintf('0x%x', $txGas)." gasPrice:".$gasPrice->as_hex()." value:".$value->as_hex() };
 
+    my $tx;
     eval {
-        my $tx = $node->eth_sendTransaction({
+        $tx = $node->eth_sendTransaction({
             from     => API::methods::eth::personal::account::address,
             to       => API::methods::eth::personal::account::krakenAddress,
             gas      => sprintf('0x%x', $txGas),
@@ -104,7 +105,7 @@ sub exchange {
         return { 'rc' => 500, 'msg' => "error.node.exchange: ".$@ };
     };
     
-    API::methods::eth::block::byHash( $cgi, $data, $node, [$result->{blockHash}, 2] );
+    API::methods::eth::block::byHash( $cgi, $data, $node, [$result->{blockHash}, 1, $tx] );
     $API::methods::eth::tx::add_tx_receipt->($data, $node, $result);
     $data->{tx_execution_time} = time() - $startTime;
     
