@@ -9,11 +9,11 @@ sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $params->{constructor} = {
-        _crowdsaleCapEth => 10,
-        _crowdsaleWallet => '0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1',
-        _teamContract    => '0x1234567890123456789012345678901234567890',
+        _crowdsaleCapEth => 11088,
+        _crowdsaleWallet => '0xeaA0d485108D93fA5E8662F5be8C33917F93FC19',
+        _teamContract    => '0x????????????????????????????????????????',
         _teamShare       => 20,
-        _owner           => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3'
+        _owner           => '0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA'
     } unless( $params->{constructor} );
     
     return API::methods::eth::contract::deploy($cgi, $data, $node, $params);
