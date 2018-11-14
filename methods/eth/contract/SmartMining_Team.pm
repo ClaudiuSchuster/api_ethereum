@@ -7,7 +7,7 @@ sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $params->{constructor} = {
-        _owner => '0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3',
+        _owner => '0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA',
     } unless( $params->{constructor} );
     
     return API::methods::eth::contract::deploy($cgi, $data, $node, $params);
