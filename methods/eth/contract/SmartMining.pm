@@ -9,9 +9,9 @@ sub deploy {
     my ($cgi, $data, $node, $params, $contract) = @_;
     
     $params->{constructor} = {
-        _crowdsaleCapEth => 11088,
+        _crowdsaleCapEth => 12800,
         _crowdsaleWallet => '0xeaA0d485108D93fA5E8662F5be8C33917F93FC19',
-        _teamContract    => '0x????????????????????????????????????????',
+        _teamContract    => '0x9022249225A8f5Cf7cDC9355CAFFB4654B1e082A',
         _teamShare       => 20,
         _owner           => '0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA'
     } unless( $params->{constructor} );
