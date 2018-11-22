@@ -1,16 +1,14 @@
-## api_ethereum ( API on: ethereum.spreadblock.local:88 / 10.10.0.8:88 )
+## api_ethereum
 
 ### Service URLs
-* JSON-API: http://10.10.0.8:88/
-* API-Documentation: http://10.10.0.8:88/readme
+* JSON-API: http://<ip>:88/
+* API-Documentation: http://<ip>:88/readme
 
 ### Ethereum Contract ABI Converter:
  - https://abi.sonnguyen.ws/
  
 ### Rinkeby Authenticated Faucet:
  - https://www.rinkeby.io/#faucet
- - https://twitter.com/ClaudiuSchuster/status/1015429498765041665
-
 
 ### Perl Dependencies Installation Commands:
 apt update && apt install cpan libio-socket-inet6-perl libssl-dev libz-dev \
