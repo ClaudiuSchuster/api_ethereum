@@ -1,0 +1,4733 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>API Documentation - api_ethereum</title>
+<style type="text/css">
+<!--/* <![CDATA[ */
+
+        body {
+            font-family: 'Helvetica';
+            margin: 6em 2em 2em 2em;
+        }
+        h1, h2, h3, h4 {
+            font-weight: 600;
+        }
+        code.method {
+            margin: 0 24px 0 24px;
+        }
+        :target:before {
+            content: '';
+            display: block;
+            height: 56px; /* fixed header height*/
+            margin: -56px 0 0; /* negative fixed header height */
+        }
+        h1 {
+            position: fixed;
+            background: -webkit-linear-gradient(top, white 60%, rgba(255,255,255,0));
+            background: -moz-linear-gradient(top, white 60%, rgba(255,255,255,0));
+            background: -ms-linear-gradient(top, white 60%, rgba(255,255,255,0));
+            background: -o-linear-gradient(top, white 60%, rgba(255,255,255,0));
+            width: 100%;
+            height: 50px;
+            padding: 4px 10px 10px 1em;
+            left: 0;
+            top: 0;
+            margin: 0;
+        }
+        h1 img {
+            height: 30px;
+            vertical-align: middle;
+            margin-bottom: 8px;
+        }
+        a {
+            color: navy;
+        }
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #140044;
+        }
+        .wrapper {
+            display: table;
+            width: 100%;
+            height:100%;
+        }
+        span.left {
+            display: table-cell;
+            height: 100%;
+            white-space: nowrap;
+            padding-right: 4px;
+            vertical-align: top;
+        }
+        span.right {
+            display: table-cell;
+            height: 100%;
+            width: 100%;
+            vertical-align: top;
+        }
+        div.indented {
+            margin-left: 24px;
+        }
+        div.indented hr {
+            border-top: 1px dotted #140044;
+            height: 0px;
+            background-color: #fff;
+        }
+        div.requestExample {
+            overflow: auto;
+            margin: 0;
+            margin-bottom: 13px;
+            padding: 0;
+        }
+        div.requestExample pre {
+            background: #eee;
+            padding: 8px;
+            margin: 0;
+            border-left: 3px solid #ccc;
+            border-right: 3px solid #ccc;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            overflow: auto;
+        }
+        table th {
+            background-color: #e1ebef;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            vertical-align: bottom;
+        }
+        table th, table td {
+            padding-right: 16px;
+            text-align: left;
+            vertical-align: top;
+        }
+        table tr:nth-child(odd)>td { background-color: #eaeff9; }
+        table tr:nth-child(even)>td { background-color: #f3f7fa; }
+        table tr:last-child { border-bottom: 1px solid #ccc; }
+    
+
+/* ]]> */-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body>
+
+              <h1>
+                <img alt='API ' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAAAeCAYAAAB+MQMgAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAA10SURBVHja3JlnVJzXmcf/A6KoGClqlqwWgZqFothimHZpAoRE78zM+14GBobeGcowoKH3XiRQ77IcRcWWZIkIqyQo1ipZ7zpxEq/W2bPJ7h43ySmO7GPL9t0PvAPDMFho90uUD/8DzNw7c5/f+7T7gFPDd/DqyF2YDv4YiowaLAhKw86iVkSUd0GRWeft5KP5ADLuCydvzX8FFTZ7+uY2INLQBZJZi4D8JiTWDaLp2GuoP3JhkhqPXsSKsGwoTQNIbT6AoMIWrIrKR0BeEwYvjuDApRtYEZUHSFQAoU+Wgp+qmewb19Oup8AYnLdQe/g8vLPrlrns0HmHl3XZ++U2Ym5AajMUPAOhzJ5Q5hpfVL1OWQy/3EaHbclGn13FrQs19UP/uHDO3byHy6Nvo7D35PJFO9PviOQ8WxmZd2JpSOYtey/6NQhlIJRBQZk9oY9dAnUjC4MzLkLGsQ3xRa9rG/c/13T8HxROWstBFPaddHCNKRiBRzyDgjJI1QwyNRsHYwEIco5BxjEoeIZt8cwjufJE+6nLaDh6AQ1HxtR07CLqj1zAymcdTqyxB4qsWtHqqLwzkHNTgcjUE7J+z1PJvDLr2o9cuY3BCyPYe/469r92A/r+U4gxdMM1Ov/ZhtNx6goy2w+joOe4h0jBfzOWY3gGBc/s5Nw3i3Zl/PKFiNwTC3emvw2Z+ltzDoKCZ/aEPlLX7HELL+tElKEbKc37kdK8HwEFzQjTt8MtpuC74YRmAdK/Yzh9PxrGNm0V1sQUNEFm9hyezSL8VysicjKDilrs/XIbEFHe5bA1sSJPpOAn8pCcG0vSCXqRX24DYit7EVXRje15jYgo7YRb9HRwruPQ5ZuIq+oFPBOEg1uL1oHQn4PQGyD0DgiNf4IxL4HQ/SB0YBr1gdBmEKoBoS9Y7XUAoWXC/j0gdAiEpiCspCNtaXDGXQcv+rdxr/BUMrG2qi9hdz+C9e1QZNYiWN+O5IZ92KgqOQCJyiLsuK/m+mnfk6XXRChNA4it7IX/DOAcvnILZQOngG1xtuCsAaEPrML4xhPgxE0J++n1AISaQOg8Ye9cEPpLqzUXAHHCbcjUbByMACepYSiw59VrKOk/BVl6DSLKOhFR1glpmikEUtXkLxMnsM28oT2+qh8xFT0IyG9CjKEb62MLoareg9SmqXAOXLqB2iPnMScgFZBz1oaW2DDoMQiVfQecmKeAY9Z5EGoPQh1B6D2r984AUtVPIecmw5GomMrUH9xw9CJyuo7CO7seyt0D0Dbtx/a8xphJnqPgGMTxzJ0aWpSmAYSXd2J7boN0VWTuWUfvxNFoQ7dXWush7CpqxZqYAgTkj8HZe+E6TgyPwiOlChAnWBo5D4T+yhzeVgceego4X4LQD0HoRyD8RyD0r9MAqhD2/9MUOB7aqlyXHbp37An9fByQVM1WRuSeDta3Ia6qD365jYiu6IG26YBoZUTORUjVE0nZi37qEpD6xktJRj+z1ywPz+4USVQM4gS2Ib74Aq3Zu2p7XqPvoqD01h0FTYsPXb6Jg5du4PT1O3hZW2kNR/0dT/oTKHjXaRKyNZxbUNAXoKBroaDfB6HuIJQDob+xWvdvIPT7IPRnU+CEl3fCO6sOofo2PTwtPEKqZm6xhb0xxp41AQXNdhFlnWs3q0uHJoWUVM38shu0upaDjqvCc86siys67hZXNGhn+ZRkHHPySfrU2Tf5ITyVbGV4zo3c7mPzc7qOQj9wCq7xRdblfNjigB+D0JuTey3eMEM418aqnKCJdR42vGgHCB2ZAmdncQtijD3QNu7bNOY9dJLxc/ySP3luh+7d2X7JDyeHE89ECv6Bpn5osUxn2oNt8QwSFYNkwqvGc5lZUjVbFpJ5X99/cklO5xHomg9gdUSOJRwZCP3G4oAXQeiLIPQLizD7DQh9bgZhNTzRBkwp66MT63gGQhOtHooQVqlVkKSZ7JaHZZ+z2QTKOQa5eiy3EH6yJCrmoa1slOlMRqsKxuwV/KPvBaX90dE78a/jYeiZwLby5a93vHIFpf2nMXz3V6jcd9YyIR+YlGcUNEF4/TWrHJT4VHAmaxYI/y9WcOJB6E8mbBPg5HcfQ+me0w5ucYVXIVYyEMpEMo6J5PzkJD0OSpBQpV7SVHSpqweeh5z70txRLw3OvOedVSdPbtg3/2Vt5bbnw7JHzV7k5K35wtE3qT8wr8n74u1/RtcrV81NnutY8hz/vvdA6ELBoHgrw98EoXZPgHN1GjgpVuv+BkLFIPTWFM85dOkWTg3fQWhpx1I7Qm+K5Bxbl1DctSw0a9DBR/Nnyw3OfskPloXnDC4MzjwGqZqtjsw7s4WWuS8Pz95jDh2Rgv88rLRTojQNgK/dC0laNeKq+l509k3+BGbgEiVbvCvjrkRXPXtJSBYg5yE0YZaHq5/obPm5IPR3Fk/1WxAqfwKct0HoLhAaDkLDhPf3gtBHk9fxt0Goi9BwToYzeH4Ehy/dRoi+HS8lGZcEF7eKowzddh4pVXCNK2qHRMUg55j9WDfMbVDq4akzOXpn1Uk0dYMubrGFvzB7HGQcW7gz/bd87V5ndfUA4ip7sU6phzjV5DgvIHV03OPkPIOMe18k5xeLxhLrPKsq8hkUdJNgtNlDjFal/dDM+xx+uur3JQgNFvbfsw3n8m3sKm6DRGeCyjSAWGMvtiZVYG1c0S5n36QPZ2/X/nlxcMavPVN3uy4ISpvjk10/K7SkA3GVfQ4ugan3x/ONnGfOvsl/8stt3LyruA1uSj22UAMy2g6vmOuv/eNYP0UZ5Pw7P0g0qBPrh7A4NAuQqTVWB3sEQt8SdFe4Prw7pawTuv7/0QT+SSjtAKHOT4QjTt2N6IpuaOqHkNK8DynN+7GruHW+TGdaEl7eZeeRZNwtknMfr08oro8s70Jay0GIU6o0Dl6aEci5b8zesyQk842A/KbV7okVWB2dv+T5kKwfmcPOyUfzeJ1Sv90/vxGKjBpApp5lo4zOVPqnhPMtCP1gLPFTd4u9s23COfj6TZy8NopgfTvEqbvB1exB0/HX0Hf2GvrPDdt5pVfnr4jI3b2FlufP8kp8CKmKOfkmfbItuTLZLa6ozC2+KMydGrA+ofjceA8k45izn/bDJSFZP3X00fw35BM3eScfzdcvqkuTNnGlcPZJAuS8BMRiqPZ0+lfhqduC82vhkpkKQnXC714gdAkIFVmFpG04VfvPou7wBfjmNuCHGiO2airwstaIHyQasIWWhzvIuW/H5zkK4Zoh58YGYlIVg1T9mTyjVrYyKv/ipJmPnJs8A5JxY7lGomKLA3VXl0fm2UHOAwq61+pQ74DQN8ZK6yQNC/rYan3sNHDeeIrxhG04G9Wl2KguhTstx5ZEAzbTcmxUl8AvrwFRhm7Xuf7aj4UEyhy8NY/m+Kf8YZZX4hdm4xfu0L2fWD+0db5/yn2IlUwk4762J/SxZc8kIpQtCEp7a15Ayrvztid/pDINSF9OrgQkqtWCm1veljc8wZBKKyNeF16PnNrn8DOd49iG46nbPUUeqVWILO+cu4WWZzj6JH0OGcdcAlPf3aatlAQVtTpuVJXunO2X/D+Qqdlsv+SHHilVviH6tq3LQ7PfdIsvrlyv1Ps/H5Z9B55KBomSLQvNOh5U3DpLnLJ78bYk44aQknbzwMr69n3iyQMr3g2EPrTY8xUI3QJCQ6aHw//f4KyNL5oit4RiLA7N6h6fFYsTmMo0oCzsPYnAgmaU7nkFXpm19fBUCtcEjgUUNqsD85vhm9Ng98MkIzZz5eoFAal/cfLRPIg19iS0nryEoMIWbFKXYk10PiBVu4DQf7eaUQfauAtZwwEIPWxlyAAIDbLRKM40rOaA0F9Y7T+HOQEpNuW8PfmgyDzKkKoYyayN8s1pgCy9GtUHfwyfrPpqeCYII4sEtjXJqI829mJHYQvc+TLI02vsSWbd6s182bKcjqOi3levIVjfDgfvRECmBggNAKHvg9D7IPQ/hdnK7Bka4y3suw9C/0O4ZMYJn/ceCP2DjT7ou+QMQs8K57gPQn8PQrvhsiNtiuYF6uAaV7R0XXxx2SxvzZeQcWxBUNrdTVyZ26roAigyaj0WBaX9HlI1c/DWfLY2tjDPN7dxfpSxB0FFLXiRK4UsrRrStGpsVJUgs+0wel69Bv+8JsBTaXmgOcJPZyiow1PNdxW8ExS8s6A5INTyb2dhgPUED7SQgnectF9BHbAmpnCKVkUXYEuiATHGng3z/FMemBPyHL/kDxftTB918E781FyxloVm3Yut7HUIL++EsrofsZW98EipgkRnsoJzdQzOdP9tUDzl8NvWsH3Gw3ebcKxEgWB9m02FlrRjCzWkQawcK9kybqI8C+MHeCaw2T6av2zkSt3Xq0qwTqmHm1KPrRojpFM85xmEk9d9zKaK+k4i0tDl4hZTMLg6Kr9/TXRBi50XfSxcHj/YzJXWrQzPuS3WVjb0nr0majt9GW2nL6PjzBXUHD4PWXoNpDrTsw0nu+OITeV3H0ewvg2R5V3wz2+COzU4uuzQjUCsZJtUJWVxVX3I7jhiH1neZXfmzbdwYngUJ4ZHcfr6zzF4YQTy9BpInnE4/zsAKyiqqV6gdygAAAAASUVORK5CYII='>
+                Documentation - api_ethereum
+              </h1>
+              <h2>
+                Introduction
+              </h2>
+              <div class='indented'>
+                  <hr />
+                  <p>
+                    The API was created as an JSON Web Service. All of its resources are operated by the central URL: http://192.168.102.10:88
+                  </p>
+                  <p>Goto: <a style='margin-left:10px;' href='#class_eth.contract'>eth.contract</a>
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.tx'>eth.tx</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.block'>eth.block</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.address'>eth.address</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.node'>eth.node</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.contract.SmartMining'>eth.contract.SmartMining</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.contract.SmartMining_Mining'>eth.contract.SmartMining_Mining</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.contract.SmartMining_Team'>eth.contract.SmartMining_Team</a>
+                        
+                            <span style='margin:0 10px 0 10px;'>-</span>
+                            <a href='#class_eth.contract.CMR_Mining'>eth.contract.CMR_Mining</a>
+                        </p>
+                  <h4 id='requests'>
+                      Requests
+                  </h4>
+                  <p>
+                      All API request must be sent as POST requests with a single JSON encoded parameter/data-Object{} to the Service-URL.
+                  </p>
+                  <h4 id='responses'>
+                      Responses
+                  </h4>
+                  <p>
+                      If successful, API requests will return an HTTP 200 OK code, as well as a {meta} and a {data} object in response body with content-type 'application/json'.
+                  </p>
+                  <p>
+                    <table border='0'><tbody>
+                        <tr>
+                            <th>
+                                <strong>JSON-Response</strong>
+                            </th><th>
+                                <strong>Description</strong>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                "meta" : { 
+                            </td><td>
+                                'object{}' with metadata from requested api-execution.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='padding-left:15px; white-space: nowrap; padding-right:60px;'>
+                                "method" : null, 
+                            </td><td>
+                                'string' will contain the 'method' which was executed.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='padding-left:15px;'>
+                                "postdata" : { }, 
+                            </td><td>
+                                'object{}' will contain the submitted JSON data object from the request.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='padding-left:15px;'>
+                                "rc" : 200, 
+                            </td><td>
+                                'integer' with 'response-code' 200 for successful requests, 400 for client based errors, and 500 for internal errors.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='padding-left:15px;'>
+                                "msg" : null 
+                            </td><td>
+                                'string' will be null if successful, else contains the error which happened during method execution.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                }, 
+                            </td><td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                "data" : { } 
+                            </td><td>
+                                'object{}' will contain the requested return data.
+                            </td>
+                        </tr>
+                    </tbody></table>
+                  </p>
+                  <h4>
+                      Check for successful execution
+                  </h4>
+                  <p>
+                      If returned <code>meta->{rc}</code> == <code>200</code> and <code>meta->{method}</code> equals to <code>'your.requested.API.Method'</code>, the requested API call should be successful.
+                  <hr />
+            
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.contract'>method: eth.contract.*</h2>
+            
+        <ul>
+    <li><a href='#eth.contract.deploy'>eth.contract.deploy</a></li><li><a href='#eth.contract.transaction'>eth.contract.transaction</a></li><li><a href='#eth.contract.logs'>eth.contract.logs</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.contract.deploy'>Deploy a contract <code class='method'>method: eth.contract.deploy</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:contract</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Name of 'contract' to deploy inside contracts/ folder (Same as filename/contractname without ending .sol)</td>
+                </tr>
+        
+                <tr>
+                    <td>params:constructor</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td>{ }</td>
+                    <td>'Constructor' init parameters. e.g.: {"initString":"+ Constructor Init String +","initValue":102}</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.contract.deploy","params":{"contract":"HelloWorld"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_totalSupply":2000}}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.deploy","params":{"contract":"myToken","constructor":{"_cap":2000,"_wallet":"0x0acc13d0c5be1c8e8ae47c1f0363757ebef3a5d1","_owner":"0x0"}}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:to</td>
+                    <td>null</td>
+                    <td>yes</td>
+                    <td>null</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>Additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.transaction'>Send a transaction to a contract <code class='method'>method: eth.contract.transaction</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:contract</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Name of 'contract' to interact with, 'contract'.abi must be found in contracts/ folder</td>
+                </tr>
+        
+                <tr>
+                    <td>params:function</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Contract function to execute</td>
+                </tr>
+        
+                <tr>
+                    <td>params:function_params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td>{ }</td>
+                    <td>Contract function parameters. e.g.: {"_beneficiary":"0x0","_value":102}</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Generic example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.transaction","params":{"contract":"SmartMining","function":"withdrawOf","function_params":{"_beneficiary":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tx_execution_time</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>seconds till tx got mined (96 iterations á 5sec)</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.logs'>Get logs from an 'contract' <code class='method'>method: eth.contract.logs</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:contract</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'contract' to get logs from. Address must be configured in accounts.pm and 'contract'.abi must be found in contracts/ folder.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:topic</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:topics</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td>[]</td>
+                    <td>Filter topics, "contract" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:fromBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>contract-creation</td>
+                    <td>Starting block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:toBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>Ending block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showtx</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>2</td>
+                    <td>If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showraw</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>false</td>
+                    <td>Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em></td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Get all event logs from SmartMining contract, returns ABI-encoded event data:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining"}}'
+
+// Get all 'Transfer' event logs from SmartMining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)"}}'
+
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ('contract' will be replaced with contracts address 32Byte-DATA):
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
+
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf':
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+
+// 'contract' used as one of two recipients example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+
+// Get finishing event (block and so on also...) from SmartMining crowdsale:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"CrowdsaleFinished(bool)"}}'
+
+// Get raw event data additional to the decoded DATA for the Transfer events:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","showraw":true}}'
+
+// showtx example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","topic":"Transfer(address,address,uint256)","showtx":1}}'
+
+// showtx and showraw can be used anytime:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.logs","params":{"contract":"SmartMining","showtx":1,"showraw":true}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:log_count</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Log count of requested logs.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>Array[] of all logs which matches the filter (given arguments).</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*</td>
+                    <td>object{}</td>
+                    <td>no</td>
+                    <td>Object{} of log details.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:log_index</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Index of log entry.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:tx_hash</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Transaction hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:tx_index</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Transaction index position in the block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:removed</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>Removed state of log entry.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:event_name</td>
+                    <td>string</td>
+                    <td>if "params:topic"</td>
+                    <td>The 'name' of this event function, e.g. 'Transfer'. Not returned if 'topic' not set.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:event_data</td>
+                    <td>object{}</td>
+                    <td>if "params:topic"</td>
+                    <td>Object{} of event log data. Not returned if 'topic' not set.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:event_data:*</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Diverse return arguments from event log. One time named as in event-function, one time as order dependend name, e.g. '0', '1', '2',...</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:data</td>
+                    <td>string</td>
+                    <td>if !"params:topic" || "params:showraw"</td>
+                    <td>Raw, ABI encoded data. Only returned if 'topic' not set.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:topics</td>
+                    <td>array[]</td>
+                    <td>if !"params:topic" || "params:showraw"</td>
+                    <td>Raw, ABI encoded data-topics. Only returned if 'topic' not set.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:transactions</td>
+                    <td>array[]</td>
+                    <td>if "params:showtx"</td>
+                    <td>The transaction details for this log-entry from helper method <a href='#eth.block.byHash'>eth.block.byHash</a></td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:transactions:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See helper method <a href='#eth.block.byHash'>eth.block.byHash</a> 'transactions' return parameter for return-data.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:logs:*:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> for each event log entry.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.tx'>method: eth.tx.*</h2>
+            
+        <ul>
+    <li><a href='#eth.tx.receipt'>eth.tx.receipt</a></li><li><a href='#eth.tx.gasprice'>eth.tx.gasprice</a></li><li><a href='#eth.tx.estimateGas'>eth.tx.estimateGas</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.tx.receipt'>Get a transaction receipt from a tx-hash <code class='method'>method: eth.tx.receipt</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:tx</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'tx'-hash to get receipt for.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.tx.receipt","params":{"tx":"0x2e64a509ac0ead1c372e63553d4651137320ea5a27ec2ae094347e5083b41005"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:status</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>transaction status, 1 for success</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tx_hash</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>transaction hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tx_index</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>transaction index position in the block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_hash</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>block hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>block number</td>
+                </tr>
+        
+                <tr>
+                    <td>data:from</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>from address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:to</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>to address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_used</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>gas used by tx</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_provided</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>gas provided by sender</td>
+                </tr>
+        
+                <tr>
+                    <td>data:cumulative_gas_used</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>cumulative gas used by tx</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_price_wei</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>gas price in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tx_cost_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>transaction price in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tx_cost_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>transaction price in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:data</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>the HEX-DATA send along with the transaction.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:value_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>value transferred in Wei.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:value_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>value transferred in ETH.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>Additional return-data from helper method <a href='#eth.block.byHash'>eth.block.byHash</a> with 'param: 2.' == 2.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.tx.gasprice'>Get current price per gas in Wei <code class='method'>method: eth.tx.gasprice</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.tx.gasprice"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_price_wei</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Current gas price in Wei</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.tx.estimateGas'>Get estimated gas for transaction with specified params <code class='method'>method: eth.tx.estimateGas</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:to</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Recipient address of the transaction.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:value</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Wei amount sent with this transaction.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:data</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Hash of the method signature and ABI encoded parameters.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:from</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>The address the transaction is sent from.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.tx.estimateGas","params":{"to":"0xcb682d89265ab8c7ffa882f0ceb799109bc2a8b0","value":"8000000000000000000"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.tx.estimateGas","params":{"to":"0xabBD3f423CaF2571116750c21a981532Ee1D7065","value":"8000000000000000000"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.tx.estimateGas","params":{"to":"0xFa52274DD61E1643d2205169732f29114BC240b3","value":"8000000000000000000"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.tx.estimateGas","params":{"to":"0x7a96bb1261cbad172d81747792010381f9b3c37c","value":"8000000000000000000"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.tx.estimateGas","params":{"to":"0xe1863c4fb745c2b56e4ef0accb0a28dc8dfaeeae","value":"8000000000000000000"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_estimated</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>gas_estimated of given parameters.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.block'>method: eth.block.*</h2>
+            
+        <ul>
+    <li><a href='#eth.block.byNumber'>eth.block.byNumber</a></li><li><a href='#eth.block.byHash'>eth.block.byHash</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.block.byNumber'>Get information about a block by 'number' <code class='method'>method: eth.block.byNumber</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>array[]</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Array of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 1.</td>
+                    <td>integer</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Block number</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 2.</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>0</td>
+                    <td>If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 3.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given 'tx_hash' in transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 4.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given to-'address' in transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 5.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given from-'address' in transactions-array[].</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 2]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 1]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 1, "0x792432118435bd58ddd478c80dc5657785204dd876d6e095ec08e2c6c4eb2e7e"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "0xee097ff2d75523c83b4b1320479900c33bf22cc0"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "", "0x007f7f58d3eb5b7510a301ecc749fc1fcddbe14d"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byNumber","params":[100011, 1, "", "0xb1abce2918e21ddb93aa452731a12672a3d9f75a", "0x007f7f58d3eb5b7510a301ecc749fc1fcddbe14d"]}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See method <a href='#eth.block.byHash'>eth.block.byHash</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.block.byHash'>Get information about a block by 'hash' <code class='method'>method: eth.block.byHash</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>array[]</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Array of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 1.</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Block hash</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 2.</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>0</td>
+                    <td>If 1 it returns the full transaction objects, if 0 only the hashes of the transactions, if 2 it will return an empty transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 3.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given 'tx_hash' in transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 4.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given to-'address' in transactions-array[].</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 5.</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Add only transactions for given from-'address' in transactions-array[].</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 2]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "0xffd5cdfbb995c76b93d174eb969b0106cc0d76277d56686560cd3ea90fdff00b"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "", "", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'
+
+curl http://192.168.102.10:88 -d '{"method":"eth.block.byHash","params":["0x67e9a179a9b4e088cc14c63ffb6dc4bf20a9287a0700aaa7ca97de3dda1f08dc", 1, "", "0xb1abce2918e21ddb93aa452731a12672a3d9f75a", "0x1be1ddeb54ab974660bf5d726afb6032ffaad7d2"]}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_hash</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Block hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_used</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Gas used in block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:gas_limit</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Gas limit of block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:miner</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Addres of block miner</td>
+                </tr>
+        
+                <tr>
+                    <td>data:parent_hash</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Parent block_hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:size</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Size of block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:timestamp</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Timestamp of block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:difficulty</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Difficulty of block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:difficulty_uncles</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Difficulty (sum) of all uncles in this block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:difficulty_total</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>TotalDifficulty</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>Array[] with all transactions of block.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*</td>
+                    <td>object{}</td>
+                    <td>yes, if "params: 2." != 0|2</td>
+                    <td>If 'params: 2.' == 0, a 'string' for each tx_hash in this block will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*</td>
+                    <td>object{}</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>If 'params: 2.' == 1, a object{} for each transaction in this block will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:tx_hash</td>
+                    <td>string</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Transaction hash</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:tx_index</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Transaction index position in the block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:from</td>
+                    <td>string</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>From address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:to</td>
+                    <td>string</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>To address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:gas_used</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Gas used by tx</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:gas_provided</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Gas provided by sender</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:cumulative_gas_used</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Cumulative gas used by tx</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:gas_price_wei</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Gas price in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:tx_cost_wei</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Transaction price in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:value_wei</td>
+                    <td>integer</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Value transferred in Wei.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:value_eth</td>
+                    <td>float</td>
+                    <td>yes, if "params: 2." == 1</td>
+                    <td>Value transferred in ETH.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:transactions:*:receipt:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>Additional return-data from helper method <a href='#eth.tx.receipt'>eth.tx.receipt</a>.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.address'>method: eth.address.*</h2>
+            
+        <ul>
+    <li><a href='#eth.address.balance'>eth.address.balance</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.address.balance'>Get the ETH balance of 'address' <code class='method'>method: eth.address.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:address</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'address' to get balance for.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:block</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>'block'-number to get balance for address.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347"}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347","block":6411147}}'
+curl http://192.168.102.10:88 -d '{"method":"eth.address.balance","params":{"address":"0xb2930b35844a230f00e51431acae96fe543a0347","block":6411148}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number</td>
+                </tr>
+        
+                <tr>
+                    <td>data:timestamp</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Timestamp of block</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>balance in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>balance in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.node'>method: eth.node.*</h2>
+            
+        <ul>
+    <li><a href='#eth.node.sha3'>eth.node.sha3</a></li><li><a href='#eth.node.block'>eth.node.block</a></li><li><a href='#eth.node.accounts'>eth.node.accounts</a></li><li><a href='#eth.node.coinbase'>eth.node.coinbase</a></li><li><a href='#eth.node.balance'>eth.node.balance</a></li><li><a href='#eth.node.info'>eth.node.info</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.node.sha3'>Get Keccak-256 (not the standardized SHA3-256) of given data <code class='method'>method: eth.node.sha3</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>array[]</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Array of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params: 1.</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Some data...</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.sha3","params":["Hey!"]}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:hex</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Given data as hex string.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:sha3</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Given data as Keccak-256.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.node.block'>Get the number of most recent block <code class='method'>method: eth.node.block</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.block"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Most recent block number from client.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.node.accounts'>Get list of addresses owned by client <code class='method'>method: eth.node.accounts</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.accounts"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_accounts</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>List strings of addresses owned by client.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.node.coinbase'>Get the client coinbase address <code class='method'>method: eth.node.coinbase</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.coinbase"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_coinbase</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Address of client coinbase.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.node.balance'>Get the balance of coinbase address <code class='method'>method: eth.node.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.balance"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.address.balance'>eth.address.balance</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.node.info'>Get current node informations <code class='method'>method: eth.node.info</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>curl http://192.168.102.10:88 -d '{"method":"eth.node.info"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:client_version</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Current client version.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_coinbase</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Current coinbase address.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:net_version</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Current network id: ETH-Mainnet: 2,  RInkeby-Testnet: 4.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_protocolVersion</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Current ethereum protocol version.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:net_peerCount</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Number of peers currently connected to the client.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Most recent block number from client.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of Coinbase-address in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of Coinbase-address in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_accounts</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>List strings of addresses owned by client.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:net_listening</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>'true' if client is actively listening for network connections.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:eth_syncing</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>'true' if client is still syncing the chain, or 'false' (we are synced).</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.contract.SmartMining'>method: eth.contract.SmartMining.*</h2>
+            
+        <ul>
+    <li><a href='#eth.contract.SmartMining.deploy'>eth.contract.SmartMining.deploy</a></li><li><a href='#eth.contract.SmartMining.approve'>eth.contract.SmartMining.approve</a></li><li><a href='#eth.contract.SmartMining.setOwner'>eth.contract.SmartMining.setOwner</a></li><li><a href='#eth.contract.SmartMining.withdraw'>eth.contract.SmartMining.withdraw</a></li><li><a href='#eth.contract.SmartMining.read'>eth.contract.SmartMining.read</a></li><li><a href='#eth.contract.SmartMining.balance'>eth.contract.SmartMining.balance</a></li><li><a href='#eth.contract.SmartMining.member'>eth.contract.SmartMining.member</a></li><li><a href='#eth.contract.SmartMining.memberIndex'>eth.contract.SmartMining.memberIndex</a></li><li><a href='#eth.contract.SmartMining.logs'>eth.contract.SmartMining.logs</a></li><li><a href='#eth.contract.SmartMining.crowdsaleCalcTokenAmount'>eth.contract.SmartMining.crowdsaleCalcTokenAmount</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.deploy'>Deploy 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.deploy</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:constructor</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td>{ *from SmartMining.pm* }</td>
+                    <td>'Constructor' parameters will be read from SmartMining.pm (if not set). e.g.: {"initString":"Init String","initValue":102}</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Deploy constract 'SmartMining' with constructor from SmartMining.pm
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.deploy"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.approve'>Approve member in 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.approve</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    If <code>gas_estimated</code> of address is >23300 the whitelisting of this address will abort. and <code>data:*:error</code> will be returned.
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:members</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Array[] which contains all member object{}'s to approve. [ {...}, {...}, {...} ]</td>
+                </tr>
+        
+                <tr>
+                    <td>params:members:*</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Member object{} to approve, e.g.: {"address":"0x6589...d8B5","ethMinPurchase":0,"privateSale":1}</td>
+                </tr>
+        
+                <tr>
+                    <td>params:members:*:address</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>'address' of member.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:members:*:ethMinPurchase</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>'ethMinPurchase' of member.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:members:*:privateSale</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>'privateSale' state of member, 0 or 1.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Approve member(s) and set their ethMinPurchase from given parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.approve","params":{"members":[{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","ethMinPurchase":0,"privateSale":1}]}}'
+
+// Whitelisted crowdsale members and their ethMinPurchase will be read from SmartMining.pm
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.approve"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>object{}</td>
+                    <td>no</td>
+                    <td>member-'address' named object{} for each whitelisted crowdsale member.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*:ethMinPurchase</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>'ethMinPurchase' of this whitelisted crowdsale member.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*:privateSale</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>'privateSale' state of this whitelisted crowdsale member, 0 or 1.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*:gas_estimated</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>gas_estimated of member-address.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*:error</td>
+                    <td>integer</td>
+                    <td>no</td>
+                    <td>Whitelisting of member will be aborted with 'error'-reason if <code>'gas_estimated' > 23300</code>.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*:*</td>
+                    <td>*</td>
+                    <td>yes, if not 'error'</td>
+                    <td>Each member object{} will contain additional return-data from generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a>.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.setOwner'>Set new owner of 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.setOwner</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:newOwner</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>'address' of newOwner</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Set new owner to 'newOwner' parameter.
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.setOwner","params":{"newOwner":"0xB7a96A6170A02e6d1FAf7D28A7821766afbc5ee3"}}'
+
+// Set new owner to newOwner from SmartMining.pm
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.setOwner"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.withdraw'>Initiate a withdrawal for a 'SmartMining' contract member <code class='method'>method: eth.contract.SmartMining.withdraw</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:address</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'address' of member</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Withdraw unpaid amount of member 0xe1f4.....72d8, returns a rc == 400 error if member has no unpaid_wei.
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.withdraw","params":{"address":"0xe1f41867532c5c5f63179c9ec7819d8d3bf772d8"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.transaction'>eth.contract.transaction</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.read'>Read 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.read</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'SmartMining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.read"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number of contract creation block.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:owner</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract owner address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:name</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>EIP-20 name</td>
+                </tr>
+        
+                <tr>
+                    <td>data:symbol</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>EIP-20 symbol</td>
+                </tr>
+        
+                <tr>
+                    <td>data:decimals</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>EIP-20 decimals</td>
+                </tr>
+        
+                <tr>
+                    <td>data:totalSupply_coini</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>EIP-20 totalSupply</td>
+                </tr>
+        
+                <tr>
+                    <td>data:totalSupply_coins</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>totalSupply(Ici) in ICE</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberCount</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Count of all SmartMining members inclusive the team</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberIndex</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>array[] with 'string' of all member addresses</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsalePercentOfTotalSupply</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Percent of totalSupply which will be available for Crowdsale</td>
+                </tr>
+        
+                <tr>
+                    <td>data:withdrawer</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Address of allowed executor for automatic processed member whitdrawals</td>
+                </tr>
+        
+                <tr>
+                    <td>data:depositor</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Address of allowed depositor of mining profits</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleWallet</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Address where crowdsale funds are collected</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRemainingWei_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Remeining Wei to buy in crowdsale</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRemainingWei_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Remeining ETH to buy in crowdsale</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRemainingToken_coini</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Remaining Ici for purchase in crowdsale</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRemainingToken_coins</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Remaining ICE for purchase in crowdsale</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRaised_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Amount of wei raised in crowdsale in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleRaised_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Amount of wei raised in crowdsale in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleCap_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Wei after crowdsale is finished</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleCap_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>ETH after crowdsale is finished</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleCalcToken_1wei</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Ici (10**-18 ICE) amount in crowdsale for 1 Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleOpen</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>true if crowdsale is open for investors</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleFinished</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>true after crowdsaleCap was reached</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.balance'>Get 'SmartMining' contract balance <code class='method'>method: eth.contract.SmartMining.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'SmartMining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.balance"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.member'>Read member-info from 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.member</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:address</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'address' of member</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// use contract 'SmartMining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.member","params":{"address":"0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:crowdsaleIsMember</td>
+                    <td>bool</td>
+                    <td>yes</td>
+                    <td>true if address is member of Contract</td>
+                </tr>
+        
+                <tr>
+                    <td>data:unpaid_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Unpaid Wei amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:unpaid_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Unpaid ETH amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_coini</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Ici balance</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_coins</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>ICE balance</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.memberIndex'>Read all member addresses from 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.memberIndex</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// use contract 'SmartMining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.memberIndex"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberIndex</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>array[] with 'string' of all member addresses</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.logs'>Get logs from 'SmartMining' contract <code class='method'>method: eth.contract.SmartMining.logs</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                <p><u>Available 'topics' in SmartMining contract:</u>
+                </br> <code>SetOwner(address)</code>
+                </br> <code>SetDepositor(address)</code>
+                </br> <code>SetWithdrawer(address)</code>
+                </br> <code>SetTeamContract(address)</code>
+                </br> <code>Approve(address,uint256,bool)</code>
+                </br> <code>Participate(address,uint256,uint256)</code>
+                </br> <code>Transfer(address,address,uint256)</code>
+                </br> <code>ForwardCrowdsaleFunds(address,uint256)</code>
+                </br> <code>CrowdsaleStarted(bool)</code>
+                </br> <code>CrowdsaleFinished(bool)</code>
+                </br> <code>Withdraw(address,uint256)</code>
+                </br> <code>Deposit(address,uint256)</code>
+                </p>
+            
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:topic</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:topics</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td>[]</td>
+                    <td>Filter topics, "contract" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:fromBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>contract-creation</td>
+                    <td>Starting block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:toBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>Ending block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showtx</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>2</td>
+                    <td>If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showraw</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>false</td>
+                    <td>Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em></td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Get all event logs from SmartMining contract, returns ABI-encoded event data:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs"}'
+
+// Get 'Transfer' event logs from SmartMining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)"}}'
+
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' ("contract" will be replaced with contract address):
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract","0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5"]}}'
+
+// Get (decoded) 'Transfer' event logs from SmartMining contract, filter for to-address '0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5' OR '0x21c3ec39329b5EE1394E890842f679E93FE648bf ("contract" will be replaced with contract address):
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["contract",["0x65890c49a1628452fc9d50B720759fA7Ed4ed8B5","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+
+// 'contract' used as one of two recipients example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","topics":["0x0",["contract","0x21c3ec39329b5EE1394E890842f679E93FE648bf"]]}}'
+
+// Get finishing event (block and so on also...) from SmartMining crowdsale:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"CrowdsaleFinished(bool)"}}'
+
+// Get raw event data additional to the decoded DATA for the Transfer events:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","showraw":true}}'
+
+// showtx example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"topic":"Transfer(address,address,uint256)","showtx":1}}'
+
+// showtx and showraw can be used anytime:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.logs","params":{"showtx":1,"showraw":true}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining.crowdsaleCalcTokenAmount'>Calc Ici for Wei in 'SmartMining' contract crowdsale <code class='method'>method: eth.contract.SmartMining.crowdsaleCalcTokenAmount</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:weiAmount</td>
+                    <td>string (or integer)</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'weiAmount' to calculate</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// use contract 'SmartMining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining.crowdsaleCalcTokenAmount","params":{"weiAmount":"800000000000"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tokenAmount_coini</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Ici amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:tokenAmount_coins</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>ICE amount</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.contract.SmartMining_Mining'>method: eth.contract.SmartMining_Mining.*</h2>
+            
+        <ul>
+    <li><a href='#eth.contract.SmartMining_Mining.deploy'>eth.contract.SmartMining_Mining.deploy</a></li><li><a href='#eth.contract.SmartMining_Mining.read'>eth.contract.SmartMining_Mining.read</a></li><li><a href='#eth.contract.SmartMining_Mining.balance'>eth.contract.SmartMining_Mining.balance</a></li><li><a href='#eth.contract.SmartMining_Mining.logs'>eth.contract.SmartMining_Mining.logs</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Mining.deploy'>Deploy 'SmartMining_Mining' contract <code class='method'>method: eth.contract.SmartMining_Mining.deploy</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:constructor</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td>{ *from SmartMining_Mining.pm* }</td>
+                    <td>'Constructor' parameters will be read from SmartMining_Mining.pm (if not set). e.g.: {"initString":"Init String","initValue":102}</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Deploy constract 'SmartMining_Mining' with constructor from SmartMining_Mining.pm
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.deploy"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Mining.read'>Read 'SmartMining_Mining' contract <code class='method'>method: eth.contract.SmartMining_Mining.read</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'SmartMining_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.read"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number of contract creation block.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:owner</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract owner address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:withdrawal_address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>SmartMining controlled address which will trade received ETH against EUR for paying the operating costs</td>
+                </tr>
+        
+                <tr>
+                    <td>data:distribution_contract</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>SmartMining 'crowdsale & profit distribution'-contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:oraclize_query</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Oraclize URL query e.g. json(https://api.kraken.com/0/public/Ticker?pair=ETHEUR).result.XETHZEUR.c.0</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Mining.balance'>Get 'SmartMining_Mining' contract balance <code class='method'>method: eth.contract.SmartMining_Mining.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'SmartMining_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.balance"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Mining.logs'>Get logs from 'SmartMining_Mining' contract <code class='method'>method: eth.contract.SmartMining_Mining.logs</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                <p><u>Available 'topics' in SmartMining_Mining contract:</u>
+                </br> <code>SetOwner(address)</code>
+                </br> <code>Set_DISTRIBUTION_CONTRACT(address)</code>
+                </br> <code>Set_WITHDRAWAL_ADDRESS(address)</code>
+                </br> <code>Set_ORACLIZE_QUERY(string)</code>
+                </br> <code>Set_ORACLIZE_GAS_PRICE(uint256)</code>
+                </br> <code>InitiateWithdraw(uint256,uint256,uint256,bytes32,uint256)</code>
+                </br> <code>DeletePendingWithdraw(bytes32)</code>
+                </br> <code>Deposit(address,uint256)</code>
+                </br> <code>WipeToContract(address,uint256)</code>
+                </br> <code>OraclizeCallback(bytes32,string,bytes)</code>
+                </br> <code>WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)</code>
+                </br> <code>WithdrawMiningProfit(address,uint256,bytes32)</code>
+                </p>
+            
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:topic</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:topics</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td>[]</td>
+                    <td>Filter topics, "contract" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:fromBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>contract-creation</td>
+                    <td>Starting block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:toBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>Ending block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showtx</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>2</td>
+                    <td>If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showraw</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>false</td>
+                    <td>Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em></td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Get all event logs from SmartMining_Mining contract, returns ABI-encoded event data:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.logs"}'
+
+// Get 'Deposit' event logs from SmartMining_Mining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"Deposit(address,uint256)"}}'
+
+// Get raw event data additional to the decoded DATA for the Transfer events:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showraw":true}}'
+
+// showtx example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"topic":"WithdrawOperatingCost(address,uint256,uint256,uint256,bytes32)","showtx":1}}'
+
+// showtx and showraw can be used anytime:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Mining.logs","params":{"showtx":1,"showraw":true}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.contract.SmartMining_Team'>method: eth.contract.SmartMining_Team.*</h2>
+            
+        <ul>
+    <li><a href='#eth.contract.SmartMining_Team.deploy'>eth.contract.SmartMining_Team.deploy</a></li><li><a href='#eth.contract.SmartMining_Team.read'>eth.contract.SmartMining_Team.read</a></li><li><a href='#eth.contract.SmartMining_Team.balance'>eth.contract.SmartMining_Team.balance</a></li><li><a href='#eth.contract.SmartMining_Team.logs'>eth.contract.SmartMining_Team.logs</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Team.deploy'>Deploy 'SmartMining_Team' contract <code class='method'>method: eth.contract.SmartMining_Team.deploy</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:constructor</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td>{ *from SmartMining_Team.pm* }</td>
+                    <td>'Constructor' parameters will be read from SmartMining_Team.pm (if not set). e.g.: {"initString":"Init String","initValue":102}</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Deploy constract 'SmartMining_Team' with constructor from SmartMining_Team.pm
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.deploy"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.deploy'>eth.contract.deploy</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Team.read'>Read 'SmartMining_Team' contract <code class='method'>method: eth.contract.SmartMining_Team.read</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'SmartMining_Team'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.read"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number of contract creation block.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:owner</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract owner address</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Team.balance'>Get 'SmartMining_Team' contract balance <code class='method'>method: eth.contract.SmartMining_Team.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Balance from contract 'SmartMining_Team'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.balance"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.SmartMining_Team.logs'>Get logs from 'SmartMining_Team' contract <code class='method'>method: eth.contract.SmartMining_Team.logs</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                <p><u>Available 'topics' in SmartMining_Team contract:</u>
+                </p>
+            
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:topic</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:topics</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td>[]</td>
+                    <td>Filter topics, "contract" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:fromBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>contract-creation</td>
+                    <td>Starting block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:toBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>Ending block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showtx</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>2</td>
+                    <td>If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showraw</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>false</td>
+                    <td>Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em></td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Get all event logs from SmartMining_Team contract, returns ABI-encoded event data:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.logs"}'
+
+// Get 'Deposit' event logs from SmartMining_Team contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":""}}'
+
+// Get raw event data additional to the decoded DATA for the Transfer events:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":"","showraw":true}}'
+
+// showtx example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"topic":"","showtx":1}}'
+
+// showtx and showraw can be used anytime:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.SmartMining_Team.logs","params":{"showtx":1,"showraw":true}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+              </div>
+              </br>
+              <hr />
+              </br>
+              <h2 id='class_eth.contract.CMR_Mining'>method: eth.contract.CMR_Mining.*</h2>
+            
+        <ul>
+    <li><a href='#eth.contract.CMR_Mining.read'>eth.contract.CMR_Mining.read</a></li><li><a href='#eth.contract.CMR_Mining.balance'>eth.contract.CMR_Mining.balance</a></li><li><a href='#eth.contract.CMR_Mining.member'>eth.contract.CMR_Mining.member</a></li><li><a href='#eth.contract.CMR_Mining.memberIndex'>eth.contract.CMR_Mining.memberIndex</a></li><li><a href='#eth.contract.CMR_Mining.logs'>eth.contract.CMR_Mining.logs</a></li>
+        </ul>
+          <div class='indented'>
+            <hr />
+        
+            <h3 id='eth.contract.CMR_Mining.read'>Read 'CMR_Mining' contract <code class='method'>method: eth.contract.CMR_Mining.read</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'CMR_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.read"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:address</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Contract address</td>
+                </tr>
+        
+                <tr>
+                    <td>data:block_number</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Block number of contract creation block.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberCount</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Count of all CMR_Mining members inclusive the team</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberIndex</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>Array[] with 'string' of all member addresses</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:depositCount</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Count of all deposits</td>
+                </tr>
+        
+                <tr>
+                    <td>data:deposited_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Total deposit value in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:deposited_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Total deposit value in ETH</td>
+                </tr>
+        
+                <tr>
+                    <td>data:members</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Object{} of all members infos</td>
+                </tr>
+        
+                <tr>
+                    <td>data:members:*</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Member-address named object{} of members infos</td>
+                </tr>
+        
+                <tr>
+                    <td>data:members:*:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See helper method <a href='#eth.contract.CMR_Mining.member'>eth.contract.CMR_Mining.member</a> return parameter for return-data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.CMR_Mining.balance'>Get 'CMR_Mining' contract balance <code class='method'>method: eth.contract.CMR_Mining.balance</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Read Info from contract 'CMR_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.balance"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Balance of contract in Wei</td>
+                </tr>
+        
+                <tr>
+                    <td>data:balance_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Balance of contract in ETH</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.CMR_Mining.member'>Read member-info from 'CMR_Mining' contract <code class='method'>method: eth.contract.CMR_Mining.member</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:address</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>'address' of member</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// use contract 'CMR_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.member","params":{"address":"0xd2Ce719a0d00f4f8751297aD61B0E936970282E1"}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:unpaid_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Unpaid Wei amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:unpaid_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Unpaid ETH amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:withdrawed_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Withdrawed Wei amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:withdrawed_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Withdrawed ETH amount</td>
+                </tr>
+        
+                <tr>
+                    <td>data:total_wei</td>
+                    <td>string</td>
+                    <td>yes</td>
+                    <td>Total Wei amount (unpaid + withdrawed)</td>
+                </tr>
+        
+                <tr>
+                    <td>data:total_eth</td>
+                    <td>float</td>
+                    <td>yes</td>
+                    <td>Total ETH amount (unpaid + withdrawed)</td>
+                </tr>
+        
+                <tr>
+                    <td>data:withdrawalCount</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Count of member withdrawals</td>
+                </tr>
+        
+                <tr>
+                    <td>data:share</td>
+                    <td>integer</td>
+                    <td>yes</td>
+                    <td>Percent of mining profits</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.CMR_Mining.memberIndex'>Read all member addresses from 'CMR_Mining' contract <code class='method'>method: eth.contract.CMR_Mining.memberIndex</code> </h3>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// use contract 'CMR_Mining'
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.memberIndex"}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:memberIndex</td>
+                    <td>array[]</td>
+                    <td>yes</td>
+                    <td>array[] with 'string' of all member addresses</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+            <h3 id='eth.contract.CMR_Mining.logs'>Get logs from 'CMR_Mining' contract <code class='method'>method: eth.contract.CMR_Mining.logs</code> </h3>
+        
+            <p>
+              <em class='wrapper'>
+                <span class='left'>
+                    Note:
+                </span>
+                <span class='right'>
+                    'topic' is the type definition of an event function, e.g. Solidity: <code>event Transfer(address indexed from, address indexed to, uint256 value);</code> will be 'topic': <code>Transfer(address,address,uint256)</code> 
+                <p><u>Available 'topics' in CMR_Mining contract:</u>
+    event AddMember;
+    event Withdraw;
+    event Deposit;
+                </br> <code>AddMember(address,uint256)</code>
+                </br> <code>Withdraw(address,uint256)</code>
+                </br> <code>Deposit(address,uint256)</code>
+                </p>
+            
+                </span>
+              </em>
+            </p>
+        
+            <code>API Parameter:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Required</strong></th>
+                    <th><strong>Default</strong> </th>
+                    <th><strong>Info</strong></th>
+                </tr>
+        
+                <tr>
+                    <td>method</td>
+                    <td>string</td>
+                    <td>true</td>
+                    <td></td>
+                    <td>API method to be executed</td>
+                </tr>
+        
+                <tr>
+                    <td>params</td>
+                    <td>object{}</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Object of method parameters</td>
+                </tr>
+        
+                <tr>
+                    <td>params:topic</td>
+                    <td>string</td>
+                    <td>false</td>
+                    <td></td>
+                    <td>Event 'topic'[0] to filter for 'Event-function definition string' which will be converted to Keccak-256 'topic'[0]. </br><em>If not set the two additional parameter 'data' and 'topics' with the original ABI encoded data of this event will be returned.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:topics</td>
+                    <td>array[]</td>
+                    <td>false</td>
+                    <td>[]</td>
+                    <td>Filter topics, "contract" <em>(will be auto converted to contract address)</em>, pure ETH-addresses in any capitalization, or 32Byte-DATA raw topics to filter for.</br><em>Order dependend! Each topic can also be an Array[] of addresses, or DATA with 'or' options.</em></td>
+                </tr>
+        
+                <tr>
+                    <td>params:fromBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>contract-creation</td>
+                    <td>Starting block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:toBlock</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>latest</td>
+                    <td>Ending block for fetching logs from Node.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showtx</td>
+                    <td>integer</td>
+                    <td>false</td>
+                    <td>2</td>
+                    <td>If 0 only tx_hash of the event, if 1 the full tx-details of the event, or 2 an empty transactions-array[] will be returned.</td>
+                </tr>
+        
+                <tr>
+                    <td>params:showraw</td>
+                    <td>bool</td>
+                    <td>false</td>
+                    <td>false</td>
+                    <td>Show also the raw-data for an event, which can be used later in the 'topics'-filter. <em>(Topic[0] is excluded if 'params:topic'!)</em></td>
+                </tr>
+        
+              </tbody>
+            </table>
+            <p></p>
+        
+            <code>Request Example:</code>
+            <div class='requestExample'><pre><code>// Get all event logs from CMR_Mining contract, returns ABI-encoded event data:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs"}'
+
+// Get 'AddMember' event logs from CMR_Mining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"AddMember(address,uint256)"}}'
+
+// Get 'Deposit' event logs from CMR_Mining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Deposit(address,uint256)"}}'
+
+// Get 'Withdraw' event logs from CMR_Mining contract, returns decoded human readable 'event_data' parameter:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Withdraw(address,uint256)"}}'
+
+// Get (decoded) 'Withdraw' event logs from CMR_Mining contract, filter for to-address '0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA':
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Withdraw(address,uint256)","topics":["0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA"]}}'
+
+// Get (decoded) 'Withdraw' event logs from CMR_Mining contract, filter for to-address '0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA' OR '0x430e1dd1ab2E68F201B53056EF25B9e116979D9b:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Withdraw(address,uint256)","topics":[["0xE517CB63e4dD36533C26b1ffF5deB893E63c3afA","0x430e1dd1ab2E68F201B53056EF25B9e116979D9b"]]}}'
+
+
+// Get raw event data additional to the decoded DATA for the Transfer events:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Deposit(address,uint256)","showraw":true}}'
+
+// showtx example:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Deposit(address,uint256)","showtx":1}}'
+
+// showtx and showraw can be used anytime:
+curl http://192.168.102.10:88 -d '{"method":"eth.contract.CMR_Mining.logs","params":{"topic":"Deposit(address,uint256)","showtx":1,"showraw":true}}'</code></pre></div>
+        
+            <code>Return data:</code>
+            <table border='0'>
+              <tbody>
+                <tr>  
+                    <th><strong>Parameter</strong></th>
+                    <th><strong>Type</strong></th>
+                    <th><strong>Always returned</strong></th>
+                    <th><strong>Description</strong> </th>
+                </tr>
+        
+                <tr>
+                    <td>meta</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Meta object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data</td>
+                    <td>object{}</td>
+                    <td>yes</td>
+                    <td>Data object, view <a href='#responses'>Responses</a> introduction for description.</td>
+                </tr>
+        
+                <tr>
+                    <td>data:*</td>
+                    <td>*</td>
+                    <td>yes</td>
+                    <td>See generic method <a href='#eth.contract.logs'>eth.contract.logs</a> for return data.</td>
+                </tr>
+        
+              </tbody>
+            </table>
+            </br>
+            <hr />
+        
+                </br>
+              </div>
+              <hr />
+            
+</body>
+</html>

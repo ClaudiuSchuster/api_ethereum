@@ -8,7 +8,7 @@ use html::readme::print;
 sub print { 
     my $cgi = shift;
     
-    API::html::readme::print::ReadmeClass('introduction',$cgi,'',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.SmartMining','eth.contract.SmartMining_Mining','eth.contract.SmartMining_Team','eth.contract.CMR_Mining']);
+    API::html::readme::print::ReadmeClass('introduction',$cgi,' - api_ethereum',['eth.contract','eth.tx','eth.block','eth.address','eth.node','eth.contract.SmartMining','eth.contract.SmartMining_Mining','eth.contract.SmartMining_Team','eth.contract.CMR_Mining']);
     
     
     API::html::readme::print::ReadmeClass([
