@@ -1,3 +1,3 @@
 [submodule "contracts"]
 	path = contracts
-	url = git@github.com:icemining/icemine.io_contracts.git
+	url = git@github.com:ClaudiuSchuster/ethereum_smart-contracts.git
