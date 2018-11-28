@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>CMR_Mining Smart Contract</title>
+		
+		<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/site.webmanifest">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+		<link rel="shortcut icon" href="/favicon.ico">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+		
+        <script src="/jquery-1.12.4.min.js"></script>
+        <script type="text/javascript"> 
+            function ajax(){
+                $.ajax({
+                    url: 'http://ethereum.blockfidelity.com/cmr_html.pl',
+                    dataType: 'html',
+                    timeout: 300000,
+                    type: 'POST',
+                    crossDomain: true,
+                    beforeSend: function() {
+                        $('body').append(`<div
+                                            style="margin:40 auto;width:400px;border:3px dashed steelblue;padding:10px;text-align:center;font-size:24px;font-weight:800;color:#172835;">
+                                            <p>Loading Ethereum data...</p><p><img src="/ajax-loader.gif" /></p>
+                                          </div>`);
+                    },
+                    success: function(data) {
+                        $('body').html(data)
+                        $('body').append(`<p><button
+                                            style="margin-top:8px;padding:4px;width:400px;background-color:#8fb9d8;font-size:20px;font-weight:600;color:#172835;"
+                                            onclick="ajax()">Refresh
+                                          </button></p>`);
+                    },
+                    error: function (request, status, error) {
+                        $('body').html(request.responseText);
+                    } 
+                });
+            }
+            $(document).ready(function(){ ajax() });
+        </script>
+		
+    </head>
+    <body></body>
+</html>
